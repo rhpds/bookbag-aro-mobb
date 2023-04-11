@@ -1,0 +1,8 @@
+---
+name: ARO Workshop  
+modules:
+  activate:
+    - home
+    - lab_1_setup
+    - lab_2_deploy_cluster
+    - lab_3_create_admin_user
