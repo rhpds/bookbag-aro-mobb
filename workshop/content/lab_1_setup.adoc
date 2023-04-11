@@ -1,0 +1,63 @@
+== Environment Setup
+
+Your environment has already been set up and you are ready to use your first ARO cluster.
+
+
+== Connect to your bastion VM
+
+. In the terminal window to the right connect to the bastion VM (you can also just click the command below to have it copied and executed automatically):
++
+[TIP]
+====
+Answer `yes` when asked if to accept the host key.
+
+The password for the user `azure` is `%bastion_password%`
+====
++
+[source,sh,role=execute]
+----
+%bastion_ssh_command%
+----
+
+=== Validate installed tools
+
+You will be using the `az` and `oc` command line tools throughout this lab.
+
+. Verify that the `az` command line tool is installed:
++
+[source,sh,role=execute]
+----
+az version
+----
++
+.Sample Output
+[source,texinfo]
+----
+{
+  "azure-cli": "2.38.0",
+  "azure-cli-core": "2.38.0",
+  "azure-cli-telemetry": "1.0.6",
+  "extensions": {}
+}
+----
+
+. Download and install the oc binary
++
+[source,sh,role=execute]
+----
+cd $HOME
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.10.40/openshift-client-linux.tar.gz
+
+mkdir $HOME/bin
+tar -xzvf $HOME/openshift-client-linux.tar.gz -C $HOME/bin
+rm $HOME/openshift-client-linux.tar.gz
+
+export PATH=$HOME/bin:$PATH
+echo "export PATH=$HOME/bin:$PATH" >>$HOME/.bashrc
+----
++
+*Why use `oc` over `kubectl`* + Being Kubernetes, one can definitely use `kubectl` with their OpenShift cluster.
+`oc` is specific to OpenShift in that it includes the standard set of features from `kubectl` plus additional support for OpenShift functionality. See https://docs.openshift.com/container-platform/latest/cli_reference/openshift_cli/usage-oc-kubectl.html[Usage of oc and kubectl commands] for more details.
+
+
+You are ready to start using your ARO cluster.

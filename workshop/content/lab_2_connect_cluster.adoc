@@ -1,0 +1,110 @@
+== Connect to ARO cluster
+
+=== Command line
+
+. Log into your OpenShift cluster:
++
+[source,sh,role=execute]
+----
+oc login -u kubeadmin -p %aro_kube_password% --insecure-skip-tls-verify=true %aro_api%
+----
++
+.Sample Output
+[source,texinfo,options=nowrap]
+----
+WARNING: Using insecure TLS client config. Setting this option is not supported!
+
+Login successful.
+
+You have access to 68 projects, the list has been suppressed. You can list all projects with 'oc projects'
+
+Using project "default".
+Welcome! See 'oc help' to get started.
+----
+
+. List the available OpenShift nodes:
++
+[source,sh,role=execute]
+----
+oc get nodes
+----
++
+.Sample Output
+[source,texinfo,options=nowrap]
+----
+NAME                                           STATUS   ROLES    AGE   VERSION
+aro-cluster-q2xkf-pb6cb-master-0               Ready    master   17h   v1.23.12+7566c4d
+aro-cluster-q2xkf-pb6cb-master-1               Ready    master   17h   v1.23.12+7566c4d
+aro-cluster-q2xkf-pb6cb-master-2               Ready    master   17h   v1.23.12+7566c4d
+aro-cluster-q2xkf-pb6cb-worker-eastus1-bfgbl   Ready    worker   17h   v1.23.12+7566c4d
+aro-cluster-q2xkf-pb6cb-worker-eastus2-ccqpv   Ready    worker   17h   v1.23.12+7566c4d
+aro-cluster-q2xkf-pb6cb-worker-eastus3-4q7ld   Ready    worker   17h   v1.23.12+7566c4d
+----
+
+. Validate that all Cluster Operators are available:
++
+[source,sh,role=execute]
+----
+oc get co
+----
++
+.Sample Output
+[source,texinfo,options=nowrap]
+----
+NAME                                       VERSION        AVAILABLE   PROGRESSING   DEGRADED   SINCE   MESSAGE
+aro                                        v20230227.00   True        False         False      17h
+authentication                             4.10.40        True        False         False      16h
+baremetal                                  4.10.40        True        False         False      17h
+cloud-controller-manager                   4.10.40        True        False         False      17h
+cloud-credential                           4.10.40        True        False         False      17h
+cluster-autoscaler                         4.10.40        True        False         False      17h
+config-operator                            4.10.40        True        False         False      17h
+console                                    4.10.40        True        False         False      17h
+csi-snapshot-controller                    4.10.40        True        False         False      17h
+dns                                        4.10.40        True        False         False      17h
+etcd                                       4.10.40        True        False         False      17h
+image-registry                             4.10.40        True        False         False      17h
+ingress                                    4.10.40        True        False         False      17h
+insights                                   4.10.40        True        False         False      37s
+kube-apiserver                             4.10.40        True        False         False      17h
+kube-controller-manager                    4.10.40        True        False         False      17h
+kube-scheduler                             4.10.40        True        False         False      17h
+kube-storage-version-migrator              4.10.40        True        False         False      17h
+machine-api                                4.10.40        True        False         False      17h
+machine-approver                           4.10.40        True        False         False      17h
+machine-config                             4.10.40        True        False         False      17h
+marketplace                                4.10.40        True        False         False      17h
+monitoring                                 4.10.40        True        False         False      17h
+network                                    4.10.40        True        False         False      17h
+node-tuning                                4.10.40        True        False         False      17h
+openshift-apiserver                        4.10.40        True        False         False      17h
+openshift-controller-manager               4.10.40        True        False         False      17h
+openshift-samples                          4.10.40        True        False         False      17h
+operator-lifecycle-manager                 4.10.40        True        False         False      17h
+operator-lifecycle-manager-catalog         4.10.40        True        False         False      17h
+operator-lifecycle-manager-packageserver   4.10.40        True        False         False      17h
+service-ca                                 4.10.40        True        False         False      17h
+storage                                    4.10.40        True        False         False      17h
+----
+
+== Log into the Web Console
+
+. Retrieve the web console URL from the OpenShift
++
+[source,sh,role=execute]
+----
+oc whoami --show-console
+----
++
+.Sample Output
+[source,texinfo,options=nowrap]
+----
+https://console-openshift-console.apps.pby01dzr.eastus.aroapp.io
+----
+
+. Open another browser window and use the URL you just retrieved to navigate to the Azure Red Hat OpenShift Web Console.
+
+. Use the following credentials to log into the web console:
+* User: `kubeadmin` 
+* Password: `%aro_kube_password%` 
+

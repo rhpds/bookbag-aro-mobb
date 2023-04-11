@@ -1,13 +1,15 @@
 {
-    "guid": "abcde",
-    "example_var": 42,
-    "ssh_command": "ssh lab-user@bastion.abcde.example.com",
-    "ssh_password": "p4ssword!1",
-    "user": "lab-user",
-    "user_info_messages": "Example workshop messages:\nHello, World",
-    "my": {
-        "deep": {
-            "var": "flattened data"
-        }
-    }
+  "guid": "abcde",
+  "aro_api": "https://api.abcdabcdeefg.eastus.aroapp.io:6443/",
+  "aro_console": "https://console-openshift-console.apps.abcde.eastus.aroapp.io/",
+  "aro_kube_password": "redacted",
+  "azappid": "redacted",
+  "azpass": "redacted",
+  "azure_subscription_id": "redacted",
+  "azure_tenant": "redacted",
+  "bastion_password": "redacted",
+  "bastion_ssh_command": "ssh azure@bastion.abcde.azure.opentlc.com",
+  "generated_password": "redacted",
+  "openenv_admin_upn": "openenv-admin-abcde@azure.opentlc.com",
+  "openenv_user_upn": "openenv-abcde@azure.opentlc.com"
 }
