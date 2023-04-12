@@ -10,7 +10,7 @@ oc login -u kubeadmin -p %aro_kube_password% --insecure-skip-tls-verify=true %ar
 ----
 +
 .Sample Output
-[source,texinfo,options=nowrap]
+[source,text,options=nowrap]
 ----
 WARNING: Using insecure TLS client config. Setting this option is not supported!
 
@@ -30,7 +30,7 @@ oc get nodes
 ----
 +
 .Sample Output
-[source,texinfo,option=nowrap]
+[source,text,options=nowrap]
 ----
 NAME                                           STATUS   ROLES    AGE   VERSION
 aro-cluster-q2xkf-pb6cb-master-0               Ready    master   17h   v1.23.12+7566c4d
@@ -49,7 +49,7 @@ oc get co
 ----
 +
 .Sample Output
-[source,texinfo,options=nowrap]
+[source,text,options=nowrap]
 ----
 NAME                                       VERSION        AVAILABLE   PROGRESSING   DEGRADED   SINCE   MESSAGE
 aro                                        v20230227.00   True        False         False      17h
@@ -97,7 +97,7 @@ oc whoami --show-console
 ----
 +
 .Sample Output
-[source,texinfo,options=nowrap]
+[source,text,options=nowrap]
 ----
 https://console-openshift-console.apps.pby01dzr.eastus.aroapp.io
 ----
