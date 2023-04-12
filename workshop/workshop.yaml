@@ -5,4 +5,4 @@ modules:
   - home
   - lab_1_setup
   - lab_2_connect_cluster
-  # - lab_3_create_admin_user
+  - lab_3_explore_aad

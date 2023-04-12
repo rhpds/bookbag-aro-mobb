@@ -99,12 +99,17 @@ oc whoami --show-console
 .Sample Output
 [source,text,options=nowrap]
 ----
-https://console-openshift-console.apps.pby01dzr.eastus.aroapp.io
+%aro_console%
 ----
 
 . Open another browser window and use the URL you just retrieved to navigate to the Azure Red Hat OpenShift Web Console.
+
+. Click on `kube:admin` to select the identity provider.
 
 . Use the following credentials to log into the web console:
 * User: `kubeadmin` 
 * Password: `%aro_kube_password%` 
 
+. Feel free to explore the web console. When done *log out* of the web console by selecting `kube:admin` on the top right of the console and then clicking `Logout`.
+
+In the next lab you will explore authentication using Azure Active Directory.

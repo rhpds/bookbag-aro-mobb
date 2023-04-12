@@ -9,8 +9,8 @@ modules:
   lab_2_connect_cluster:
     name: Connect to your cluster
     exit_sign: Continue
-  # lab_3_tbd:
-  #   name: Exercise 3
-  #   exit_sign: Continue
+  lab_3_explore_aad:
+    name: Authentication using AAD
+    exit_sign: Continue
   # review:
   #   name: Review
