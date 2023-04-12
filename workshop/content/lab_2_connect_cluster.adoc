@@ -2,6 +2,26 @@
 
 === Command line
 
+In order to log into your cluster you need credentials. If this is a brand new ARO cluster you can retrieve the `kubeadmin` credentials using the `az` command line tool:
+
+. Get the `kubeadmin` credentials:
++
+[source,sh,role=execute]
+----
+az aro list-credentials \
+  --name aro-cluster-%guid% \
+  --resource-group openenv-%guid%
+----
++
+.Sample Output
+[source,texinfo,options=nowrap]
+----
+{
+  "kubeadminPassword": "%aro_kube_password%",
+  "kubeadminUsername": "kubeadmin"
+}
+----
+
 . Log into your OpenShift cluster:
 +
 [source,sh,role=execute]

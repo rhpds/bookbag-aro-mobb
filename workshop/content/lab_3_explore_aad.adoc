@@ -12,11 +12,11 @@ Both users have been assigned the temporary password `%bastion_password%`. You *
 
 === Azure Portal and change admin password
 
-The Azure Portal URL is %https://portal.azure.com%.
+The Azure Portal URL is https://portal.azure.com.
 
-. Open a new web browser window/tab and log into the Azure Portal by navigating to %https://portal.azure.com%.
+. Open a new web browser window/tab and log into the Azure Portal by navigating to https://portal.azure.com.
 . Use `%openenv_admin_upn%` as the user id and `%bastion_password%` as the password to log into the portal.
-. You will be prompted to change your password. Use `%bastion_password%` as the current password and pick a password that you will remember throughout this lab. Make sure this password is reasonably complex. An example could be `Firstname-Lastname-Admin2023` (replacing your with your first and last name).
+. You will be prompted to change your password. Use `%bastion_password%` as the current password and pick a password that you will remember throughout this lab. Make sure this password is reasonably complex. An example could be `Firstname-Lastname-Admin2023` (using your first and last name).
 . Click `Maybe Later` when asked if you want to take a tour of the Azure portal.
 
 === Explore ARO
@@ -74,7 +74,7 @@ oc whoami
 .Sample Output
 [source,texinfo,options=nowrap]
 ----
-openenv-admin-4c5g4@azure.opentlc.com
+openenv-admin-%guid%@azure.opentlc.com
 ----
 
 You now have full admin access to both the Azure console and the OpenShift console.
