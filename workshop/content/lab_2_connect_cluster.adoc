@@ -30,7 +30,7 @@ oc get nodes
 ----
 +
 .Sample Output
-[source,texinfo,options=nowrap]
+[source,texinfo,option=nowrap]
 ----
 NAME                                           STATUS   ROLES    AGE   VERSION
 aro-cluster-q2xkf-pb6cb-master-0               Ready    master   17h   v1.23.12+7566c4d

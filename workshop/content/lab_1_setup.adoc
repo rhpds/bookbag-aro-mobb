@@ -34,9 +34,9 @@ az version
 [source,texinfo]
 ----
 {
-  "azure-cli": "2.38.0",
-  "azure-cli-core": "2.38.0",
-  "azure-cli-telemetry": "1.0.6",
+  "azure-cli": "2.47.0",
+  "azure-cli-core": "2.47.0",
+  "azure-cli-telemetry": "1.0.8",
   "extensions": {}
 }
 ----
