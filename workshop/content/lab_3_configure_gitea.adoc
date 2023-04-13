@@ -106,7 +106,7 @@ EOF
 .Sample Output
 [source,text,options=nowrap]
 ----
-
+gitea.gpte.opentlc.com/gitea created
 ----
 
 You are now have a Gitea repository deployed and ready to use later on in this lab.
