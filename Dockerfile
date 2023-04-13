@@ -9,7 +9,7 @@ RUN rm -rf /tmp/src/.git* && \
     chgrp -R 0 /tmp/src && \
     chmod -R g+w /tmp/src
 
-RUN dnf -y install git
+RUN yum -y install git
 
 USER 1001
 
