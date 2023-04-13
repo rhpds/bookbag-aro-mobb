@@ -42,6 +42,20 @@ A project has a 1-to-1 mapping with a standard Kubernetes namespace.
 ----
 oc new-project workshop
 ----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+Now using project "workshop" on server "https://api.gqfnl2xz.eastus.aroapp.io:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/e2e-test-images/agnhost:2.33 -- /agnhost serve-hostname
+----
 
 ____
 *Resources*
@@ -57,7 +71,7 @@ ____
 Azure Red Hat OpenShift allows you to deploy a container image from Docker hub easily and we will deploy a MongoDB database service this way.
 The mandatory environment variables (user, password, database name etc.) can be passed in the `oc new-app` command line
 
-Deploy the MongoDB database:
+Deploy the MongoDB database (you can safely ignore the warning about not having `git` available):
 
 [source,sh,role=execute]
 ----
@@ -68,8 +82,29 @@ oc new-app bitnami/mongodb \
   -e MONGODB_ROOT_USER=root \
   -e MONGODB_ROOT_PASSWORD=ratingspassword
 ----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+warning: Cannot find git. Ensure that it is installed and in your path. Git is required to work with git repositories.
+--> Found container image f426934 (2 days old) from Docker Hub for "bitnami/mongodb"
 
-If you now head back to the web console, and switch to the *workshop* project, you should see a new deployment for mongoDB.
+    * An image stream tag will be created as "mongodb:latest" that will track this image
+
+--> Creating resources ...
+    imagestream.image.openshift.io "mongodb" created
+    deployment.apps "mongodb" created
+    service "mongodb" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/mongodb'
+    Run 'oc status' to view your app.
+----
+
+. Head back to the OpenShift web console.
++
+If you don't see the Developer perspective click on the *Administrator* link under the OpenShift logo and select *Developer*, then if applicable click *Skip Tour* and select your `workshop` project from the *Project* drop down.
+. Then click *Topology* to see the application layout.
 
 image::media/mongodb-overview.png[MongoDB deployment]
 
@@ -81,25 +116,50 @@ Run the `oc get all` command to view the status of the new application and verif
 ----
 oc get all
 ----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+NAME                           READY   STATUS    RESTARTS   AGE
+pod/mongodb-655486dd95-6m6k5   1/1     Running   0          4m31s
+
+NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
+service/mongodb   ClusterIP   172.30.170.239   <none>        27017/TCP   4m31s
+
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/mongodb   1/1     1            1           4m31s
+
+NAME                                 DESIRED   CURRENT   READY   AGE
+replicaset.apps/mongodb-655486dd95   1         1         1       4m31s
+replicaset.apps/mongodb-d6855d74d    0         0         0       4m31s
+
+NAME                                     IMAGE REPOSITORY                                                    TAGS     UPDATED
+imagestream.image.openshift.io/mongodb   image-registry.openshift-image-registry.svc:5000/workshop/mongodb   latest   4 minutes ago
+----
 
 
 === Retrieve mongoDB service hostname
 
-Find the mongoDB service.
-
-[,sh]
+. Find the mongoDB service.
++
+[source,sh,role=execute]
 ----
 oc get svc mongodb
 ----
-
++
+.Sample Output
+[source,text,options=nowrap]
+----
+NAME      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
+mongodb   ClusterIP   172.30.170.239   <none>        27017/TCP   5m20s
+----
++
 The service will be accessible at the following DNS name: `mongodb.workshop.svc.cluster.local` which is formed of `[service name].[project name].svc.cluster.local`.
 This resolves only within the cluster.
 
-You can also retrieve this from the web console.
-You'll need this hostname to configure the `rating-api`.
+. You can also retrieve this from the web console (click on the *mongodb* deployment, then under *Services* click on the *mongodb* service). You'll need this hostname to configure the `rating-api`.
 
 image::media/mongo-svc-webconsole.png[MongoDB service in the Web Console]
-
 
 == Deploy Ratings API
 
@@ -109,12 +169,6 @@ Below are some of the details that you'll need to deploy this.
 * `rating-api` on GitHub: https://github.com/MicrosoftDocs/mslearn-aks-workshop-ratings-api
 * The container exposes port 8080
 * MongoDB connection is configured using an environment variable called `MONGODB_URI`
-
-=== Fork the application to your own GitHub repository
-
-To be able to setup CI/CD webhooks, you'll need to fork the application into your personal GitHub repository.
-
-https://github.com/MicrosoftDocs/mslearn-aks-workshop-ratings-api/fork[Fork]
 
 === Use the OpenShift CLI to deploy the `rating-api`
 
