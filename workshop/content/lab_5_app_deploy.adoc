@@ -33,11 +33,11 @@ image:media/app-overview-3.png[Application]
 
 == Create Project
 
-=== Create a project
-
 A project allows a community of users to organize and manage their content in isolation from other communities.
 A project has a 1-to-1 mapping with a standard Kubernetes namespace.
 
+. Create a project called `workshop`:
++
 [source,sh,role=execute]
 ----
 oc new-project workshop
@@ -64,15 +64,13 @@ ____
 * https://docs.openshift.com/aro/4/applications/projects/working-with-projects.html[ARO Documentation - Projects]
 ____
 
-== Deploy MongoDB
-
-=== Create mongoDB from Docker hub
+== Deploy MongoDB from DockerHub image
 
 Azure Red Hat OpenShift allows you to deploy a container image from Docker hub easily and we will deploy a MongoDB database service this way.
 The mandatory environment variables (user, password, database name etc.) can be passed in the `oc new-app` command line
 
-Deploy the MongoDB database (you can safely ignore the warning about not having `git` available):
-
+. Deploy the MongoDB database:
++
 [source,sh,role=execute]
 ----
 oc new-app bitnami/mongodb \
@@ -86,7 +84,6 @@ oc new-app bitnami/mongodb \
 .Sample Output
 [source,text,options=nowrap]
 ----
-warning: Cannot find git. Ensure that it is installed and in your path. Git is required to work with git repositories.
 --> Found container image f426934 (2 days old) from Docker Hub for "bitnami/mongodb"
 
     * An image stream tag will be created as "mongodb:latest" that will track this image
@@ -112,6 +109,8 @@ image::media/mongodb-overview.png[MongoDB deployment]
 
 Run the `oc get all` command to view the status of the new application and verify if the deployment of the mongoDB template was successful.
 
+. Display all resources in the `workshop` project:
++
 [source,sh,role=execute]
 ----
 oc get all
@@ -136,7 +135,6 @@ replicaset.apps/mongodb-d6855d74d    0         0         0       4m31s
 NAME                                     IMAGE REPOSITORY                                                    TAGS     UPDATED
 imagestream.image.openshift.io/mongodb   image-registry.openshift-image-registry.svc:5000/workshop/mongodb   latest   4 minutes ago
 ----
-
 
 === Retrieve mongoDB service hostname
 
@@ -169,54 +167,100 @@ Below are some of the details that you'll need to deploy this.
 * `rating-api` on GitHub: https://github.com/MicrosoftDocs/mslearn-aks-workshop-ratings-api
 * The container exposes port 8080
 * MongoDB connection is configured using an environment variable called `MONGODB_URI`
+* You're going to be using <<source-to-image-s2i,source-to-image (S2I)>> as a build strategy.
 
-=== Use the OpenShift CLI to deploy the `rating-api`
-
-____
-*Note* You're going to be using <<source-to-image-s2i,source-to-image (S2I)>> as a build strategy.
-____
-
+. Create the new application from git source
++
 [source,sh,role=execute]
 ----
 oc new-app https://github.com/MicrosoftDocs/mslearn-aks-workshop-ratings-api --strategy=source --name=rating-api
 ----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+--> Found image 3e4c7d3 (2 weeks old) in image stream "openshift/nodejs" under tag "16-ubi8" for "nodejs"
 
+    Node.js 16
+    ----------
+    Node.js 16 available as container is a base platform for building and running various Node.js 16 applications and frameworks. Node.js is a p
+latform built on Chrome's JavaScript runtime for easily building fast, scalable network applications. Node.js uses an event-driven, non-blocking
+ I/O model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices.
+
+    Tags: builder, nodejs, nodejs16
+
+    * The source repository appears to match: nodejs
+    * A source build using source code from https://github.com/MicrosoftDocs/mslearn-aks-workshop-ratings-api will be created
+      * The resulting image will be pushed to image stream tag "rating-api:latest"
+      * Use 'oc start-build' to trigger a new build
+
+--> Creating resources ...
+    imagestream.image.openshift.io "rating-api" created
+    buildconfig.build.openshift.io "rating-api" created
+    deployment.apps "rating-api" created
+    service "rating-api" created
+--> Success
+    Build scheduled, use 'oc logs -f buildconfig/rating-api' to track its progress.
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/rating-api'
+    Run 'oc status' to view your app.
+----
 
 === Configure the required environment variables
 
 Create the `MONGODB_URI` environment variable.
+
 This URI should look like `mongodb://[username]:[password]@[endpoint]:27017/ratingsdb`.
-You'll need to replace the `[usernaame]` and `[password]` with the ones you used when creating the database.
+You'll need to replace the `[username]` and `[password]` with the ones you used when creating the database.
 You'll also need to replace the `[endpoint]` with the hostname acquired in the previous step
 
-Hit *Save* when done.
-
-image::media/rating-api-envvars.png[Create a MONGODB_URI environment variable]
-
-It can also be done with CLI
-
+. Set the environment variable for the `Deployment` called *rating-api*:
++
+[source,sh,role=execute]
 ----
 oc set env deploy/rating-api MONGODB_URI=mongodb://ratingsuser:ratingspassword@mongodb.workshop.svc.cluster.local:27017/ratingsdb
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+deployment.apps/rating-api updated
 ----
 
 === Verify that the service is running
 
-If you navigate to the logs of the `rating-api` deployment, you should see a log message confirming the code can successfully connect to the mongoDB.
-For that, in the deployment's details screen, click on _Pods_ tab, then on one of the pods
+If you check the logs of and pod managed by the `rating-api` deployment, you should see a log message confirming the code can successfully connect to the mongoDB.
 
-image::media/rating-api-working.png[Verify mongoDB connection]
+. Check that your pods have a log message confirming that the application can connect to the database:
++
+[source,sh,role=execute]
+----
+oc logs deploy/rating-api | grep CONNECTED
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+'CONNECTED TO mongodb://ratingsuser:ratingspassword@mongodb.workshop.svc.cluster.local:27017/ratingsdb'
+----
 
 === Retrieve `rating-api` service hostname
 
-Find the `rating-api` service.
-
-[,sh]
+. Find the `rating-api` service.
++
+[source,sh,role=execute]
 ----
 oc get svc rating-api
 ----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+rating-api   ClusterIP   172.30.58.112   <none>        8080/TCP   8m58s
+----
 
-The service will be accessible at the following DNS name over port 8080: `rating-api.workshop.svc.cluster.local:8080` which is formed of `[service name].[project name].svc.cluster.local`.
-This resolves only within the cluster.
+The service will be accessible at the following DNS name over port 8080: `rating-api.workshop.svc.cluster.local:8080` which is formed of `[service name].[project name].svc.cluster.local`. This resolves only within the cluster.
 
 
 == Deploy Ratings frontend

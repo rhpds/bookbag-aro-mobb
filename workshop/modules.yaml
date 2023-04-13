@@ -9,9 +9,12 @@ modules:
   lab_2_connect_cluster:
     name: Connect to your cluster
     exit_sign: Continue
-  lab_3_explore_aad:
+  lab_3_configure_gitea:
+    name: Configure Gitea repository
+    exit_sign: Continue
+  lab_4_explore_aad:
     name: Authentication using AAD
     exit_sign: Continue
-  lab_4_app_deploy:
+  lab_5_app_deploy:
     name: Deploy a Go Microservices Application
     exit_sign: Continue

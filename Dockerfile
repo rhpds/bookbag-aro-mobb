@@ -2,8 +2,6 @@ FROM quay.io/openshifthomeroom/workshop-dashboard:5.0.0
 
 USER root
 
-RUN yum -y install git
-
 COPY . /tmp/src
 
 RUN rm -rf /tmp/src/.git* && \
