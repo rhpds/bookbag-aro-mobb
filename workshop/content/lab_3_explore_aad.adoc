@@ -1,4 +1,4 @@
-== Explore authentication using AAD
+== Explore OpenShift authentication using AAD
 
 In your environment an Azure Active Directory has been configured with two users:
 
@@ -34,7 +34,7 @@ Now that your password has been changed for the Azure admin account you can use 
 
 . Navigate back to the OpenShift console at %aro_console%.
 . This time click on `AAD` when prompted for which authentication provider to use.
-. Use `%%` as the user and the password that you set for the Azure portal to log into the console.
+. Use `%openenv_admin_upn%` as the user and the password that you set for the Azure portal to log into the console.
 +
 [TIP]
 ====
@@ -43,28 +43,12 @@ If you are still logged into the Azure portal in the same browser this will be e
 
 . Also log into the terminal window that you have been using so far using the same user.
 +
-On the top right of the console click on your user and then *Copy login command*.
+On the top right of the OpenShift web console click on your user and then *Copy login command*.
 
 . Confirm by clicking on `AAD` and selecting your account again.
 . Click on *Display Token*
 . Copy the displayed login command under *Log in with this token* and paste it into the terminal window to log in with that user.
-+
-[source,sh]
-----
-oc login --token=sha256~S1Y0Ruqqs-SdPTpbbr_BKZPG7-ntC062JfFh6rXZW0U --server=https://api.spoxm3zr.eastus.aroapp.io:6443
-----
-+
-.Sample Output
-[source,texinfo,options=nowrap]
-----
-Logged into "https://api.spoxm3zr.eastus.aroapp.io:6443" as "openenv-admin-4c5g4@azure.opentlc.com" using the token provided.
-
-You have access to 68 projects, the list has been suppressed. You can list all projects with 'oc projects'
-
-Using project "default".
-----
-
-. Double check that you are logged in as your user:
+. Double check that you are logged in as your Azure user:
 +
 [source,sh,role=execute]
 ----

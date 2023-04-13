@@ -109,11 +109,28 @@ storage                                    4.10.40        True        False     
 
 == Log into the Web Console
 
-. Retrieve the web console URL from the OpenShift
+There are two ways to find out the OpenShift web console URL - either from OpenShift if you are already logged in via the command line or from Azure via the Azure command line tool.
+
+. Use either of the next two commands to get the URL of the OpenShift Web Console:
+
+.. *Option 1*: Retrieve the web console URL from OpenShift
 +
 [source,sh,role=execute]
 ----
 oc whoami --show-console
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+%aro_console%
+----
+
+.. *Option 2*: Retrieve the web console URL from Azure:
++
+[source,sh,role=execute]
+----
+az aro list -o json | jq -r '[.[]|select(.name=="aro-cluster-%guid%")][0].consoleProfile.url'
 ----
 +
 .Sample Output
@@ -130,6 +147,6 @@ oc whoami --show-console
 * User: `kubeadmin` 
 * Password: `%aro_kube_password%` 
 
-. Feel free to explore the web console. When done *log out* of the web console by selecting `kube:admin` on the top right of the console and then clicking `Logout`.
+. Feel free to explore the web console.
 
-In the next lab you will explore authentication using Azure Active Directory.
+. When you're done exploring *log out* of the web console by selecting `kube:admin` on the top right of the console and then clicking `Logout`.

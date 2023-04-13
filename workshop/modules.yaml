@@ -12,5 +12,6 @@ modules:
   lab_3_explore_aad:
     name: Authentication using AAD
     exit_sign: Continue
-  # review:
-  #   name: Review
+  lab_4_app_deploy:
+    name: Deploy a Go Microservices Application
+    exit_sign: Continue

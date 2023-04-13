@@ -46,7 +46,7 @@ az version
 [source,sh,role=execute]
 ----
 cd $HOME
-wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.10.40/openshift-client-linux.tar.gz
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.10.54/openshift-client-linux.tar.gz
 
 mkdir $HOME/bin
 tar -xzvf $HOME/openshift-client-linux.tar.gz -C $HOME/bin

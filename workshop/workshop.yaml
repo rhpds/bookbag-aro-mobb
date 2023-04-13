@@ -6,3 +6,4 @@ modules:
   - lab_1_setup
   - lab_2_connect_cluster
   - lab_3_explore_aad
+  - lab_4_app_deploy
