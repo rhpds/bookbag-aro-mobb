@@ -1,52 +1,23 @@
-= Deploy a Go Microservices Application
+= Introduction
 
-Now that you have your environment provisioned and the prerequisites fulfilled, it is time to start working on the labs.
+It's time for us to put our cluster to work and deploy a workload.
+We're going to build an example Java application, https://github.com/redhat-mw-demos/microsweeper-quarkus/tree/ARO[microsweeper], using https://quarkus.io/[Quarkus] (a Kubernetes Native Java stack) and https://azure.microsoft.com/en-us/products/postgresql/[Azure Database for PostgreSQL].
+We'll then deploy the application to our Azure Red Hat OpenShift cluster, connect to the database using Azure Private Link, and automate the deployment with OpenShift Pipelines.
 
-== Application Overview
+== Create Azure Database for PostgreSQL instance
 
-You will be deploying a ratings application on Azure Red Hat OpenShift.
-
-image::media/app-overview.png[Application diagram,width=100%]
-
-The application consists of 3 components:
-
-|===
-| Component | Link
-
-| A public facing API `rating-api`
-| https://github.com/MicrosoftDocs/mslearn-aks-workshop-ratings-api[GitHub repo]
-
-| A public facing web frontend `rating-web`
-| https://github.com/MicrosoftDocs/mslearn-aks-workshop-ratings-web[GitHub repo]
-
-| A MongoDB with pre-loaded data
-| https://github.com/MicrosoftDocs/mslearn-aks-workshop-ratings-api/raw/master/data.tar.gz[Data]
-|===
-
-Once you're done, you'll have an experience similar to the below.
-
-image:media/app-overview-1.png[Application]
-
-image:media/app-overview-2.png[Application]
-
-image:media/app-overview-3.png[Application]
-
-== Create Project
-
-A project allows a community of users to organize and manage their content in isolation from other communities.
-A project has a 1-to-1 mapping with a standard Kubernetes namespace.
-
-. Create a project called `workshop`:
+. First, let's create a namespace (also known as a project in OpenShift).
+To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
-oc new-project workshop
+oc new-project microsweeper-ex
 ----
 +
 .Sample Output
 [source,text,options=nowrap]
 ----
-Now using project "workshop" on server "https://api.gqfnl2xz.eastus.aroapp.io:6443".
+Now using project "microsweeper-ex" on server "https://api.c90qz1cy.eastus.aroapp.io:6443".
 
 You can add applications to this project with the 'new-app' command. For example, try:
 
@@ -57,508 +28,429 @@ to build a new example application in Ruby. Or use kubectl to deploy a simple Ku
     kubectl create deployment hello-node --image=k8s.gcr.io/e2e-test-images/agnhost:2.33 -- /agnhost serve-hostname
 ----
 
-____
-*Resources*
-
-* https://docs.openshift.com/aro/4/cli_reference/openshift_cli/getting-started-cli.html[ARO Documentation - Getting started with the CLI]
-* https://docs.openshift.com/aro/4/applications/projects/working-with-projects.html[ARO Documentation - Projects]
-____
-
-== Deploy MongoDB from DockerHub image
-
-Azure Red Hat OpenShift allows you to deploy a container image from Docker hub easily and we will deploy a MongoDB database service this way.
-The mandatory environment variables (user, password, database name etc.) can be passed in the `oc new-app` command line
-
-. Deploy the MongoDB database:
+. Create the Azure Postgres Server resource.
+To do so, run the following command (this command will take ~ 5mins)
 +
 [source,sh,role=execute]
 ----
-oc new-app bitnami/mongodb \
-  -e MONGODB_USERNAME=ratingsuser \
-  -e MONGODB_PASSWORD=ratingspassword \
-  -e MONGODB_DATABASE=ratingsdb \
-  -e MONGODB_ROOT_USER=root \
-  -e MONGODB_ROOT_PASSWORD=ratingspassword
+az postgres server create --resource-group openenv-${GUID} \
+  --location eastus --sku-name GP_Gen5_2 \
+  --name microsweeper-${GUID} --storage-size 51200 \
+  --admin-user myAdmin --admin-pass %generated_password% \
+  --public 0.0.0.0
 ----
 +
 .Sample Output
 [source,text,options=nowrap]
 ----
---> Found container image f426934 (2 days old) from Docker Hub for "bitnami/mongodb"
+Checking the existence of the resource group 'openenv-qsd7p'...
+Resource group 'openenv-qsd7p' exists ? : True
+Creating postgres Server 'microsweeper-qsd7p' in group 'openenv-qsd7p'...
+Your server 'microsweeper-qsd7p' is using sku 'GP_Gen5_2' (Paid Tier). Please refer to https://aka.ms/postgres-pricing  for pricing details
+Configuring server firewall rule, 'azure-access', to accept connections from all Azure resources...
+Make a note of your password. If you forget, you would have to reset your password with 'az postgres server update -n microsweeper-qsd7p -g openenv-qsd7p -p <new-password>'.
+{
+  "additionalProperties": {},
+  "administratorLogin": "myAdmin",
 
-    * An image stream tag will be created as "mongodb:latest" that will track this image
-
---> Creating resources ...
-    imagestream.image.openshift.io "mongodb" created
-    deployment.apps "mongodb" created
-    service "mongodb" created
---> Success
-    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
-     'oc expose service/mongodb'
-    Run 'oc status' to view your app.
+[...Output omitted...]
 ----
-
-. Head back to the OpenShift web console.
 +
-If you don't see the Developer perspective click on the *Administrator* link under the OpenShift logo and select *Developer*, then if applicable click *Skip Tour* and select your `workshop` project from the *Project* drop down.
-. Then click *Topology* to see the application layout.
+[NOTE]
+====
+For the sake of the workshop we are creating a public database that any host in Azure can connect to.
+In a real world scenario you would create a private database and connect to it over a private link service
+====
 
-image::media/mongodb-overview.png[MongoDB deployment]
-
-=== Verify if the mongoDB pod was created successfully
-
-Run the `oc get all` command to view the status of the new application and verify if the deployment of the mongoDB template was successful.
-
-. Display all resources in the `workshop` project:
+. Check connectivity from to the database.
+To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
-oc get all
+psql \
+  "host=microsweeper-${GUID}.postgres.database.azure.com port=5432
+  dbname=postgres
+  user=myAdmin@microsweeper-${GUID}.postgres.database.azure.com password=%generated_password% sslmode=require" \
+  -c "select now();"
 ----
 +
 .Sample Output
 [source,text,options=nowrap]
 ----
-NAME                           READY   STATUS    RESTARTS   AGE
-pod/mongodb-655486dd95-6m6k5   1/1     Running   0          4m31s
-
-NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
-service/mongodb   ClusterIP   172.30.170.239   <none>        27017/TCP   4m31s
-
-NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/mongodb   1/1     1            1           4m31s
-
-NAME                                 DESIRED   CURRENT   READY   AGE
-replicaset.apps/mongodb-655486dd95   1         1         1       4m31s
-replicaset.apps/mongodb-d6855d74d    0         0         0       4m31s
-
-NAME                                     IMAGE REPOSITORY                                                    TAGS     UPDATED
-imagestream.image.openshift.io/mongodb   image-registry.openshift-image-registry.svc:5000/workshop/mongodb   latest   4 minutes ago
+-------------------------------
+ 2023-04-24 20:44:38.088556+00
+(1 row)
 ----
 
-=== Retrieve mongoDB service hostname
+== Build and deploy the Microsweeper app
 
-. Find the mongoDB service.
+Now that we've got an Azure managed PostgreSQL instance up and running, let's build and deploy our application.
+
+. In order to build the application you will need the Java JDK 17 and the Quarkus CLI installed. Java JDK 17 is already installed on your bastion VM so let's install the Quarkus CLI:
 +
 [source,sh,role=execute]
 ----
-oc get svc mongodb
+curl -Ls https://sh.jbang.dev | bash -s - trust add https://repo1.maven.org/maven2/io/quarkus/quarkus-cli/
+
+curl -Ls https://sh.jbang.dev | bash -s - app install --fresh --force quarkus@quarkusio
+
+source $HOME/.bashrc
+----
+
+. Double check the Quarkus CLI version:
++
+[source,sh,role=execute]
+----
+quarkus --version
 ----
 +
 .Sample Output
 [source,text,options=nowrap]
 ----
-NAME      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
-mongodb   ClusterIP   172.30.170.239   <none>        27017/TCP   5m20s
-----
-+
-The service will be accessible at the following DNS name: `mongodb.workshop.svc.cluster.local` which is formed of `[service name].[project name].svc.cluster.local`.
-This resolves only within the cluster.
-
-. You can also retrieve this from the web console (click on the *mongodb* deployment, then under *Services* click on the *mongodb* service). You'll need this hostname to configure the `rating-api`.
-
-image::media/mongo-svc-webconsole.png[MongoDB service in the Web Console]
-
-== Deploy Ratings API
-
-The `rating-api` is a NodeJS application that connects to mongoDB to retrieve and rate items.
-Below are some of the details that you'll need to deploy this.
-
-* `rating-api` on Gitea migrated from: https://github.com/MicrosoftDocs/mslearn-aks-workshop-ratings-api
-* The container exposes port 8080
-* MongoDB connection is configured using an environment variable called `MONGODB_URI`
-* You're going to be using <<source-to-image-s2i,source-to-image (S2I)>> as a build strategy.
-
-. Set an environment variable for your personal Gitea instance URL:
-+
-[source,sh,role=execute]
-----
-export GITEA_URL=$(oc get route gitea -n gitea -o json | jq -r .spec.host); echo $GITEA_URL
-----
-+
-.Sample Output
-[source,text,options=nowrap]
-----
-gitea-gitea.apps.gqfnl2xz.eastus.aroapp.io
+2.16.6.Final
 ----
 
-. Create the new application from git source
-+
-[source,sh,role=execute]
-----
-oc new-app https://${GITEA_URL}/developer/ratings-api --strategy=source --name=rating-api -n workshop
-----
-+
-.Sample Output
-[source,text,options=nowrap]
-----
---> Found image 3e4c7d3 (2 weeks old) in image stream "openshift/nodejs" under tag "16-ubi8" for "nodejs"
-
-    Node.js 16
-    ----------
-    Node.js 16 available as container is a base platform for building and running various Node.js 16 applications and frameworks. Node.js is a p
-latform built on Chrome's JavaScript runtime for easily building fast, scalable network applications. Node.js uses an event-driven, non-blocking
- I/O model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices.
-
-    Tags: builder, nodejs, nodejs16
-
-    * The source repository appears to match: nodejs
-    * A source build using source code from https://github.com/MicrosoftDocs/mslearn-aks-workshop-ratings-api will be created
-      * The resulting image will be pushed to image stream tag "rating-api:latest"
-      * Use 'oc start-build' to trigger a new build
-
---> Creating resources ...
-    imagestream.image.openshift.io "rating-api" created
-    buildconfig.build.openshift.io "rating-api" created
-    deployment.apps "rating-api" created
-    service "rating-api" created
---> Success
-    Build scheduled, use 'oc logs -f buildconfig/rating-api' to track its progress.
-    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
-     'oc expose service/rating-api'
-    Run 'oc status' to view your app.
-----
-
-=== Configure the required environment variables
-
-Create the `MONGODB_URI` environment variable.
-
-This URI should look like `mongodb://[username]:[password]@[endpoint]:27017/ratingsdb`.
-You'll need to replace the `[username]` and `[password]` with the ones you used when creating the database.
-You'll also need to replace the `[endpoint]` with the hostname acquired in the previous step
-
-. Set the environment variable for the `Deployment` called *rating-api*:
-+
-[source,sh,role=execute]
-----
-oc set env deploy/rating-api MONGODB_URI=mongodb://ratingsuser:ratingspassword@mongodb.workshop.svc.cluster.local:27017/ratingsdb
-----
-+
-.Sample Output
-[source,text,options=nowrap]
-----
-deployment.apps/rating-api updated
-----
-
-=== Verify that the service is running
-
-If you check the logs of and pod managed by the `rating-api` deployment, you should see a log message confirming the code can successfully connect to the mongoDB.
-
-. Check that your pods have a log message confirming that the application can connect to the database:
-+
-[source,sh,role=execute]
-----
-oc logs deploy/rating-api | grep CONNECTED
-----
-+
-.Sample Output
-[source,text,options=nowrap]
-----
-'CONNECTED TO mongodb://ratingsuser:ratingspassword@mongodb.workshop.svc.cluster.local:27017/ratingsdb'
-----
-
-=== Retrieve `rating-api` service hostname
-
-. Find the `rating-api` service.
-+
-[source,sh,role=execute]
-----
-oc get svc rating-api
-----
-+
-.Sample Output
-[source,text,options=nowrap]
-----
-NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-rating-api   ClusterIP   172.30.58.112   <none>        8080/TCP   8m58s
-----
-
-The service will be accessible at the following DNS name over port 8080: `rating-api.workshop.svc.cluster.local:8080` which is formed of `[service name].[project name].svc.cluster.local`. This resolves only within the cluster.
-
-== Deploy Ratings frontend
-
-The `rating-web` is a NodeJS application that connects to the `rating-api`.
-Below are some of the details that you'll need to deploy this.
-
-* `rating-web` on Gitea migrated from https://github.com/MicrosoftDocs/mslearn-aks-workshop-ratings-web
-* The rating-web frontend Dockerfile needs modification to the image to run on ARO 4.x versions
-* The container exposes port 8080
-* The web app connects to the API over the internal cluster DNS, using a proxy through an environment variable named `API`
-
-=== Modify Dockerfile in your repository
-
-____
-*Note* The Dockerfile needs to be modified to use the correct node.js image to build correctly.
-____
-
-. Clone the Git repository locally and change to repo directory:
+. Now, let's clone the application from GitHub to our local bastion VM.
+To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
 cd $HOME
 
-git clone https://${GITEA_URL}/developer/ratings-web.git
-
-cd ratings-web
-----
-
-. Download updated Dockerfile and Footer.vue files:
-+
-[source,sh,role=execute]
-----
-wget https://raw.githubusercontent.com/sajitsasi/rating-web/master/Dockerfile -O ./Dockerfile
-wget https://raw.githubusercontent.com/sajitsasi/rating-web/master/src/components/Footer.vue -O ./src/components/Footer.vue
-----
-
-. Verify, stage, commit and push changes to your local repository:
-+
-[TIP]
-----
-When prompted for the username use `developer` and when prompted for the password use `%generated_password%`.
-----
-+
-[source,sh,role=execute]
-----
-git status
-git add .
-git commit -m "Modified Dockerfile and Footer.vue"
-git push
-----
-
-=== Use the OpenShift CLI to deploy the `rating-web`
-
-. Create a new application from your modified source code repository:
-+
-[source,sh,role=execute]
-----
-oc new-app https://${GITEA_URL}/developer/ratings-web.git --strategy=docker --name=rating-web -n workshop
+git clone https://github.com/rh-mobb/aro-workshop-app.git
 ----
 +
 .Sample Output
 [source,text,options=nowrap]
 ----
---> Found container image 6dad24e (5 months old) from Docker Hub for "node:14-alpine3.15"
-
-    * An image stream tag will be created as "node:14-alpine3.15" that will track the source image
-    * A Docker build using source code from https://gitea-gitea.apps.gqfnl2xz.eastus.aroapp.io/developer/ratings-web.git will be created
-      * The resulting image will be pushed to image stream tag "rating-web:latest"
-      * Every time "node:14-alpine3.15" changes a new build will be triggered
-
---> Creating resources ...
-    imagestream.image.openshift.io "node" created
-    imagestream.image.openshift.io "rating-web" created
-    buildconfig.build.openshift.io "rating-web" created
-    deployment.apps "rating-web" created
-    service "rating-web" created
---> Success
-    Build scheduled, use 'oc logs -f buildconfig/rating-web' to track its progress.
-    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
-     'oc expose service/rating-web'
-    Run 'oc status' to view your app.
+Cloning into 'aro-workshop-app'...
+remote: Enumerating objects: 152, done.
+remote: Counting objects: 100% (16/16), done.
+remote: Compressing objects: 100% (14/14), done.
+remote: Total 152 (delta 12), reused 2 (delta 2), pack-reused 136
+Receiving objects: 100% (152/152), 6.57 MiB | 31.29 MiB/s, done.
+Resolving deltas: 100% (55/55), done.
 ----
 
-. Follow the build logs:
+. Next, let's change directory into the newly cloned Git repository.
+To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
-oc logs -f bc/rating-web
+cd $HOME/aro-workshop-app
+----
+
+. Next, we will add the OpenShift extension to the Quarkus CLI.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+quarkus ext add openshift
 ----
 +
 .Sample Output
 [source,text,options=nowrap]
 ----
-[... Output omitted ...]
-
-Copying config sha256:12a0251bb16533a06f47aede83ea83c66c2d307c9952a72517b14dc7416d7970
-Writing manifest to image destination
-Storing signatures
-Successfully pushed image-registry.openshift-image-registry.svc:5000/workshop/rating-web@sha256:c833ec22cd405ed11c17b40205ed7a5f077ff627a46409ce
-24470e37a33cc4ef
-Push successful
+Looking for the newly published extensions in registry.quarkus.io
+[SUCCESS] ✅  Extension io.quarkus:quarkus-openshift has been installed
 ----
 
-=== Configure the required environment variables
-
-Create the `API` environment variable for `rating-web` Deployment. The value of this variable is going to be the hostname/port of the `rating-api` service.
-
-. Set the environment variable on the deployment:
+. We also want Quarkus to be able to use OpenShift ConfigMaps and Secrets:
 +
 [source,sh,role=execute]
 ----
-oc set env deploy rating-web API=http://rating-api:8080
+quarkus ext add kubernetes-config
 ----
 +
 .Sample Output
 [source,text,options=nowrap]
 ----
-deployment.apps/rating-web updated
+[SUCCESS] ✅  Extension io.quarkus:quarkus-kubernetes-config has been installed
 ----
 
-=== Expose the `rating-web` service using a Route
-
-. Expose the service.
+. Create a OpenShift secret containing Database credentials for Quarkus to use:
 +
 [source,sh,role=execute]
 ----
-oc expose svc/rating-web
-----
-+
-.Sample Output
-[source,text,options=nowrap]
-----
-route.route.openshift.io/rating-web exposed
-----
-
-. Retrieve the created route hostname:
-+
-[source,sh,role=execute]
-----
-oc get route rating-web
-----
-+
-.Sample Output
-[source,text,options=nowrap]
-----
-NAME         HOST/PORT                                            PATH   SERVICES     PORT       TERMINATION   WILDCARD
-rating-web   rating-web-workshop.apps.gqfnl2xz.eastus.aroapp.io          rating-web   8080-tcp                 None
-----
-+
-Notice the fully qualified domain name (FQDN) is comprised of the application name and project name by default.
-The remainder of the FQDN, the subdomain, is your Azure Red Hat OpenShift cluster specific apps subdomain.
-
-=== Try the Ratings application
-
-Open the hostname in your browser, you should see the rating app page.
-
-Play around, submit a few votes and check the leaderboard.
-
-image::media/rating-web-homepage.png[rating-web homepage]
-
-////
-WK need to udpate Gitea to allow webhook calls...
-=== Setup Gitea webhook
-
-To trigger S2I builds when you push code into your source code repository, you'll need to setup a webhook.
-
-Retrieve the GitHub webhook trigger secret. You'll need use this secret in the GitHub webhook URL.
-+
-[source,sh,role=execute]
-----
-oc get bc/rating-web -o=jsonpath='{.spec.triggers..github.secret}'; echo
-----
-+
-.Sample Output
-[source,text,options=nowrap]
-----
-W0Xu-5FgaFgGOXmJOJHb
-----
-
-You'll get back something similar to the below.
-Make note the secret key in the red box as you'll need it in a few steps.
-
-image::media/rating-web-github-secret.png[Rating Web GitHub trigger secret]
-
-Retrieve the GitHub webhook trigger URL from the build configuration.
-+
-[source,sh,role=execute]
-----
-oc describe bc/rating-web | grep URL | grep github | awk -c '{print $2}'
-----
-+
-.Sample Output
-[source,text,options=nowrap]
-----
-https://api.gqfnl2xz.eastus.aroapp.io:6443/apis/build.openshift.io/v1/namespaces/workshop/buildconfigs/rating-web/webhooks/<secret>/github
-----
-+
-You will need to replace the `<secret>` placeholder with the secret you retrieved in the previous step. You'll use this URL to setup the webhook on your source code repository.
-
-. Remind yourself of your Gitea repository URL:
-+
-[source,sh,role=execute]
-----
-echo https://$GITEA_URL
-----
-+
-.Sample Output
-[source,text,options=nowrap]
-----
-https://gitea-gitea.apps.gqfnl2xz.eastus.aroapp.io
-----
-
-. Use this URL in another browser window to open the Gitea repository.
-. Sign into Gitea by clicking the *Sign In* link on the top right of the page.
-. Use `developer` as the username and `%generated_password%` as the password.
-. In the list of repositories click on the repository *developer/ratings-web*.
-. In the repository click on *Settings* then on *Webhooks*.
-. Click the blue *Add Webhook* button and select *Gitea* for the webhook type.
-. Add the URL that you constructed before (e.g. `https://api.gqfnl2xz.eastus.aroapp.io:6443/apis/build.openshift.io/v1/namespaces/workshop/buildconfigs/rating-web/webhooks/<secret>/github` - with `<secret>` replaced with your personal secret.)
-. Click *Add webhook*.
-+
-image::media/gitea-webhook.png[Gitea add webhook]
-
-Now, whenever you push a change to your GitHub repository, a new build will automatically start, and upon a successful build a new deployment will start.
-
-=== Make a change to the website app and see the rolling update
-
-. In your Gitea repository navigate to the file `/src/App.vue`.
-. Edit the file, and change the `background-color: #999;` line to be `background-color: #0071c5`.
-. Commit the changes to the file into the `master` branch.
-. Immediately, go to the *Builds* tab in the OpenShift Web Console. You'll see a new build queued up which was triggered by the push. Once this is done, it will trigger a new deployment and you should see the new website color updated.
-
-____
-*Resources*
-
-* https://docs.openshift.com/aro/4/builds/triggering-builds-build-hooks.html[ARO Documentation - Triggering builds]
-____
-////
-
-== Create Network Policy
-
-Now that you have the application working, it is time to apply some security hardening.
-
-You'll use https://docs.openshift.com/aro/4/networking/network_policy/about-network-policy.html[network policies] to restrict communication to the `rating-api`.
-
-=== Switch to the OpenShift Administrative Console
-
-. In the OpenShift Web Console switch back to the Administrator console (top left, click on *Developer* and select *Administrator*).
-
-. On the left expand *Networking* and click *NetworkPolicies*.
-. If it is not already selected select *workshop* from the dropdown list of *Projects*.
-. Create a new NetworkPolicy with the following properties:
-* You will create a policy that applies to any pod matching the `app=rating-api` label.
-* The policy will allow ingress only from pods matching the `app=rating-web` label.
-+
-Click the blue *Create Network Policy* button.
-. Click the `YAML view` radio button.
-. Paste the YAML below in the editor overwriting the default YAML that has been pre-populated.
-+
-[source,yaml,role=copy]
-----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
+cat << EOF | oc apply -f -
+---
+apiVersion: v1
+kind: Secret
 metadata:
-  name: api-allow-from-web
-  namespace: workshop
-spec:
-  podSelector:
-    matchLabels:
-      app: rating-api
-  ingress:
-  - from:
-    - podSelector:
-        matchLabels:
-          app: rating-web
+  name: microsweeper-secret
+  namespace: microsweeper-ex
+type: Opaque
+stringData:
+  PG_URL: jdbc:postgresql://microsweeper-${GUID}.postgres.database.azure.com:5432/postgres
+  PG_USER: myAdmin@microsweeper-${GUID}.postgres.database.azure.com
+  PG_PASS: %generated_password%
+EOF
 ----
 +
-image::media/create-networkpolicy.png[Create network policy]
+.Sample Output
+[source,text,options=nowrap]
+----
+secret/microsweeper-secret created
+----
 
-. Click *Create*.
+. Now, we'll configure Quarkus to use the PostgreSQL database that we created earlier in this section.
+To do so, we'll create an `application.properties` file using by running the following command:
++
+[source,sh,role=execute]
+----
+cat <<"EOF" > $HOME/aro-workshop-app/src/main/resources/application.properties
+# Database configurations
+%prod.quarkus.datasource.db-kind=postgresql
+%prod.quarkus.datasource.jdbc.url=${PG_URL}
+%prod.quarkus.datasource.username=${PG_USER}
+%prod.quarkus.datasource.password=${PG_PASS}
+%prod.quarkus.datasource.jdbc.driver=org.postgresql.Driver
+%prod.quarkus.hibernate-orm.database.generation=drop-and-create
+%prod.quarkus.hibernate-orm.database.generation=update
 
-____
-*Resources*
+# OpenShift configurations
+%prod.quarkus.kubernetes-client.trust-certs=true
+%prod.quarkus.kubernetes.deploy=true
+%prod.quarkus.kubernetes.deployment-target=openshift
+%prod.quarkus.openshift.build-strategy=docker
+%prod.quarkus.openshift.expose=true
+%prod.quarkus.openshift.deployment-kind=Deployment
+%prod.quarkus.container-image.group=microsweeper-ex
+%prod.quarkus.openshift.env.secrets=microsweeper-secret
+EOF
+----
 
-* https://docs.openshift.com/aro/4/networking/network_policy/creating-network-policy.html[ARO Documentation - Managing Networking with Network Policy]
-____
+. Now that we've provided the proper configuration, we will build our application.
+We'll do this using https://github.com/openshift/source-to-image[source-to-image], a tool built-in to OpenShift.
+To start the build and deploy, run the following command:
++
+[source,sh,role=execute]
+----
+quarkus build --no-tests
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+[INFO] Scanning for projects...
+Downloading from central: https://repo.maven.apache.org/maven2/io/quarkus/platform/quarkus-maven-plugin/2.11.2.Final/quarkus-maven-plugin-2.11.2.Final.pom
+Downloaded from central: https://repo.maven.apache.org/maven2/io/quarkus/platform/quarkus-maven-plugin/2.11.2.Final/quarkus-maven-plugin-2.11.2.Final.pom (6.9 kB at 11 kB/s)
 
-You now have an application consisting of 3 microservices deployed with a Network policy to restrict who can access the API.
+[...Output omitted...]
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  02:41 min
+[INFO] Finished at: 2023-04-24T20:58:59Z
+[INFO] ------------------------------------------------------------------------
+----
++
+[INFO]
+====
+Quarkus will build the .jar locally and then work with the OpenShift build system to inject it into a Red Hat UBI image, save that to the inbuild OpenShift registry, and then run the resultant image in OpenShift.
+====
+
+. We want to see custom metrics from the Quarkus app (they're exposed by the Quarkus micrometer plugin) so we can configure a Prometheus `ServiceMonitor` resource to watch for the applications label.
++
+[source,sh,role=execute]
+----
+cat << EOF | oc apply -f -
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: microsweeper-monitor
+  name: microsweeper-monitor
+  namespace: microsweeper-ex
+spec:
+  endpoints:
+  - interval: 30s
+    targetPort: 8080
+    path: /q/metrics
+    scheme: http
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: microsweeper-appservice
+EOF
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+servicemonitor.monitoring.coreos.com/microsweeper-monitor created
+----
+
+. Change back to your previous working directory
++
+[source,sh,role=execute]
+----
+cd $HOME
+----
+
+== Review
+
+Let's take a look at what this command did, along with everything that was created in your cluster.
+Return to your tab with the OpenShift Web Console.
+
+=== Container Images
+
+From the Administrator perspective, expand _Builds_ and then _ImageStreams_, and select the _microsweeper-ex_ project.
+
+image::media/web-console-imagestreams.png[OpenShift Web Console - Imagestreams]
+
+You will see two images that were created on your behalf when you ran the quarkus build command.
+There is one image for `openjdk-11` that comes with OpenShift as a Universal Base Image (UBI) that the application will run under.
+With UBI, you get highly optimized and secure container images that you can build your applications with.
+For more information on UBI please read this https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image[article].
+
+The second image you see is the the `microsweeper-appservice` image.
+This is the image for the application that was built automatically for you and pushed to the built-in container registry inside of OpenShift.
+
+=== Image Build
+
+How did those images get built you ask?
+Back on the OpenShift Web Console, click on _BuildConfigs_ and then the _microsweeper-appservice_ entry.
+
+image::media/web-console-buildconfigs.png[OpenShift Web Console - BuildConfigs]
+image::media/web-console-microsweeper-appservice-buildconfig.png[OpenShift Web Console - microsweeper-appservice BuildConfig]
+
+When you ran the `quarkus build` command, this created the BuildConfig you can see here.
+In our quarkus settings, we set the deployment strategy to build the image using Docker.
+The Dockerfile file from the git repo that we cloned was used for this BuildConfig.
+
+!!!
+info "A build configuration describes a single build definition and a set of triggers for when a new build is created.
+Build configurations are defined by a BuildConfig, which is a REST object that can be used in a POST to the API server to create a new instance."
+
+You can read more about BuildConfigs https://docs.openshift.com/container-platform/latest/cicd/builds/understanding-buildconfigs.html[here]
+
+Once the BuildConfig was created, the source-to-image process kicked off a Build of that BuildConfig.
+The build is what actually does the work in building and deploying the image.
+We started with defining what to be built with the BuildConfig and then actually did the work with the Build.
+You can read more about Builds https://docs.openshift.com/container-platform/latest/cicd/builds/understanding-image-builds.html[here]
+
+To look at what the build actually did, click on Builds tab and then into the first Build in the list.
+
+image::media/web-console-builds.png[OpenShift Web Console - Builds]
+
+On the next screen, explore around.
+Look specifically at the YAML definition of the build and the logs to see what the build actually did.
+If you build failed for some reason, the logs are a great first place to start to look at to debug what happened.
+
+image::media/web-console-build-logs.png[OpenShift Web Console - Build Logs]
+
+=== Image Deployment
+
+After the image was built, the source-to-image process then deployed the application for us.
+In the quarkus properties file, we specified that a deployment should be created.
+You can view the deployment under _Workloads_ \-> _Deployments_, and then click on the Deployment name.
+
+image::media/web-console-deployments.png[OpenShift Web Console - Deployments]
+
+Explore around the deployment screen, check out the different tabs, look at the YAML that was created.
+
+image::media/web-console-deployment-yaml.png[OpenShift Web Console - Deployment YAML]
+
+Look at the pod the deployment created, and see that it is running.
+
+image::media/web-console-deployment-pods.png[OpenShift Web Console - Deployment Pods]
+
+The last thing we will look at is the route that was created for our application.
+In the quarkus properties file, we specified that the application should be exposed to the Internet.
+When you create a Route, you have the option to specify a hostname.
+To start with, we will just use the default domain that comes with ARO (`useast.aroapp.io` in our case).
+In next section, we will expose the same application to a custom domain leveraging Azure Front Door.
+
+You can read more about routes https://docs.openshift.com/container-platform/latest/networking/routes/route-configuration.html[in the Red Hat documentation]
+
+From the OpenShift Web Console menu, click on _Networking_\->__Routes__, and the _microsweeper-appservice_ route.
+image::media/web-console-routes.png[OpenShift Web Console - Routes]
+
+=== Test the application
+
+While in the route section of the OpenShift Web Console, click the URL under _Location_: image::media/web-console-route-link.png[OpenShift Web Console - Route Link]
+
+You can also get the the URL for your application using the command line:
+
+[source,sh,role=execute]
+----
+oc -n microsweeper-ex get route microsweeper-appservice -o jsonpath='{.spec.host}' ; echo
+----
+
+.Sample Output
+[source,text,options=nowrap]
+----
+microsweeper-appservice-microsweeper-ex.apps.c90qz1cy.eastus.aroapp.io
+----
+
+=== View custom metrics for the App
+
+Switch the OpenShift Web Console to the Developer view, select the project `microsweeper-ex` and go to menu:Observe[Metrics] and type `process_uptime_seconds` into custom metrics.
+Switch the timeframe to `5min`.
+
+[INFO]
+====
+While you're here, you might also want to look at the Dashboard tab to see the Project's CPU/Memory usage.
+====
+
+=== Application IP
+
+Let's take a quick look at what IP the application resolves to.
+Back in your terminal environment, run the following command:
+
+[source,sh,role=execute]
+----
+nslookup $(oc -n microsweeper-ex get route microsweeper-appservice -o jsonpath='{.spec.host}')
+----
+
+.Sample Output
+[source,text,options=nowrap]
+----
+Server:		168.63.129.16
+Address:	168.63.129.16#53
+
+Non-authoritative answer:
+Name:	microsweeper-appservice-microsweeper-ex.apps.c90qz1cy.eastus.aroapp.io
+Address: 40.88.34.241
+----
+
+Notice the IP address;
+Can you guess where it comes from?
+
+It comes from the ARO Load Balancer.
+In this workshop, we are using a public cluster which means the load balancer is exposed to the Internet.
+If this was a private cluster, you would have to have connectivity to the vNet ARO is running on.
+This could be via a VPN connection, Azure ExpressRoute, or something else.
+
+To view the ARO load balancer, on the Azure Portal, search for "Load Balancers" in the search bar and click on the _Load balancers_ service.
+
+image::media/azure-portal-load-balancer-menu.png[Azure Portal - Load Balancer Search]
+
+You will notice two load balancers, one that has -internal in the name and one that does not.
+The `-internal` load balancer is used for the OpenShift API.
+The other load balancer (without the `-internal` suffix) in the name is use the public load balancer used for the default Ingress Controller.
+Click into the load balancer for applications.
+
+image::media/azure-portal-load-balancer-list.png[Azure Portal - Load Balancer List]
+
+On the next screen, click on Frontend IP configuration.
+Notice the IP address of the 2nd load balancer on the list.
+This IP address matches what you found with the nslookup command.
+
+image::media/azure-portal-lb-frontend-ip-config.png[Azure Portal - Load Balancer Frontend IP configuration]
+
+For the fun of it, we can also look at what backends this load balancer is connected to.
+
+image::media/azure-portal-lb-frontend-ip-drilldown.png[Azure Portal - Load Balancer Frontend IP configuration]
+
+Next, click on the pool that ends in 443.
+
+image::media/azure-portal-lb-frontend-ip-detail.png[Azure Portal - Load Balancer Frontend IP configuration]
+
+Notice the _Backend pool_.
+This is the subnet that contains all the worker nodes.
+And the best part is all of this came with Azure Red Hat OpenShift out of the box!
+
+image::media/azure-portal-lb-backend-pool.png[Azure Portal - Load Balancer Backend Pool]

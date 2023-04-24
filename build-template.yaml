@@ -11,39 +11,39 @@ metadata:
   name: bookbag-build
 
 parameters:
-  - name: NAME
-    required: true
-    value: bookbag
-  - name: BUILDER_IMAGE
-    required: true
-    value: quay.io/openshifthomeroom/workshop-dashboard:5.0.0
-  - name: GIT_REPO
-    value: https://github.com/rhpds/bookbag-open-environment-azure-aro4.git
+- name: NAME
+  required: true
+  value: bookbag
+- name: BUILDER_IMAGE
+  required: true
+  value: quay.io/openshifthomeroom/workshop-dashboard:5.0.0
+- name: GIT_REPO
+  value: https://github.com/rhpds/bookbag-open-environment-azure-aro4.git
 
 objects:
-  - apiVersion: image.openshift.io/v1
-    kind: ImageStream
-    metadata:
-      name: ${NAME}
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    name: ${NAME}
 
-  - apiVersion: build.openshift.io/v1
-    kind: BuildConfig
-    metadata:
-      name: ${NAME}
-    spec:
-      output:
-        to:
-          kind: ImageStreamTag
-          name: ${NAME}:latest
-      source:
-        git:
-          ref: main
-          uri: ${GIT_REPO}
-        type: Git
-      strategy:
-        sourceStrategy:
-          from:
-            kind: DockerImage
-            name: ${BUILDER_IMAGE}
-        type: Source
-      triggers: []
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    name: ${NAME}
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${NAME}:latest
+    source:
+      git:
+        ref: main
+        uri: ${GIT_REPO}
+      type: Git
+    strategy:
+      sourceStrategy:
+        from:
+          kind: DockerImage
+          name: ${BUILDER_IMAGE}
+      type: Source
+    triggers: []
