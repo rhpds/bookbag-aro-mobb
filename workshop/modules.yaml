@@ -24,3 +24,21 @@ modules:
   lab_7_app_networkpolicy:
     name: Restrict Network Access
     exit_sign: Continue
+  lab_8_resilient_app:
+    name: Making your application resilient
+    exit_sign: Continue
+  lab_9_service_mesh_introduction:
+    name: Introduction to OpenShift Service Mesh
+    exit_sign: Continue
+  lab_10_service_mesh_deploy_operator:
+    name: Deploy Service Mesh Operator
+    exit_sign: Continue
+  lab_11_service_mesh_deploy_control_plane:
+    name: Deploy Control Plane
+    exit_sign: Continue
+  lab_12_service_mesh_deploy_app:
+    name: Deploy Workloads
+    exit_sign: Continue
+  lab_13_service_mesh_observe:
+    name: Configure and Observe Traffic
+    exit_sign: Exit
