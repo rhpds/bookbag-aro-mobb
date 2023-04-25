@@ -21,3 +21,6 @@ modules:
   lab_6_app_gitops:
     name: Using OpenShift GitOps
     exit_sign: Continue
+  lab_7_app_networkpolicy:
+    name: Restrict Network Access
+    exit_sign: Continue

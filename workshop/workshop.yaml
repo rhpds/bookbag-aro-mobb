@@ -9,3 +9,4 @@ modules:
   - lab_4_explore_aad
   - lab_5_app_deploy
   - lab_6_app_gitops
+  - lab_7_app_networkpolicy
