@@ -8,3 +8,4 @@ modules:
   - lab_3_configure_gitea
   - lab_4_explore_aad
   - lab_5_app_deploy
+  - lab_6_app_gitops

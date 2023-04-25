@@ -1,0 +1,228 @@
+= Deploying your Application with OpenShift GitOps
+
+. From the OpenShift Console Administrator view click through *HOME* \-> *Operators* \-> *Operator Hub*, search for "Red Hat OpenShift GitOps" and hit *Install*. Make sure to select the *Channel* `gitops-1.8`. Accept all other defaults and click on *Install*.
++
+image::media/gitops_operator.png[]
+
+. Create a new project
++
+[source,sh,role=execute]
+----
+oc new-project bgd
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+Now using project "bgd" on server "https://api.c90qz1cy.eastus.aroapp.io:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/e2e-test-images/agnhost:2.33 -- /agnhost serve-hostname
+----
+
+. Deploy ArgoCD into your project
++
+[source,sh,role=execute]
+----
+cat <<EOF | oc apply -f -
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ArgoCD
+metadata:
+  name: argocd
+  namespace: bgd
+spec:
+  sso:
+    dex:
+      openShiftOAuth: true
+      resources:
+        limits:
+          cpu: 500m
+          memory: 256Mi
+        requests:
+          cpu: 250m
+          memory: 128Mi
+    provider: dex
+  rbac:
+    defaultPolicy: "role:readonly"
+    policy: "g, system:authenticated, role:admin"
+    scopes: "[groups]"
+  server:
+    route:
+      enabled: true
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: reencrypt
+EOF
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+argocd.argoproj.io/argocd created
+----
+
+. Wait for ArgoCD to be ready
++
+[source,sh,role=execute]
+----
+oc rollout status deploy/argocd-server
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+deployment "argocd-server" successfully rolled out
+----
+
+. Apply the gitops configuration
++
+[source,sh,role=execute]
+----
+cat <<EOF | oc apply -f -
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bgd-app
+  namespace: bgd
+spec:
+  destination:
+    namespace: bgd
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: apps/bgd/base
+    repoURL: https://github.com/rh-mobb/gitops-bgd-app
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=false
+EOF
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+application.argoproj.io/bgd-app created
+----
+
+. Find the URL for your Argo CD dashboard and log in using your OpenShift credentials
++
+[source,sh,role=execute]
+----
+oc get route argocd-server -n bgd -o jsonpath='{"https://"}{.spec.host}{"\n"}'
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+https://argocd-server-bgd.apps.c90qz1cy.eastus.aroapp.io
+----
++
+image::media/argo_app1.png[]
+
+. Click on the Application *bgd-app* to show its topology
++
+image::media/argo_sync.png[]
+
+. Verify that OpenShift sees the Deployment as rolled out
++
+[source,sh,role=execute]
+----
+oc rollout status deploy/bgd -n bgd
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+deployment "bgd" successfully rolled out
+----
+
+. Get the route and browse to it in your browser
++
+[source,sh,role=execute]
+----
+oc get route bgd -n bgd -o jsonpath='{"https://"}{.spec.host}{"\n"}'
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+https://bgd-bgd.apps.c90qz1cy.eastus.aroapp.io
+----
+
+. You should see a green box in the website like so
++
+image::media/bgd_green.png[]
+
+. Patch the OpenShift resource to force it to be out of sync with git
++
+[source,sh,role=execute]
+----
+oc patch deploy/bgd --type='json' \
+   -p='[{"op": "replace", "path":
+   "/spec/template/spec/containers/0/env/0/value", "value":"blue"}]'
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+deployment.apps/bgd patched
+----
+
+. Refresh Your browser and you should see a blue box in the website like so
++
+image::media/app_blue.png[]
+
+. Meanwhile check ArgoCD it should show the application as out of sync.
+Click the *Sync* button and then click on *Synchronize* to have it revert the change you made in OpenShift
++
+image::media/sync_bgd.png[]
+
+. Check again, you should see a green box in the website like so
++
+image::media/bgd_green.png[]
+
+. Patch the ArgoCD application to automatically self heal
++
+[source,sh,role=execute]
+----
+oc patch application bgd-app --type merge \
+   -p='{"spec":{"syncPolicy":{"automated":{"selfHeal": true}}}}'
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+application.argoproj.io/bgd-app patched
+----
+
+. Change the Application again and watch the ArgoCD web gui, you should see the change made in the cluster get quickly reverted back to match what is in github.
++
+[source,sh,role=execute]
+----
+oc patch deploy/bgd --type='json' \
+   -p='[{"op": "replace", "path":
+   "/spec/template/spec/containers/0/env/0/value", "value":"blue"}]'
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+deployment.apps/bgd patched
+----
++
+[INFO]
+====
+The self healing may happen so fast you don't even see it happen.
+====
+
