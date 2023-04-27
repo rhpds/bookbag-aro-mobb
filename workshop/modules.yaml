@@ -41,4 +41,7 @@ modules:
     exit_sign: Continue
   lab_5_worker-nodes:
     name: Managing Worker Nodes
+    exit_sign: Continue
+  lab_6_storage.:
+    name: Temporary Azure Storage Lab
     exit_sign: Exit

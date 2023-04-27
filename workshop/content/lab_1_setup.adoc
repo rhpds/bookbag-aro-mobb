@@ -58,5 +58,18 @@ echo "export PATH=$HOME/bin:$PATH" >>$HOME/.bashrc
 *Why use `oc` over `kubectl`* + Being Kubernetes, one can definitely use `kubectl` with their OpenShift cluster.
 `oc` is specific to OpenShift in that it includes the standard set of features from `kubectl` plus additional support for OpenShift functionality. See https://docs.openshift.com/container-platform/latest/cli_reference/openshift_cli/usage-oc-kubectl.html[Usage of oc and kubectl commands] for more details.
 
+. Download and install the `helm` binary:
++
+[source,sh,role=execute]
+----
+cd $HOME
+
+wget https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/helm/latest/helm-linux-a
+md64
+
+chmod 775 helm-linux-amd64
+
+mv helm-linux-amd64 ~/bin/helm
+----
 
 You are ready to start using your ARO cluster.

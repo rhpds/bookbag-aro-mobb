@@ -16,3 +16,4 @@ modules:
   - lab_4_07_app_scaling
   - lab_4_08_app_hpa
   - lab_5_worker-nodes
+  - lab_6_storage
