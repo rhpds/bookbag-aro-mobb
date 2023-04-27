@@ -1,0 +1,64 @@
+== Explore OpenShift authentication using AAD
+
+In your environment an Azure Active Directory has been configured with two users:
+
+* Admin user: `%openenv_admin_upn%`. This user has administrative access to the Azure Portal as well as cluster-admin authorization on the ARO cluster.
+* Regular user:  `%openenv_user_upn%`. This user only has user level permissions with no useful access to the Azure portal or ARO cluster.
+
+[NOTE]
+====
+Both users have been assigned the temporary password `%bastion_password%`. You *must* change this password when you first log into the Azure portal.
+====
+
+=== Azure Portal and change admin password
+
+The Azure Portal URL is https://portal.azure.com.
+
+. Open a new web browser window/tab and log into the Azure Portal by navigating to https://portal.azure.com.
+. Use `%openenv_admin_upn%` as the user id and `%bastion_password%` as the password to log into the portal.
+. You will be prompted to change your password. Use `%bastion_password%` as the current password and pick a password that you will remember throughout this lab. Make sure this password is reasonably complex. An example could be `Firstname-Lastname-Admin2023` (using your first and last name).
+. Click `Maybe Later` when asked if you want to take a tour of the Azure portal.
+
+=== Explore ARO
+
+. In the search bar at the top type *aro* and then click on *Azure Red Hat OpenShift Clusters*.
++
+You will see your cluster `aro-cluster-%guid%`.
+
+. Click on your cluster to open the cluster properties.
+. Click on *Settings* -> *Properties* to bring up the cluster overview.
+
+== Log into OpenShift using Azure Credentials
+
+Now that your password has been changed for the Azure admin account you can use single sign on to log into your OpenShift cluster.
+
+. Navigate back to the OpenShift console at %aro_console%.
+. This time click on `AAD` when prompted for which authentication provider to use.
+. Use `%openenv_admin_upn%` as the user and the password that you set for the Azure portal to log into the console.
++
+[TIP]
+====
+If you are still logged into the Azure portal in the same browser this will be easy - Azure will present you with a list of users. Simply select your admin user. And because this is single sign on you will not even have to provide your password.
+====
+
+. Also log into the terminal window that you have been using so far using the same user.
++
+On the top right of the OpenShift web console click on your user and then *Copy login command*.
+
+. Confirm by clicking on `AAD` and selecting your account again.
+. Click on *Display Token*
+. Copy the displayed login command under *Log in with this token* and paste it into the terminal window to log in with that user.
+. Double check that you are logged in as your Azure user:
++
+[source,sh,role=execute]
+----
+oc whoami
+----
++
+.Sample Output
+[source,texinfo,options=nowrap]
+----
+openenv-admin-%guid%@azure.opentlc.com
+----
+
+You now have full admin access to both the Azure console and the OpenShift console.

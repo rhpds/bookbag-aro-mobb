@@ -2,7 +2,6 @@
 
 Your environment has already been set up and you are ready to use your first ARO cluster.
 
-
 == Connect to your bastion VM
 
 . In the terminal window to the right connect to the bastion VM (you can also just click the command below to have it copied and executed automatically):
@@ -34,8 +33,8 @@ az version
 [source,texinfo]
 ----
 {
-  "azure-cli": "2.47.0",
-  "azure-cli-core": "2.47.0",
+  "azure-cli": "2.48.1",
+  "azure-cli-core": "2.48.1",
   "azure-cli-telemetry": "1.0.8",
   "extensions": {}
 }

@@ -9,36 +9,36 @@ modules:
   lab_2_connect_cluster:
     name: Connect to your cluster
     exit_sign: Continue
-  # lab_3_configure_gitea:
-  #   name: Configure Gitea repository
-  #   exit_sign: Continue
-  lab_4_explore_aad:
+  lab_3_explore_aad:
     name: Authentication using AAD
     exit_sign: Continue
-  lab_5_app_deploy:
-    name: Deploy a Go Microservices Application
+  lab_4_00_app_overview:
+    name: Deploy the Application - Introduction
     exit_sign: Continue
-  lab_6_app_gitops:
-    name: Using OpenShift GitOps
+  lab_4_01_app_deployment:
+    name: Deploy the Application - Deployment
     exit_sign: Continue
-  lab_7_app_networkpolicy:
-    name: Restrict Network Access
+  lab_4_02_app_logging:
+    name: Deploy the Application - Logging
     exit_sign: Continue
-  lab_8_resilient_app:
-    name: Making your application resilient
+  lab_4_03_app_healthcheck:
+    name: Deploy the Application - Health Checks
     exit_sign: Continue
-  lab_9_service_mesh_introduction:
-    name: Introduction to OpenShift Service Mesh
+  lab_4_04_app_storage:
+    name: Deploy the Application - Storage
     exit_sign: Continue
-  lab_10_service_mesh_deploy_operator:
-    name: Deploy Service Mesh Operator
+  lab_4_05_app_confsecenv:
+    name: Deploy the Application - Configuration
     exit_sign: Continue
-  lab_11_service_mesh_deploy_control_plane:
-    name: Deploy Control Plane
+  lab_4_06_app_networking:
+    name: Deploy the Application - Networking
     exit_sign: Continue
-  lab_12_service_mesh_deploy_app:
-    name: Deploy Workloads
+  lab_4_07_app_scaling:
+    name: Deploy the Application - Scaling
     exit_sign: Continue
-  lab_13_service_mesh_observe:
-    name: Configure and Observe Traffic
+  lab_4_08_app_hpa:
+    name: Deploy the Application - Autoscaling
+    exit_sign: Continue
+  lab_5_worker-nodes:
+    name: Managing Worker Nodes
     exit_sign: Exit

@@ -5,14 +5,14 @@ modules:
   - home
   - lab_1_setup
   - lab_2_connect_cluster
-  # - lab_3_configure_gitea
-  - lab_4_explore_aad
-  - lab_5_app_deploy
-  - lab_6_app_gitops
-  - lab_7_app_networkpolicy
-  - lab_8_resilient_app
-  - lab_9_service_mesh_introduction
-  - lab_10_service_mesh_deploy_operator
-  - lab_11_service_mesh_deploy_control_plane
-  - lab_12_service_mesh_deploy_app
-  - lab_13_service_mesh_observe
+  - lab_3_explore_aad
+  - lab_4_00_app_overview
+  - lab_4_01_app_deployment
+  - lab_4_02_app_logging
+  - lab_4_03_app_healthcheck
+  - lab_4_04_app_storage
+  - lab_4_05_app_conf-sec-env
+  - lab_4_06_app_networking
+  - lab_4_07_app_scaling
+  - lab_4_08_app_hpa
+  - lab_5_worker-nodes
