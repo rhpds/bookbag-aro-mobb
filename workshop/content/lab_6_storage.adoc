@@ -1,6 +1,6 @@
 = Storage Stuff
 
-Set environment variables:
+. Set environment variables:
 +
 [source,sh,role=execute]
 ----
