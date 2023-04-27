@@ -152,10 +152,14 @@ EOF
 
 == Keyvault
 
+. Set some environment variables (or adjust the commands from the mobb ninja document to use the ones from above)
++
+[source,sh,role=execute]
+----
 export KEYVAULT_RESOURCE_GROUP=openenv-${GUID}
 export KEYVAULT_LOCATION=eastus
 export KEYVAULT_NAME=secret-store-${GUID}
 export AZ_TENANT_ID=$(az account show -o tsv --query tenantId)
+----
 
-Then follow instructions below.
-https://mobb.ninja/docs/misc/secrets-store-csi/azure-key-vault/
+. Then follow instructions at https://mobb.ninja/docs/misc/secrets-store-csi/azure-key-vault
