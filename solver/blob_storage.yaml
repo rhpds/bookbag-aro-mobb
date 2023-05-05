@@ -5,46 +5,71 @@
     PATH: "$HOME/bin:{{ ansible_env.PATH }}"
   tasks:
 
-    - name: create $HOME/bin
-      ansible.builtin.file:
-        state: directory
-        path: "$HOME/bin/"
-        mode: 'a+rwx'
+    - name: Setup
+      when: module_setup_linux is true
+      block:
+      - name: create $HOME/bin
+        ansible.builtin.file:
+          state: directory
+          path: "$HOME/bin/"
+          mode: 'a+rwx'
 
-    - name: add bin to .bashrc
-      ansible.builtin.lineinfile:
-        path: "$HOME/.bashrc"
-        line: 'export PATH=$HOME/bin:$PATH'
+      - name: add bin to .bashrc
+        ansible.builtin.lineinfile:
+          path: "$HOME/.bashrc"
+          line: 'export PATH=$HOME/bin:$PATH'
 
-    - name: delete all the stuff
-      ansible.builtin.file:
-        path: "$HOME/bin/*"
-        state: absent
+      - name: delete all the stuff
+        ansible.builtin.file:
+          path: "$HOME/bin/*"
+          state: absent
 
-        #tar -xzvf $HOME/openshift-client-linux.tar.gz -C $HOME/bin
+          #tar -xzvf $HOME/openshift-client-linux.tar.gz -C $HOME/bin
 
-    - name: uncompress oc package
-      ansible.builtin.unarchive:
-        src: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.10.54/openshift-client-linux.tar.gz
-        dest: "$HOME/bin/"
-        mode: 'a+rwx'
-        remote_src: true
+      - name: uncompress oc package
+        ansible.builtin.unarchive:
+          src: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.10.54/openshift-client-linux.tar.gz
+          dest: "$HOME/bin/"
+          mode: 'a+rwx'
+          remote_src: true
 
-    - name: remove downloaded file
-      ansible.builtin.file:
-        path: "$HOME/bin/openshift-client*"
-        state: absent
+      - name: remove downloaded file
+        ansible.builtin.file:
+          path: "$HOME/bin/openshift-client*"
+          state: absent
 
-    - name: get helm package
-      ansible.builtin.unarchive:
-        src: https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/helm/latest/helm-linux-amd64.tar.gz
-        dest: "$HOME/bin/"
-        mode: 'a+rwx'
-        remote_src: true
+      - name: get helm package
+        ansible.builtin.unarchive:
+          src: https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/helm/latest/helm-linux-amd64.tar.gz
+          dest: "$HOME/bin/"
+          mode: 'a+rwx'
+          remote_src: true
 
-    - name: link to short filename
-      ansible.builtin.file:
-        state: link
-        src: "$HOME/bin/helm-linux-amd64"
-        dest: "$HOME/bin/helm"
-        mode: 'a+rwx'
+      - name: link to short filename
+        ansible.builtin.file:
+          state: link
+          src: "$HOME/bin/helm-linux-amd64"
+          dest: "$HOME/bin/helm"
+          mode: 'a+rwx'
+
+    - name: Storage Objects Module
+      block:
+      - name: get aro credentials
+        command: >-
+          az aro list-credentials
+          --name aro-cluster-{{ guid }}
+          --resource-group openenv-{{ guid }}
+          --query 'kubeadminPassword'
+        register: _kubeadminPassword
+
+    - name: get api endpoint
+      command: >-
+        az aro list --query '[0].apiserverProfile.url'
+      register: _apiserverUrl
+
+    - name: login to aro
+      command: >-
+        oc login -u kubeadmin
+        -p {{ _kubeadminPassword.stdout }}
+        --insecure-skip-tls-verify=true
+        {{ _apiserverUrl.stdout }}
