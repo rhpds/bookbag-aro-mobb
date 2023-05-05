@@ -1,0 +1,50 @@
+- hosts: bastion
+  become: false
+  gather_facts: false
+  environment:
+    PATH: "$HOME/bin:{{ ansible_env.PATH }}"
+  tasks:
+
+    - name: create $HOME/bin
+      ansible.builtin.file:
+        state: directory
+        path: "$HOME/bin/"
+        mode: 'a+rwx'
+
+    - name: add bin to .bashrc
+      ansible.builtin.lineinfile:
+        path: "$HOME/.bashrc"
+        line: 'export PATH=$HOME/bin:$PATH'
+
+    - name: delete all the stuff
+      ansible.builtin.file:
+        path: "$HOME/bin/*"
+        state: absent
+
+        #tar -xzvf $HOME/openshift-client-linux.tar.gz -C $HOME/bin
+
+    - name: uncompress oc package
+      ansible.builtin.unarchive:
+        src: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.10.54/openshift-client-linux.tar.gz
+        dest: "$HOME/bin/"
+        mode: 'a+rwx'
+        remote_src: true
+
+    - name: remove downloaded file
+      ansible.builtin.file:
+        path: "$HOME/bin/openshift-client*"
+        state: absent
+
+    - name: get helm package
+      ansible.builtin.unarchive:
+        src: https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/helm/latest/helm-linux-amd64.tar.gz
+        dest: "$HOME/bin/"
+        mode: 'a+rwx'
+        remote_src: true
+
+    - name: link to short filename
+      ansible.builtin.file:
+        state: link
+        src: "$HOME/bin/helm-linux-amd64"
+        dest: "$HOME/bin/helm"
+        mode: 'a+rwx'
