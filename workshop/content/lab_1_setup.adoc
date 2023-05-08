@@ -64,8 +64,7 @@ echo "export PATH=$HOME/bin:$PATH" >>$HOME/.bashrc
 ----
 cd $HOME
 
-wget https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/helm/latest/helm-linux-a
-md64
+wget https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/helm/latest/helm-linux-amd64
 
 chmod 775 helm-linux-amd64
 
