@@ -10,34 +10,34 @@ modules:
     name: Connect to your cluster
     exit_sign: Continue
   lab_3_explore_aad:
-    name: Authentication using AAD
+    name: Optional - Authentication using AAD
     exit_sign: Continue
   lab_4_00_app_overview:
-    name: Deploy the Application - Introduction
+    name: Introduction
     exit_sign: Continue
   lab_4_01_app_deployment:
-    name: Deploy the Application - Deployment
+    name: Deployment
     exit_sign: Continue
   lab_4_02_app_logging:
-    name: Deploy the Application - Logging
+    name: Logging
     exit_sign: Continue
   lab_4_03_app_healthcheck:
-    name: Deploy the Application - Health Checks
+    name: Health Checks
     exit_sign: Continue
   lab_4_04_app_storage:
-    name: Deploy the Application - Storage
+    name: Storage
     exit_sign: Continue
   lab_4_05_app_confsecenv:
-    name: Deploy the Application - Configuration
+    name: Configuration
     exit_sign: Continue
   lab_4_06_app_networking:
-    name: Deploy the Application - Networking
+    name: Networking
     exit_sign: Continue
   lab_4_07_app_scaling:
-    name: Deploy the Application - Scaling
+    name: Scaling
     exit_sign: Continue
   lab_4_08_app_hpa:
-    name: Deploy the Application - Autoscaling
+    name: Autoscaling
     exit_sign: Continue
   lab_5_worker-nodes:
     name: Managing Worker Nodes

@@ -2,6 +2,21 @@
 
 === Create new project
 
+WARNING: You must be logged in as administrator.
+
+. Check to see that you're logged in as kubeadmin.
++
+[source,sh,role=execute]
+----
+oc whoami
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+kube:admin
+----
+
 Create a new project called "OSToy" in your cluster.
 
 . Use the following command:
