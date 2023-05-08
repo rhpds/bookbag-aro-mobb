@@ -48,6 +48,10 @@ export REGION=eastus
 export RESOURCE_GROUP=openenv-${GUID}
 export PROJECT_NAME=ostoy-${GUID}
 ----
+////
+RESORUCE_GROUP is %resourcegroup% in agd, but needs to be part of provision data
+REGION, also in agd,but not in provision data
+////
 
 === Install the Azure Service Operator
 
@@ -364,7 +368,7 @@ oc create sa ostoy-sa -n $PROJECT_NAME
 +
 [source,sh,role=execute]
 ----
-oc adm policy add-scc-to-user ostoyscc system:serviceaccount:${PROJECT_NAME}:ostoy-sa
+oc adm policy add-scc-to-user ostoyscc system:serviceaccount:${PROJECT_NAME}:ostoy-sa -n ${PROJECT_NAME}
 ----
 
 == Deploy the OSToy application
