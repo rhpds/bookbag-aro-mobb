@@ -59,7 +59,7 @@ REGION, also in agd,but not in provision data
 +
 [source,sh,role=execute]
 ----
-oc apply -f https://github.com/jetstack/cert-manager/releases/download/v1.8.2/cert-manager.yaml
+oc apply -f https://github.com/jetstack/cert-manager/releases/download/v1.11.1/cert-manager.yaml
 ----
 
 . Validate you have three pods running (wait until you do):
