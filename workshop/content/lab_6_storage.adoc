@@ -85,12 +85,6 @@ cert-manager-webhook-5685fdbc4b-rlbhz      1/1     Running   0          57m
 # Azure Service Operator
 helm repo add aso2 https://raw.githubusercontent.com/Azure/azure-service-operator/main/v2/charts
 
-# Secrets Store CSI Driver
-helm repo add secrets-store-csi-driver https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
-
-# Azure CSI Secrets Store Provider
-helm repo add csi-secrets-store-provider-azure https://azure.github.io/secrets-store-csi-driver-provider-azure/charts
-
 # Update local repo list
 helm repo update
 ----
