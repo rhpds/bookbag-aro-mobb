@@ -3,6 +3,8 @@
   gather_facts: false
   environment:
     PATH: "$HOME/bin:{{ ansible_env.PATH }}"
+  vars:
+    module_setup_linux: true
   tasks:
 
     - name: Setup

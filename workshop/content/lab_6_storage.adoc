@@ -47,7 +47,6 @@ export AZURE_CLIENT_SECRET=%azpass%
 export REGION=eastus
 export RESOURCE_GROUP=openenv-${GUID}
 export PROJECT_NAME=ostoy-${GUID}
-export KEYVAULT_NAME=secret-store-${GUID}
 ----
 
 === Install the Azure Service Operator
@@ -109,8 +108,7 @@ helm upgrade --install --devel aso2 aso2/azure-service-operator \
 +
 [source,sh,role=execute]
 ----
-oc project azureserviceoperator-system
-oc get pod
+oc get pod -n azureserviceoperator-system
 ----
 +
 .Sample Output
@@ -127,6 +125,13 @@ We could create this using the CLI or the Azure Portal, but wouldn't it be nice 
 
 We could define the all the resources our application needs in once place. We will create each resource separately below.
 
+. Create a NEW project namespace for this lab:
++
+[source,sh,role=execute]
+----
+oc new-project ${PROJECT_NAME}
+----
+
 . Create a ResourceGroup in OpenShift
 +
 [source,sh,role=execute]
@@ -136,10 +141,10 @@ cat << EOF | oc apply -f -
 apiVersion: resources.azure.com/v1api20200601
 kind: ResourceGroup
 metadata:
-  name: openenv-${GUID}
+  name: ${RESOURCE_GROUP}
   namespace: ${PROJECT_NAME}
 spec:
-  location: eastus
+  location: ${REGION}
 EOF
 ----
 
@@ -152,16 +157,7 @@ az group list --query '[].name' --output tsv | grep ${GUID}
 +
 .Sample Output
 ----
-[
-  "openenv-m72px"
-]
-----
-
-. Create a NEW project namespace for this lab:
-+
-[source,sh,role=execute]
-----
-oc new-project ${PROJECT_NAME}
+openenv-m72px
 ----
 
 . Create a Storage Account:
@@ -176,12 +172,12 @@ metadata:
   name: storage${GUID}
   namespace: ${PROJECT_NAME}
 spec:
-  location: eastus
+  location: ${REGION}
   kind: BlobStorage
   sku:
     name: Standard_LRS
   owner:
-    name: openenv-${GUID}
+    name: ${RESOURCE_GROUP}
   accessTier: Hot
 EOF
 ----
@@ -202,7 +198,7 @@ cat << EOF | oc apply -f -
 apiVersion: storage.azure.com/v1api20210401
 kind: StorageAccountsBlobService
 metadata:
-  name: samplekubestorageservice
+  name: ${PROJECT_NAME}-bucket
   namespace: ${PROJECT_NAME}
 spec:
   owner:
@@ -219,11 +215,11 @@ cat << EOF | oc apply -f -
 apiVersion: storage.azure.com/v1api20210401
 kind: StorageAccountsBlobServicesContainer
 metadata:
-  name: samplecontainer
+  name: ${PROJECT_NAME}-container
   namespace: ${PROJECT_NAME}
 spec:
   owner:
-    name: samplekubestorageservice
+    name: ${PROJECT_NAME}-bucket
 EOF
 ----
 
@@ -238,7 +234,7 @@ az storage container list --auth-mode login --account-name storage${GUID} --quer
 +
 [source,sh,role=execute]
 ----
-export CONNECTION_STRING=$(az storage account show-connection-string --name storage${GUID} --resource-group openenv-${GUID} -o tsv)
+export CONNECTION_STRING=$(az storage account show-connection-string --name storage${GUID} --resource-group ${RESOURCE_GROUP} -o tsv); echo ${CONNECTION_STRING}
 ----
 
 The storage account is now set up for use with our application.
@@ -255,9 +251,9 @@ To simplify the process for the workshop, there is a script provided that will d
 +
 [source,sh,role=execute]
 ----
-export KEYVAULT_RESOURCE_GROUP=openenv-${GUID}
-export KEYVAULT_LOCATION=eastus
 export KEYVAULT_NAME=secret-store-${GUID}
+export KEYVAULT_RESOURCE_GROUP=${RESOURCE_GROUP}
+export KEYVAULT_LOCATION=${REGION}
 export AZ_TENANT_ID=$(az account show -o tsv --query tenantId)
 ----
 
@@ -277,7 +273,7 @@ Or, if you'd rather not live on the edge, feel free to download it first.
 +
 [source,sh,role=execute]
 ----
-az keyvault create -n $KEYVAULT_NAME --resource-group ${PROJECT_NAME}-rg --location $REGION
+az keyvault create -n $KEYVAULT_NAME --resource-group ${RESOURCE_GROUP} --location $REGION
 ----
 
 . Store the connection string as a secret in Key Vault.
@@ -293,9 +289,8 @@ az keyvault secret set --vault-name $KEYVAULT_NAME --name connectionsecret --val
 ----
 export SERVICE_PRINCIPAL_CLIENT_ID=${AZURE_CLIENT_ID}
 export SERVICE_PRINCIPAL_CLIENT_SECRET=${AZURE_CLIENT_SECRET}
-
-//export SERVICE_PRINCIPAL_CLIENT_ID=$(az ad sp list --query '[0].appId' -o tsv)
 ----
+//export SERVICE_PRINCIPAL_CLIENT_ID=$(az ad sp list --query '[0].appId' -o tsv)
 
 . Set an Access Policy for the Service Principal. This allows the Service Principal to get secrets from the Key Vault instance.
 +
@@ -396,7 +391,7 @@ After about a minute we can use our app to see the contents of our blob storage 
 +
 [source,sh,role=execute]
 ----
-oc get route ostoy-route -o jsonpath='{.spec.host}{"\n"}'
+oc get route ostoy-route -o jsonpath='{.spec.host}{"\n"}' -n ${PROJECT_NAME}
 ----
 
 . Open a new browser tab and enter the route from above. Ensure that it is using http:// and not https://.
