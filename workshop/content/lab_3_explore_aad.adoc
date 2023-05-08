@@ -1,5 +1,8 @@
 == Explore OpenShift authentication using AAD
 
+WARNING: This section is optional and is not necessary to complete this lab.
+CAUTION: You must be logged in as an administrator to complete the rest of this lab.
+
 In your environment an Azure Active Directory has been configured with two users:
 
 * Admin user: `%openenv_admin_upn%`. This user has administrative access to the Azure Portal as well as cluster-admin authorization on the ARO cluster.
@@ -62,3 +65,5 @@ openenv-admin-%guid%@azure.opentlc.com
 ----
 
 You now have full admin access to both the Azure console and the OpenShift console.
+
+CAUTION: Remember to log in as an administrator to complete the rest of the lab.

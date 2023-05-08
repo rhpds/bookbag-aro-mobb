@@ -1,5 +1,5 @@
 ---
-name: ARO Workshop  
+name: ARO Workshop
 modules:
   activate:
   - home
