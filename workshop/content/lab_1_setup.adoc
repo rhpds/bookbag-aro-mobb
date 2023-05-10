@@ -1,6 +1,6 @@
 == Environment Setup
 
-Your environment has already been set up and you are ready to use your first ARO cluster.
+Your cluster has already been provisioned and you are almost ready to use your first ARO cluster. You will need to do a few last things.
 
 == Connect to your bastion VM
 
@@ -55,7 +55,9 @@ export PATH=$HOME/bin:$PATH
 echo "export PATH=$HOME/bin:$PATH" >>$HOME/.bashrc
 ----
 +
-*Why use `oc` over `kubectl`* + Being Kubernetes, one can definitely use `kubectl` with their OpenShift cluster.
+*Why use `oc` over `kubectl`* 
++
+Being Kubernetes, one can definitely use `kubectl` with their OpenShift cluster.
 `oc` is specific to OpenShift in that it includes the standard set of features from `kubectl` plus additional support for OpenShift functionality. See https://docs.openshift.com/container-platform/latest/cli_reference/openshift_cli/usage-oc-kubectl.html[Usage of oc and kubectl commands] for more details.
 
 . Download and install the `helm` binary:

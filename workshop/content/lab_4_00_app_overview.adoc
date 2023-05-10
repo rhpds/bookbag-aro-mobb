@@ -19,6 +19,7 @@ This application has a user interface which you can:
 * if connected to shared storage, read and write files
 * check network connectivity, intra-cluster DNS, and intra-communication with an included microservice
 * increase the load to view automatic scaling of the pods to handle the load (via the Horizontal Pod Autoscaler)
+* connect to an Azure Blob Storage container to read and write objects 
 
 === OSToy Application Diagram
 
@@ -34,6 +35,7 @@ image::media/managedlab/4-ostoy-arch.png[OSToy Diagram]
 . *ENV Variables:* Shows the environment variables available to the application.
 . *Auto Scaling:* Explore the Horizontal Pod Autoscaler to see how increased loads are handled.
 . *Networking:* Tools to illustrate networking within the application.
+. *ASO - Blob Storage:* Integrate with Azure Blob Storage to read and write objects to a container.
 . *About:* Shows some more information about the application.
 
 image::media/managedlab/10-ostoy-homepage-1.png[Home Page]

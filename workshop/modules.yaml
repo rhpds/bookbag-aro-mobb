@@ -10,7 +10,7 @@ modules:
     name: Connect to your cluster
     exit_sign: Continue
   lab_3_explore_aad:
-    name: Optional - Authentication using AAD
+    name: Azure portal and authentication using AAD
     exit_sign: Continue
   lab_4_00_app_overview:
     name: Introduction
@@ -33,15 +33,18 @@ modules:
   lab_4_06_app_networking:
     name: Networking
     exit_sign: Continue
-  lab_4_07_app_scaling:
-    name: Scaling
+  # lab_4_07_app_scaling:
+  #   name: Scaling
+  #   exit_sign: Continue
+  # lab_4_08_app_hpa:
+  #   name: Autoscaling
+  #   exit_sign: Continue
+  # lab_5_worker-nodes:
+  #   name: Managing Worker Nodes
+  #   exit_sign: Continue
+  lab_6_integrating_az_services:
+    name: Integrating Azure Services
     exit_sign: Continue
-  lab_4_08_app_hpa:
-    name: Autoscaling
-    exit_sign: Continue
-  lab_5_worker-nodes:
-    name: Managing Worker Nodes
-    exit_sign: Continue
-  lab_6_storage:
-    name: Temporary Azure Storage Lab
+  conclusion:
+    name: Conclusion
     exit_sign: Exit
