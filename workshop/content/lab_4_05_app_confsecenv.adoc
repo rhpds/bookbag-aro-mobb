@@ -1,8 +1,6 @@
 = Configuration
 
-In this section we'll take a look at how OSToy can be configured using https://docs.openshift.com/container-platform/latest/nodes/pods/nodes-pods-configmaps.html[ConfigMaps], https://docs.openshift.com/container-platform/latest/cicd/builds/creating-build-inputs.html#builds-input-secrets-configmaps_creating-build-inputs[Secrets], and https://docs.openshift.com/container-platform/3.11/dev_guide/environment_variables.html[Environment Variables].
-
-This section won't go into details explaining each (the links above are for that), but will show you how they are exposed to the application.
+In this section we'll take a look at how OSToy can be configured using https://docs.openshift.com/container-platform/latest/nodes/pods/nodes-pods-configmaps.html[ConfigMaps], https://docs.openshift.com/container-platform/latest/cicd/builds/creating-build-inputs.html#builds-input-secrets-configmaps_creating-build-inputs[Secrets], and https://docs.openshift.com/container-platform/3.11/dev_guide/environment_variables.html[Environment Variables]. This section won't go into details explaining each (the links above are for that), but will show you how they are exposed to the application.
 
 == Configuration using ConfigMaps
 
@@ -11,8 +9,9 @@ ConfigMaps allow you to decouple configuration artifacts from container image co
 Click on _Config Maps_ in the left menu.
 
 This will display the contents of the configmap available to the OSToy application.
-We defined this in the `ostoy-fe-deployment.yaml` here:
+We defined this in the `ostoy-frontend-deployment.yaml` here:
 
+[source,yaml]
 ----
 kind: ConfigMap
 apiVersion: v1
@@ -30,8 +29,9 @@ Putting this information in a secret is safer and more flexible than putting it,
 Click on _Secrets_ in the left menu.
 
 This will display the contents of the secrets available to the OSToy application.
-We defined this in the `ostoy-fe-deployment.yaml` here:
+We defined this in the `ostoy-frontend-deployment.yaml` here:
 
+[source,yaml]
 ----
 apiVersion: v1
 kind: Secret
@@ -51,8 +51,9 @@ Click on _ENV Variables_ in the left menu.
 
 This will display the environment variables available to the OSToy application.
 
-We added three as defined in the deployment spec of `ostoy-fe-deployment.yaml` here:
+We added four as defined in the deployment spec of `ostoy-frontend-deployment.yaml` here:
 
+[source,yaml]
 ----
   env:
   - name: ENV_TOY_CONFIGMAP
@@ -67,8 +68,12 @@ We added three as defined in the deployment spec of `ostoy-fe-deployment.yaml` h
         key: ENV_TOY_SECRET
   - name: MICROSERVICE_NAME
     value: OSTOY_MICROSERVICE_SVC
+  - name: NAMESPACE
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.namespace
 ----
 
-The last one, `MICROSERVICE_NAME` is used for the intra-cluster communications between pods for this application.
+The third one, `MICROSERVICE_NAME` is used for the intra-cluster communications between pods for this application.
 
 The application looks for this environment variable to know how to access the microservice in order to get the colors.

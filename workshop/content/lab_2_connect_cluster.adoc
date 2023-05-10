@@ -1,4 +1,4 @@
-== Connect to ARO cluster
+== Connect to your ARO cluster
 
 === Command line
 
@@ -22,7 +22,7 @@ az aro list-credentials \
 }
 ----
 
-. Log into your OpenShift cluster:
+. Log into your OpenShift cluster (note the values have already been filled in):
 +
 [source,sh,role=execute]
 ----
@@ -32,8 +32,6 @@ oc login -u kubeadmin -p %aro_kube_password% --insecure-skip-tls-verify=true %ar
 .Sample Output
 [source,text,options=nowrap]
 ----
-WARNING: Using insecure TLS client config. Setting this option is not supported!
-
 Login successful.
 
 You have access to 68 projects, the list has been suppressed. You can list all projects with 'oc projects'
@@ -44,11 +42,7 @@ Welcome! See 'oc help' to get started.
 
 == Log into the Web Console
 
-There are two ways to find out the OpenShift web console URL - either from OpenShift if you are already logged in via the command line or from Azure via the Azure command line tool.
-
-. Use either of the next two commands to get the URL of the OpenShift Web Console:
-
-.. Retrieve the web console URL from Azure:
+. Retrieve the web console URL from Azure:
 +
 [source,sh,role=execute]
 ----
@@ -70,5 +64,3 @@ az aro list -o json | jq -r '[.[]|select(.name=="aro-cluster-%guid%")][0].consol
 * Password: `%aro_kube_password%`
 
 . Feel free to explore the web console.
-
-. When you're done exploring *log out* of the web console by selecting `kube:admin` on the top right of the console and then clicking `Logout`.

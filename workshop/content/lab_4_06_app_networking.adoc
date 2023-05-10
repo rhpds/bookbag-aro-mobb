@@ -17,13 +17,16 @@ This color string is used to display a box with that color displayed in the tile
 
 == Networking
 
-Click on _Networking_ in the left menu.
+. Click on _Networking_ in the left menu.
++
 Review the networking configuration.
-
++
 The right tile titled "Hostname Lookup" illustrates how the service name created for a pod can be used to translate into an internal ClusterIP address.
++
 
-Enter the name of the microservice following the format of `my-svc.my-namespace.svc.cluster.local` which we created in our `ostoy-microservice.yaml` as seen here:
-
+. Enter the name of the microservice following the format of `<my-svc>.<my-namespace>.svc.cluster.local` which we created in our `ostoy-microservice.yaml` as seen here:
++
+[source,yaml]
 ----
 apiVersion: v1
 kind: Service
@@ -40,13 +43,13 @@ spec:
   selector:
     app: ostoy-microservice
 ----
-
++
 In this case we will enter: `ostoy-microservice-svc.ostoy.svc.cluster.local`
-
++
 We will see an IP address returned.
 In our example it is `172.30.165.246`.
-
++
 This is the intra-cluster IP address;
 only accessible from within the cluster.
-
++
 image::media/managedlab/20-ostoy-dns.png[ostoy DNS]
