@@ -1,0 +1,5 @@
+= Conclusion
+
+In this lab we have done a number of things that will help you become more comfortable with Azure Red Hat OpenShift (ARO). This lab was not intended to be all-encompassing but rather to get you familiar with using ARO and how you could deploy applications that integrate nicely with other Azure services.  We have learned a number of things about OpenShift, Kubernetes and Azure and hope you have found this useful.  If you would like to do this again, or explore some extra topics that were not covered in this lab, please visit https://aroworkshop.io[aroworkshop.io].
+
+Thank you for attending this session at Red Hat Summit.

@@ -9,36 +9,42 @@ modules:
   lab_2_connect_cluster:
     name: Connect to your cluster
     exit_sign: Continue
-  # lab_3_configure_gitea:
-  #   name: Configure Gitea repository
+  lab_3_explore_aad:
+    name: Azure portal and authentication using AAD
+    exit_sign: Continue
+  lab_4_00_app_overview:
+    name: Introduction
+    exit_sign: Continue
+  lab_4_01_app_deployment:
+    name: Deployment
+    exit_sign: Continue
+  lab_4_02_app_logging:
+    name: Logging
+    exit_sign: Continue
+  lab_4_03_app_healthcheck:
+    name: Health Checks
+    exit_sign: Continue
+  lab_4_04_app_storage:
+    name: Storage
+    exit_sign: Continue
+  lab_4_05_app_confsecenv:
+    name: Configuration
+    exit_sign: Continue
+  lab_4_06_app_networking:
+    name: Networking
+    exit_sign: Continue
+  # lab_4_07_app_scaling:
+  #   name: Scaling
   #   exit_sign: Continue
-  lab_4_explore_aad:
-    name: Authentication using AAD
+  # lab_4_08_app_hpa:
+  #   name: Autoscaling
+  #   exit_sign: Continue
+  # lab_5_worker-nodes:
+  #   name: Managing Worker Nodes
+  #   exit_sign: Continue
+  lab_6_integrating_az_services:
+    name: Integrating Azure Services
     exit_sign: Continue
-  lab_5_app_deploy:
-    name: Deploy a Go Microservices Application
-    exit_sign: Continue
-  lab_6_app_gitops:
-    name: Using OpenShift GitOps
-    exit_sign: Continue
-  lab_7_app_networkpolicy:
-    name: Restrict Network Access
-    exit_sign: Continue
-  lab_8_resilient_app:
-    name: Making your application resilient
-    exit_sign: Continue
-  lab_9_service_mesh_introduction:
-    name: Introduction to OpenShift Service Mesh
-    exit_sign: Continue
-  lab_10_service_mesh_deploy_operator:
-    name: Deploy Service Mesh Operator
-    exit_sign: Continue
-  lab_11_service_mesh_deploy_control_plane:
-    name: Deploy Control Plane
-    exit_sign: Continue
-  lab_12_service_mesh_deploy_app:
-    name: Deploy Workloads
-    exit_sign: Continue
-  lab_13_service_mesh_observe:
-    name: Configure and Observe Traffic
+  conclusion:
+    name: Conclusion
     exit_sign: Exit
