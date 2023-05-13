@@ -11,6 +11,7 @@ You can use this guide as an OpenShift tutorial and as study material to help yo
   ** Explore configuration management through configmaps, secrets and environment variables
   ** Explore networking within Kubernetes and applications
 * Explore logging
+* Using your cluster with Azure ARC to simplify logging, metrics, and secrets management with KeyVault
 
 Lastly, to tie it together in a real world scenario you will integrate the application with Azure Blob Storage and use KeyVault to store the connection secret. You will create an OpenShift secret that will pull the value from KeyVault and then the application will use that in order to read/write objects to Blob Storage.
 

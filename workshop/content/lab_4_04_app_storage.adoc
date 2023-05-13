@@ -72,7 +72,7 @@ ostoy-microservice-5b6dd698df-f2zvq   1/1     Running   0          153m
 +
 [source,sh,role=execute]
 ----
-POD_NAME=$(oc get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' | grep frontend)
+POD_NAME=$(oc get pods -o name | grep frontend)
 oc rsh $POD_NAME
 ----
 
