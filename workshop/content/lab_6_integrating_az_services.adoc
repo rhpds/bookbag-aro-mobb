@@ -238,6 +238,7 @@ In this part we will create a Key Vault location to store the connection string 
 export KEYVAULT_NAME=secret-store-${GUID}
 ----
 
+////
 . To simplify the process for this lab, a script is provided that will do the prerequisite work in order to use Key Vault stored secrets. If you are curious, please feel free to read the script, otherwise just run it. This should take about 1-2 minutes to complete.
 +
 [source,sh,role=execute]
@@ -246,6 +247,7 @@ curl https://raw.githubusercontent.com/microsoft/aroworkshop/master/resources/se
 ----
 +
 Or, if you'd rather not live on the edge, feel free to download it first.
+////
 
 . Create an Azure Key Vault.
 +
@@ -355,7 +357,7 @@ curl https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-f
 
 == See the Blob Storage contents through OSToy
 
-After about a minute, we can use our app to see the contents of our blob storage container.
+After about a minute, we can use our app to see the contents of our Blob Storage container.
 
 . Get the route for the newly deployed application.
 +
@@ -404,3 +406,51 @@ az storage blob list --account-name ostoystorage${GUID} --connection-string $CON
 ----
 
 We should see our file(s) returned.
+
+== Confirm the secret
+
+Lastly, lets confirm that the secret (using the ConnectionString) we created in KeyVault is actually mounted in the pod.
+
+. Connect to the `ostoy-frontend` pod and open a terminal.
++
+[source,sh,role=execute]
+----
+oc rsh $(oc get pods -o name | grep frontend)
+----
+
+. If you remember, in our deployment manifest we defined the mount location as `/mnt/secrets-store`:
++
+[source,yaml,options=nowrap]
+----
+[...]
+volumeMounts:
+- name: configvol
+  mountPath: /var/config
+- name: secretvol
+  mountPath: /var/secret
+- name: datavol
+  mountPath: /var/demo_files
+- name: secrets-store-inline
+  mountPath: "/mnt/secrets-store"
+  readOnly: true
+[...]
+----
+
+. Open the file to see the ConnectionSecret. 
++
+[source,sh,role=execute]
+----
+cat /mnt/secrets-store/connectionsecret
+----
++
+[NOTE]
+====
+Remember, you are able to view this because you are logged in as kube:admin.
+====
+
+. Exit the session
++
+[source,sh,role=execute]
+----
+exit
+----
