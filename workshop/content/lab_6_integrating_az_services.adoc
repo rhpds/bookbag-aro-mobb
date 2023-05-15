@@ -308,7 +308,7 @@ spec:
           objectName: connectionsecret
           objectType: secret
           objectVersion: ""
-    tenantId: "${AZ_TENANT_ID}"
+    tenantId: "${AZURE_TENANT_ID}"
 EOF
 ----
 

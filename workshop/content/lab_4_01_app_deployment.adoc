@@ -14,7 +14,7 @@ oc whoami
 .Sample Output
 [source,text,options=nowrap]
 ----
-kube:admin
+openenv-admin-%guid%@azure.opentlc.com
 ----
 
 Create a new project called "OSToy" in your cluster.

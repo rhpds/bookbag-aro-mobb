@@ -73,6 +73,7 @@ ostoy-microservice-5b6dd698df-f2zvq   1/1     Running   0          153m
 [source,sh,role=execute]
 ----
 POD_NAME=$(oc get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' | grep frontend)
+
 oc rsh $POD_NAME
 ----
 
@@ -94,7 +95,7 @@ ls
 +
 [source,sh,role=execute]
 ----
-cat test-pv.txt
+cat test-pv.txt; echo
 ----
 +
 You should see the text you entered in the UI.

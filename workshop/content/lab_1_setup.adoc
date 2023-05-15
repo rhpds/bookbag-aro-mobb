@@ -40,19 +40,20 @@ az version
 }
 ----
 
-. Download and install the oc binary
+. Validate the OpenShift version:
 +
 [source,sh,role=execute]
 ----
-cd $HOME
-wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.10.54/openshift-client-linux.tar.gz
-
-mkdir $HOME/bin
-tar -xzvf $HOME/openshift-client-linux.tar.gz -C $HOME/bin
-rm $HOME/openshift-client-linux.tar.gz
-
-export PATH=$HOME/bin:$PATH
-echo "export PATH=$HOME/bin:$PATH" >>$HOME/.bashrc
+oc version
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+Client Version: 4.11.26
+Kustomize Version: v4.5.4
+Server Version: 4.11.26
+Kubernetes Version: v1.24.6+263df15
 ----
 +
 *Why use `oc` over `kubectl`* 
@@ -68,9 +69,11 @@ cd $HOME
 
 wget https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/helm/latest/helm-linux-amd64
 
-chmod 775 helm-linux-amd64
+chmod 755 helm-linux-amd64
 
-mv helm-linux-amd64 ~/bin/helm
+sudo mv helm-linux-amd64 /usr/bin/helm
+
+sudo chown root:root /usr/bin/helm
 ----
 
 You are ready to start using your ARO cluster.

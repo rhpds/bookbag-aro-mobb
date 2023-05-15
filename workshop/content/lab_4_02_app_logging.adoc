@@ -35,8 +35,10 @@ pod/ostoy-microservice-5b6dd698df-f2zvq
 ----
 +
 So the pod name in this case is *ostoy-frontend-5f6b9c9b67-w5cj4*.
++
+You could either retrieve the logs from the pod (`oc logs ostoy-frontend-5f6b9c9b67-w5cj4`) or use the `Deployment` to aggregate the logs (in which case you don't actually need to know the name of the pod).
 
-. Then run `oc logs deploy/ostoy-frontend` and you should see your messages:
+. Run `oc logs deploy/ostoy-frontend` and you should see your messages:
 +
 [source,sh,role=execute]
 ----
@@ -46,17 +48,17 @@ oc logs deploy/ostoy-frontend
 .Sample Output
 [source,text,options=nowrap]
 ----
-npm info it worked if it ends with ok
-npm info using npm@6.14.6
-npm info using node@v10.22.1
-npm info lifecycle ostoy@1.4.0~prestart: ostoy@1.4.0
-npm info lifecycle ostoy@1.4.0~start: ostoy@1.4.0
+Version: 1.6.0
+ostoy-frontend-dc8658556-4tb4s: server starting on port 8080
+(node:1) NOTE: We are formalizing our plans to enter AWS SDK for JavaScript (v2) into maintenance mode in 2023.
 
-> ostoy@1.4.0 start /
-> node app.js
-
-Version: 1.4.0
-ostoy-frontend-5f6b9c9b67-w5cj4: server starting on port 8080
+Please migrate your code to use AWS SDK for JavaScript (v3).
+For more information, check the migration guide at https://a.co/7PzMCcy
+(Use `node --trace-warnings ...` to show where the warning was created)
+ACK feature disabled. ostoy-bucket not found.
+Connection string secret file does not exist or is not readable.
+ASO feature disabled. Connection string not found.
+Redirecting to /home
 stdout: All is well!
 stderr: Oh no! Error!
 ----
