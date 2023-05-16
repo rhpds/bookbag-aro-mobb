@@ -232,7 +232,7 @@ export CONNECTION_STRING=$(az storage account show-connection-string --name osto
 
 The storage account is now set up for use with our application.
 
-== Create Key Vault and Store the secret
+== Create Key Vault and store the secret
 
 In this part we will create a Key Vault location to store the connection string to our Storage account. Our application will use this to connect to the Blob Storage container we created, enabling it to display the contents, create new files, as well as display the contents of the files. We will mount this as a secret in a secure volume mount within our application. Our application will then read that to access the Blob storage.
 
