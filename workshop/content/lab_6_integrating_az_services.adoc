@@ -29,8 +29,13 @@ Azure Key Vault is a cloud-based service provided by Microsoft Azure that allows
 To provide a clearer understanding of the process, the procedure we will be following consists of three primary parts.
 
 . *Install the Azure Service Operator* - This allows you to create/delete Azure services (in our case, Blob Storage) through the use of a Kubernetes Custom Resource. Install the controller which will also create the required namespace and the service account and then create the required resources.
-. *Setup Key Vault* - Perform required prerequisites (ex: install CSI drivers), create a Key Vault instance, add the connection string.
+. *Setup Key Vault* - Create a Key Vault instance, add the connection string.
 . *Application access* - Configuring the application to access the stored connection string in Key Vault and thus enable the application to access the Blob Storage location.
+
+[NOTE]
+====
+Note that normally we would need to https://learn.microsoft.com/en-us/azure/openshift/howto-use-key-vault-secrets[perform some tasks] to use KeyVault with our application. Though since we've connected our cluster with Azure Arc we were able to install the https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/tutorial-akv-secrets-provider[Azure Key Vault Secrets Provider extension] which automatically takes care of it for us.
+====
 
 Below is an updated application diagram of what this will look like after completing this section.
 
@@ -227,7 +232,7 @@ export CONNECTION_STRING=$(az storage account show-connection-string --name osto
 
 The storage account is now set up for use with our application.
 
-== Install Kubernetes Secret Store CSI
+== Create Key Vault and Store the secret
 
 In this part we will create a Key Vault location to store the connection string to our Storage account. Our application will use this to connect to the Blob Storage container we created, enabling it to display the contents, create new files, as well as display the contents of the files. We will mount this as a secret in a secure volume mount within our application. Our application will then read that to access the Blob storage.
 
@@ -243,7 +248,7 @@ export KEYVAULT_NAME=secret-store-${GUID}
 +
 [source,sh,role=execute]
 ----
-curl https://raw.githubusercontent.com/microsoft/aroworkshop/master/resources/setup-csi.sh | bash
+curl -s https://raw.githubusercontent.com/microsoft/aroworkshop/master/resources/setup-csi.sh | bash
 ----
 +
 Or, if you'd rather not live on the edge, feel free to download it first.
@@ -352,7 +357,7 @@ oc apply -n $PROJECT_NAME -f https://raw.githubusercontent.com/microsoft/arowork
 +
 [source,sh,role=execute]
 ----
-curl https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-frontend-deployment.yaml | sed 's/#//g' | oc apply -n $PROJECT_NAME -f -
+curl -s https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-frontend-deployment.yaml | sed 's/#//g' | oc apply -n $PROJECT_NAME -f -
 ----
 
 == See the Blob Storage contents through OSToy
@@ -411,7 +416,7 @@ We should see our file(s) returned.
 
 Lastly, lets confirm that the secret (using the ConnectionString) we created in KeyVault is actually mounted in the pod.
 
-. Connect to the `ostoy-frontend` pod and open a terminal.
+. Open an interactive shell session inside the container within our pod.
 +
 [source,sh,role=execute]
 ----
@@ -440,7 +445,7 @@ volumeMounts:
 +
 [source,sh,role=execute]
 ----
-cat /mnt/secrets-store/connectionsecret
+cat /mnt/secrets-store/connectionsecret; echo
 ----
 +
 [NOTE]

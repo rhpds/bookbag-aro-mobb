@@ -19,7 +19,7 @@ oc describe pvc ostoy-pvc
 +
 In this case the mode is RWO (Read-Write-Once) which means that the volume can only be mounted to one node, but the pod(s) can both read and write to that volume.
 +
-The https://docs.microsoft.com/en-us/azure/openshift/openshift-faq#can-we-choose-any-persistent-storage-solution--like-ocs[default in ARO] is for Persistent Volumes to be backed by Azure Disk, but it is possible to https://docs.openshift.com/container-platform/latest/storage/persistent_storage/persistent-storage-azure-file.html[use Azure Files] so that you can use the RWX (Read-Write-Many) access mode.
+The link:++https://docs.microsoft.com/en-us/azure/openshift/openshift-faq#can-we-choose-any-persistent-storage-solution--like-ocs++[default in ARO] is for Persistent Volumes to be backed by Azure Disk, but it is possible to https://docs.openshift.com/container-platform/latest/storage/persistent_storage/persistent-storage-azure-file.html[use Azure Files] so that you can use the RWX (Read-Write-Many) access mode.
 See here for more info on https://docs.openshift.com/container-platform/latest/storage/understanding-persistent-storage.html#pv-access-modes_understanding-persistent-storage[access modes].
 
 . In the OSToy app click on _Persistent Storage_ in the left menu.
@@ -68,7 +68,7 @@ ostoy-frontend-5f6b9c9b67-w5cj4       1/1     Running   0          152m
 ostoy-microservice-5b6dd698df-f2zvq   1/1     Running   0          153m
 ----
 
-. Then get an SSH session into the container:
+. Then open an interactive shell session inside the container within our pod:
 +
 [source,sh,role=execute]
 ----
