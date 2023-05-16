@@ -72,7 +72,7 @@ image::media/managedlab/9-ostoy-wclogs.png[web-pods]
 
 You can use Azure services for metrics and logging by enabling your ARO cluster with Azure Arc. Connecting to ARC was already completed in the earlier script we ran.
 
-. Back in the Azure web console (https://portal.azure.com) type *Azure Arc* in the search bar from the Home screen and select *Kubernetes - Azure Arc*.
+. Back in the Azure portal (https://portal.azure.com) type *Azure Arc* in the search bar from the Home screen and select *Kubernetes - Azure Arc*.
 +
 image::media/managedlab/36-searcharc.png[arckubernetes]
 
@@ -84,20 +84,20 @@ You will see a page with all sorts of metrics for the cluster.
 +
 image::media/managedlab/38-clustermetrics.png[clustermetrics]
 +
-NOTE: Please feel free to come back to this section after the "Pod Autoscaling" section and see how you can use Container Insights to view metrics.
+NOTE: Please feel free to come back to this section later and see how you can use Container Insights to view metrics.
 You may need to add a filter by "namespace" to see the pods from our application.
 
-. To see the log messages we outputted to _stdout_ and _stderr_, click on "Logs" in the left menu, then the "Container Logs" query.
+. To see the log messages we outputted to _stdout_ and _stderr_, click on *Logs* in the left menu, then click on the *Container Logs* query.
 
-. Finally, click "Load to editor" for the pre-created query called "Find a value in Container Logs Table".
+. Finally, click *Load to editor* for the pre-created query called "Find a value in Container Logs Table".
 +
 image::media/managedlab/39-containerlogs.png[containerlogs]
 +
 This will populate a query that requires a parameter to search for.
 
-. Let's look for our error entry. Type "stderr" in the location for `FindString`, then click run.
+. Let's look for our error entry. Type "stderr" in the location for `FindString`. Also change the `Time Range` to "Last 30 minutes", then click run.
 +
-You should see one line returned that contains the message you inputted earlier. You can also click the twist for more information.
+You should see a line returned that contains the message you inputted earlier. You can also click the twist for more information.
 +
 image::media/managedlab/40-getlogmessage.png[getmessage]
 +

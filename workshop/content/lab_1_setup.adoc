@@ -76,19 +76,23 @@ mv helm-linux-amd64 ~/bin/helm
 === Connect our cluster to Azure Arc.
 Azure Arc is a Microsoft Azure service that extends Azure management and governance capabilities to resources located outside of Azure. It allows you to manage and govern resources, such as virtual machines, Kubernetes clusters, and data services, that are running in on-premises environments, multi-cloud environments, or edge locations. By connecting our cluster to Azure Arc, we can centralize management, governance, and monitoring of our Kubernetes resources alongside other Azure resources.  We will use this to streamline logging, monitoring and Secrets management with KeyVault in this lab.
 
-If you'd like to read more about connecting your cluster with Azure Arc please see https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/[Azure Arc-enabled Kubernetes]
+If you'd like to read more about connecting your cluster with Azure Arc please see https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/[Azure Arc-enabled Kubernetes].
 
-. Set up your cluster for use with Azure ARC.
-+
+.The script you will run below will do three things:
+. Connect the ARO cluster with Azure Arc
+. Install the Azure Monitor Container Insights extension (to enable viewing of logs and metrics through Azure Monitor)
+. Install the Azure Key Vault Secrets Provider extension (to use Azure Key Vault as a secrets store with a Kubernetes cluster via a CSI volume)
+
+Set up your cluster for use with Azure ARC.
+
 [source,sh,role=execute]
 ----
-curl https://raw.githubusercontent.com/microsoft/aroworkshop/master/resources/configure-arc.sh | bash & disown
+curl -s https://raw.githubusercontent.com/microsoft/aroworkshop/master/resources/configure-arc.sh | bash & disown
 ----
-+
+
 [NOTE]
 ====
 You do not have to wait for the script to run.  It will run in the background so you can proceed with the lab.
 ====
-
 
 You are ready to start using your ARO cluster.
