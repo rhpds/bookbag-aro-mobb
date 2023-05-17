@@ -441,7 +441,7 @@ volumeMounts:
 [...]
 ----
 
-. Open the file to see the ConnectionSecret. 
+. Open the file to see the ConnectionSecret.
 +
 [source,sh,role=execute]
 ----

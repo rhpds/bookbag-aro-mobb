@@ -10,7 +10,7 @@ In this case there is just one called "ostoy-pvc".
 
 . If you click on it you will also see other pertinent information such as whether it is bound or not, size, access mode and creation time.
 
-. Alternatively, you can use the CLI to get the same information. 
+. Alternatively, you can use the CLI to get the same information.
 +
 [source,sh,role=execute]
 ----
@@ -73,6 +73,7 @@ ostoy-microservice-5b6dd698df-f2zvq   1/1     Running   0          153m
 [source,sh,role=execute]
 ----
 POD_NAME=$(oc get pods -o name | grep frontend)
+
 oc rsh $POD_NAME
 ----
 
