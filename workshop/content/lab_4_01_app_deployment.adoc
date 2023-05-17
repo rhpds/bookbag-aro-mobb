@@ -15,6 +15,10 @@ oc whoami
 [source,text,options=nowrap]
 ----
 openenv-admin-%guid%@azure.opentlc.com
+
+OR
+
+kube:admin
 ----
 
 Create a new project called "OSToy" in your cluster.
