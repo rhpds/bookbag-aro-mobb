@@ -2,7 +2,7 @@
 
 === Create new project
 
-WARNING: You must be logged in as administrator.
+WARNING: You must be logged in as an administrator.
 
 . Check to see that you're logged in as kubeadmin.
 +
@@ -14,6 +14,10 @@ oc whoami
 .Sample Output
 [source,text,options=nowrap]
 ----
+openenv-admin-%guid%@azure.opentlc.com
+
+OR
+
 kube:admin
 ----
 
