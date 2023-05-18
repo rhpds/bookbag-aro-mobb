@@ -106,3 +106,14 @@ You should see the text you entered in the UI.
 ----
 exit
 ----
+ 
+. You can verify the Azure Disk backend of the PV behind the PVC.
++
+[source,sh,role=execute]
+----
+export PVC_NAME=$(oc get $POD_NAME -o jsonpath='{.spec.volumes[2].persistentVolumeClaim.claimName}')
+export PV_NAME=$(oc get pvc $PVC_NAME -o jsonpath='{.spec.volumeName}')
+oc get pv $PV_NAME
+az disk show --resource-group openenv-${GUID} -n $PV_NAME
+----
++ 
