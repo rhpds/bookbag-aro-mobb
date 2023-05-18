@@ -53,3 +53,27 @@ This is the intra-cluster IP address;
 only accessible from within the cluster.
 +
 image::media/managedlab/20-ostoy-dns.png[ostoy DNS]
++
+The ostoy-frontend service is exposed via an Openshift route object that has a DNS name for the service.
++
+[source,sh,role=execute]
+----
+oc get route ostoy-route -o "jsonpath={.spec.host}"
+----
++
+The IP address corresponding to that DNS name is configured on the Azure Load Balancer that is automatically created when the ARO cluster is created.
++
+[source,sh,role=execute]
+----
+export LB_EXTERNAL=$(az network lb list --resource-group openenv-${GUID} --query "[].name" -o tsv | grep %GUID | grep -v internal)
+export ROUTER_IP_ID=$(az network lb frontend-ip list --resource-group openenv-${GUID} --lb-name $LB_EXTERNAL --query [].[publicIPAddress.id] -o tsv | grep -E -m 1 "default" | grep -E -o "$LB_EXTERNAL.*\$")
+az network public-ip show --resource-group openenv-${GUID} -n $ROUTER_IP_ID --query ipAddress -o tsv
+----
++
+That IP is associated with the router-default kubernetes service that provides the routes functionality (similar to kubernetes ingress, implemented with a pair of HA proxy pods).
++
+[source,sh,role=execute]
+----
+oc get svc router-default -n openshift-ingress -o jsonpath='{.spec.loadBalancerIP}{"\n"}'
+----
++
