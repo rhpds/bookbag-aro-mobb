@@ -2,7 +2,6 @@
 
 Your environment has already been set up and you are ready to use your first ARO cluster.
 
-
 == Connect to your bastion VM
 
 . In the terminal window to the right connect to the bastion VM (you can also just click the command below to have it copied and executed automatically):
@@ -17,6 +16,20 @@ The password for the user `azure` is `%bastion_password%`
 [source,sh,role=execute]
 ----
 %bastion_ssh_command%
+----
++
+.Click in the box below to copy and paste the string `yes` to your terminal:
++
+[source,sh,role=execute]
+----
+yes
+----
++
+.Click in the box below to copy and paste the password to your terminal:
++
+[source,sh,role=execute]
+----
+%bastion_password%
 ----
 
 === Validate installed tools
@@ -34,30 +47,27 @@ az version
 [source,texinfo]
 ----
 {
-  "azure-cli": "2.47.0",
-  "azure-cli-core": "2.47.0",
+  "azure-cli": "2.49.0",
+  "azure-cli-core": "2.49.0",
   "azure-cli-telemetry": "1.0.8",
   "extensions": {}
 }
 ----
 
-. Download and install the oc binary
+. Validate the version of the OpenShift CLI:
 +
 [source,sh,role=execute]
 ----
-cd $HOME
-wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.10.54/openshift-client-linux.tar.gz
-
-mkdir $HOME/bin
-tar -xzvf $HOME/openshift-client-linux.tar.gz -C $HOME/bin
-rm $HOME/openshift-client-linux.tar.gz
-
-export PATH=$HOME/bin:$PATH
-echo "export PATH=$HOME/bin:$PATH" >>$HOME/.bashrc
+oc version
 ----
 +
-*Why use `oc` over `kubectl`* + Being Kubernetes, one can definitely use `kubectl` with their OpenShift cluster.
-`oc` is specific to OpenShift in that it includes the standard set of features from `kubectl` plus additional support for OpenShift functionality. See https://docs.openshift.com/container-platform/latest/cli_reference/openshift_cli/usage-oc-kubectl.html[Usage of oc and kubectl commands] for more details.
-
+.Sample Output
+[source,texinfo]
+----
+Client Version: 4.11.26
+Kustomize Version: v4.5.4
+Server Version: 4.11.26
+Kubernetes Version: v1.24.6+263df15
+----
 
 You are ready to start using your ARO cluster.

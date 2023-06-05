@@ -3,15 +3,15 @@ modules:
   home:
     name: Home
     exit_sign: Continue
-  lab_1_setup:
+  100-setup/1-enviroment:
     name: Environment Setup
     exit_sign: Continue
-  lab_2_connect_cluster:
+  100-setup/2-access-cluster:
     name: Connect to your cluster
     exit_sign: Continue
-  # lab_3_configure_gitea:
-  #   name: Configure Gitea repository
-  #   exit_sign: Continue
+  lab_2_connect_cluster:
+    name: Connect Cluster
+    exit_sign: Continue
   lab_4_explore_aad:
     name: Authentication using AAD
     exit_sign: Continue

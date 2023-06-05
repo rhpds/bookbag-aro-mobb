@@ -42,7 +42,6 @@ EOF
 source ~/.workshoprc
 
 env | grep -E 'AZ_|OCP'
-
 ----
 +
 .Sample Output

@@ -1,16 +1,21 @@
 = Azure Red Hat OpenShift Workshop
 
 https://azure.microsoft.com/en-us/services/openshift/[Azure Red Hat OpenShift] is a fully managed Red Hat OpenShift service in Azure that is jointly engineered and supported by Microsoft and Red Hat.
+
 In this lab, you'll go through a set of tasks that will help you understand some of the concepts of deploying and securing container based applications on top of Azure Red Hat OpenShift.
 
 You can use this guide as an OpenShift tutorial and as study material to help you get started to learn OpenShift.
 
-Some of the things you'll be going through:
+== What to expect
 
-* Creating a https://docs.openshift.com/aro/4/applications/projects/working-with-projects.html[project] on the Azure Red Hat OpenShift Web Console
-* Deploying a MongoDB container that uses Azure Disks for https://docs.openshift.com/aro/4/storage/understanding-persistent-storage.html[persistent storage]
-* Deploying a Node JS API and frontend app from Git Hub using https://docs.openshift.com/aro/4/openshift_images/create-images.html[Source-To-Image (S2I)]
-* Exposing the web application frontend using https://docs.openshift.com/aro/4/networking/routes/route-configuration.html[Routes]
-* Creating a https://docs.openshift.com/aro/4/networking/network_policy/about-network-policy.html[network policy] to control communication between the different tiers in the application
+During the workshop, we will take you through a series of content to help you learn how to deploy ARO, configure it, and securely deploy appplications to it using cloud based backing services such as Azure Container Registry and Azure Postgres.
 
-You'll be doing the majority of the labs using the OpenShift CLI, but you can also accomplish them using the Azure Red Hat OpenShift web console.
+During this hands on workshop we will cover the following:
+
+- Deploying Azure Red Hat OpenShift clusters
+- Perform Day 2 operations tasks such as configuring node and cluster scaling policies, configuring managed upgrades, and using labels for deterministic app placement on nodes
+// - Learn how to leverage the built in Observability tooling
+- Deploy an application to ARO, and then automate it using OpenShift GitOps and OpenShift Pipelines using modern tooling and practices.
+- Make an application on OpenShift scalable and resistant to node failures and upgrades
+- Deploy an application that uses an Azure Managed Database
+- Learn how to use OpenShift Service Mesh for application observability and tracing

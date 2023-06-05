@@ -3,9 +3,9 @@ name: ARO Workshop
 modules:
   activate:
   - home
-  - lab_1_setup
+  - 100-setup/1-environment
+  - 100-setup/2-access-cluster
   - lab_2_connect_cluster
-  # - lab_3_configure_gitea
   - lab_4_explore_aad
   - lab_5_app_deploy
   - lab_6_app_gitops
