@@ -5,8 +5,8 @@ modules:
   - home
   - 100-setup/1-environment
   - 100-setup/2-access-cluster
-  - lab_2_connect_cluster
-  - lab_4_explore_aad
+  - 200-ops/idp/1a-configure-aad
+  # - 200-ops/idp/1b-explore-aad
   - lab_5_app_deploy
   - lab_6_app_gitops
   - lab_7_app_networkpolicy

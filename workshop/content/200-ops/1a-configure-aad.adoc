@@ -1,0 +1,256 @@
+= Configuring Azure AD for Cluster authentication
+
+// taken from here - https://mobb.ninja/docs/idp/azuread-aro-cli/
+
+Your Azure Red Hat OpenShift (ARO) cluster has a built-in OAuth server.
+
+Developers and administrators do not really directly interact with the OAuth server itself, but instead interact with an external identity provider (such as Azure AD) which is brokered by the OAuth server in the cluster.
+
+To learn more about cluster authentication, visit the https://docs.openshift.com/container-platform/latest/authentication/understanding-identity-provider.html[Red Hat documentation for identity provider configuration] and the https://learn.microsoft.com/en-us/azure/openshift/configure-azure-ad-cli[Microsoft documentation for configuring Azure Active Directory authentication for ARO].
+
+In this section of the workshop, we'll configure Azure AD as the cluster identity provider in Azure Red Hat OpenShift.
+
+== Configure our Azure AD application
+
+. First, we need to determine the OAuth callback URL, which we will use to tell Azure AD where it should send authentication responses.
++
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+IDP_CALLBACK=$(oc get route -n openshift-authentication oauth-openshift -o jsonpath='https://{.spec.host}/oauth2callback/AAD')
+
+echo "${IDP_CALLBACK}"
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+https://oauth-openshift.apps.upd83re2.westeurope.aroapp.io/oauth2callback/AAD
+----
+////
++
+[source,sh,role=execute]
+----
+IDP_CALLBACK="https://oauth-openshift.apps.$(
+  az aro show -g ${AZ_RG} -n ${AZ_ARO} --query clusterProfile.domain \
+  -o tsv).${AZ_LOCATION}.aroapp.io/oauth2callback/AAD"
+
+echo "${IDP_CALLBACK}"
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+https://oauth-openshift.apps.upd83re2.westeurope.aroapp.io
+----
+////
+
+. Next, let's create a manifest file to configure the AAD application.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+cat << EOF > $HOME/manifest.json
+{
+  "idToken": [
+    {
+      "name": "upn",
+      "source": null,
+      "essential": false,
+      "additionalProperties": []
+    },
+    {
+      "name": "email",
+      "source": null,
+      "essential": false,
+      "additionalProperties": []
+    }
+  ]
+}
+EOF
+----
+
+. Next, let's use the manifest we created above to create an Azure AD App for your cluster.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+az ad app create \
+  --display-name ${GUID}-idp \
+  --web-redirect-uris ${IDP_CALLBACK} \
+  --sign-in-audience AzureADMyOrg \
+  --optional-claims @$HOME/manifest.json
+
+APPID=$(az ad app list --display-name ${GUID}-idp --query "[].appId" -o tsv)
+
+echo ${APPID}
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+... lots of JSON output...
+
+01d2ddd4-742c-442b-8c00-795cabc00ca8
+----
+
+. To allow us to securely sign our authentication requests, we need to create an Azure Service Principal and grab the credentials to authenticate with.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+az ad sp create --id ${APPID}
+
+az ad sp update --id ${APPID} --set 'tags=["WindowsAzureActiveDirectoryIntegratedApp"]'
+
+IDP_SECRET=$(az ad app credential reset --id ${APPID} --query password -o tsv)
+
+echo ${IDP_SECRET}
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+... Lots of JSON output ...
+
+WARNING: The output includes credentials that you must protect. Be sure that you do not include these credentials in your code or check the credentials into your source control. For more information, see https://aka.ms/azadsp-cli
+fsK8Q~Oiy4kSH4ptkLSNQ7~XpF18pkGmevl2Pb.A
+----
+
+. Next, we need to add permissions to our Azure AD application which grants `read email`, `read profile`, and `read user`.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+az ad app permission add \
+  --api 00000003-0000-0000-c000-000000000000 \
+  --api-permissions 64a6cdd6-aab1-4aaf-94b8-3cc8405e90d0=Scope \
+  --id ${APPID}
+
+az ad app permission add \
+  --api 00000003-0000-0000-c000-000000000000 \
+  --api-permissions 14dad69e-099b-42c9-810b-d002981feec1=Scope \
+  --id ${APPID}
+
+az ad app permission add \
+  --api 00000003-0000-0000-c000-000000000000 \
+  --api-permissions e1fe6dd8-ba31-4d61-89e7-88639da4683d=Scope \
+  --id ${APPID}
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+Invoking `az ad app permission grant --id 01d2ddd4-742c-442b-8c00-795cabc00ca8 --api 00000003-0000-0000-c000-000000000000` is needed to make the change effective
+----
++
+[TIP]
+====
+If you see the output `Invoking az ad app permission grant --id xxxxxxx --api 00000003-0000-0000-c000-000000000000 is needed to make the change effective` you can safely ignore it.
+====
+
+== Configure our OpenShift cluster to use Azure AD
+
+. Create an secret to store the service principal secret, above.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+oc create secret generic openid-client-secret-azuread \
+  -n openshift-config \
+  --from-literal=clientSecret="${IDP_SECRET}"
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+secret/openid-client-secret-azuread created
+----
+
+. Next, let's update the OAuth server's custom resource with our Azure AD configuration.
++
+[source,sh,role=execute]
+----
+AZ_TENANT=$(az account show --query tenantId -o tsv)
+
+cat << EOF | oc apply -f -
+---
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+spec:
+  identityProviders:
+  - name: AAD
+    mappingMethod: claim
+    type: OpenID
+    openID:
+      clientID: "${APPID}"
+      clientSecret:
+        name: openid-client-secret-azuread
+      extraScopes:
+      - email
+      - profile
+      extraAuthorizeParameters:
+        include_granted_scopes: "true"
+      claims:
+        preferredUsername:
+        - email
+        - upn
+        name:
+        - name
+        email:
+        - email
+      issuer: "https://login.microsoftonline.com/${AZ_TENANT}"
+EOF
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+Warning: resource oauths/cluster is missing the kubectl.kubernetes.io/last-applied-configuration annotation which is required by oc apply. oc apply should only be used on resources created declaratively by either oc create --save-config or oc apply. The missing annotation will be patched automatically.
+oauth.config.openshift.io/cluster configured
+----
++
+[NOTE]
+====
+We are specifically requesting `email`, `upn`, and `name` optional claims from Azure AD to populate the data in our user profiles. This is entirely configurable.
+
+If you see the output `Warning: resource oauths/cluster is missing the kubectl.kubernetes.io/last-applied-configuration annotation which is required by oc apply.
+oc apply should only be used on resources created declaratively by either oc create --save-config or oc apply.
+The missing annotation will be patched automatically.` you can safely ignore this warning.
+====
+
+. Next, give Cluster Admin permissions to your AAD user by running the following commands:
++
+[source,sh,role=execute]
+----
+oc adm policy add-cluster-role-to-user cluster-admin \
+  openenv-admin-%guid%@azure.opentlc.com
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+Warning: User 'openenv-admin-@azure.opentlc.com' not found
+clusterrole.rbac.authorization.k8s.io/cluster-admin added: "openenv-admin-@azure.opentlc.com"
+----
+
+. Logout from your OCP Console and browse back to the Console URL (`echo $OCP_CONSOLE` if you have forgotten it) and you should see a new option to login called `AAD`.
++
+[TIP]
+If you do not see a new *AAD* login option, wait a few more minutes as this process can take a few minutes to deploy across the cluster and revisit the Console URL.
+====
+
+. Select `AAD`, and log in using the provided Azure credentials:
+* *User*: openenv-admin-%guid%@azure.opentlc.com
+* *Password*: %bastion_password%
+
+. You will be prompted to change your password. Provide your current password and select a new password that you will remember.
++
+It is suggested to use something like *FirstnameLastnameMOBB2023*.
+
+. The first time you log in you will also be prompted to accept permissions for the _application_. Click *Accept*.
++
+Now you should be logged into the OpenShift Console as user *openenv-admin-%guid%@azure.opentlc.com* with Cluster Administrator permissions.

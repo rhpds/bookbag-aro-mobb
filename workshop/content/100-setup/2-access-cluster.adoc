@@ -123,7 +123,8 @@ oc login "${OCP_API}" -u "${OCP_USER}" -p "${OCP_PASS}"
 ----
 Login successful.
 
-You have access to 68 projects, the list has been suppressed. You can list all projects with 'oc projects'
+You have access to 71 projects, the list has been suppressed. You can list all projects with
+'oc projects'
 
 Using project "default".
 ----

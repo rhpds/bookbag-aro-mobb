@@ -9,6 +9,28 @@ modules:
   100-setup/2-access-cluster:
     name: Access your cluster
     exit_sign: Continue
+  200-ops/idp/1a-configure-aad:
+    name: Configuring cluster authentication
+    exit_sign: Continue
+  # 200-ops/idp/1b-explore-aad:
+  #   name: Explore cluster authentication
+  #   exit_sign: Continue
+  200-ops/day2/upgrades:
+    name: Managing Cluster Upgrades
+    exit_sign: Continue
+  200-ops/day2/scaling-nodes:
+    name: Managing Worker Nodes
+    exit_sign: Continue
+  200-ops/day2/autoscaling:
+    name: Cluster Autoscaling
+    exit_sign: Continue
+  200-ops/day2/labels:
+    name: Labeling Nodes
+  200-ops/day2/observability:
+    name: Forward Metrics and Logs to Azure Files: 
+    exit_sign: Continue  
+
+
   lab_2_connect_cluster:
     name: Connect to your Cluster
     exit_sign: Continue
