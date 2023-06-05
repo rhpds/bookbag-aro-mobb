@@ -3,14 +3,14 @@ modules:
   home:
     name: Home
     exit_sign: Continue
-  100-setup/1-enviroment:
+  100-setup/1-environment:
     name: Environment Setup
     exit_sign: Continue
   100-setup/2-access-cluster:
-    name: Connect to your cluster
+    name: Access your cluster
     exit_sign: Continue
   lab_2_connect_cluster:
-    name: Connect Cluster
+    name: Connect to your Cluster
     exit_sign: Continue
   lab_4_explore_aad:
     name: Authentication using AAD
