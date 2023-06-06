@@ -27,7 +27,7 @@ modules:
   200-ops/day2/labels:
     name: Labeling Nodes
   200-ops/day2/observability:
-    name: Forward Metrics and Logs to Azure Files: 
+    name: Forward Metrics and Logs to Azure Files
     exit_sign: Continue  
 
 
