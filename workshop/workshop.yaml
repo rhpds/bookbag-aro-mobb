@@ -5,13 +5,14 @@ modules:
   - home
   - 100-setup/1-environment
   - 100-setup/2-access-cluster
+  - 200-ops-idp/1-aad
   - 200-ops/idp/1a-configure-aad
-  # - 200-ops/idp/1b-explore-aad
-  - 200-ops/day2/upgrades
-  - 200-ops/day2/scaling-nodes
-  - 200-ops/day2/autoscaling
-  - 200-ops/day2/labels
-  - 200-ops/day2/observability
+  - 200-ops/idp/1b-explore-aad
+  - 200-ops/day2/1-upgrades
+  - 200-ops/day2/2-scaling-nodes
+  - 200-ops/day2/3-autoscaling
+  - 200-ops/day2/4-labels
+  - 200-ops/day2/5-observability
   - 300-app/1-app-deploy
   - 300-app/2-app-gitops
   - 300-app/3-app-networkpolicy

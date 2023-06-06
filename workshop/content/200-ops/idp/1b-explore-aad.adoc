@@ -1,5 +1,10 @@
 == Explore OpenShift authentication using AAD
 
+[WARNING]
+====
+Only do the module for Azure Active Directory that your instructor told you to do. If you just set up Azure AD yourself move on to the next module.
+====
+
 In your environment an Azure Active Directory has been configured with two users:
 
 * Admin user: `%openenv_admin_upn%`. This user has administrative access to the Azure Portal as well as cluster-admin authorization on the ARO cluster.

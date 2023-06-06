@@ -1,5 +1,10 @@
 = Configuring Azure AD for Cluster authentication
 
+[WARNING]
+====
+Only do the module for Azure Active Directory that your instructor told you to do. If Azure AD is already preconfigured move on to the next module.
+====
+
 // taken from here - https://mobb.ninja/docs/idp/azuread-aro-cli/
 
 Your Azure Red Hat OpenShift (ARO) cluster has a built-in OAuth server.
