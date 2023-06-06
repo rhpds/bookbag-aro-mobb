@@ -1,4 +1,4 @@
-== Explore OpenShift authentication using AAD
+= Explore OpenShift authentication using AAD
 
 [WARNING]
 ====
@@ -15,7 +15,7 @@ In your environment an Azure Active Directory has been configured with two users
 Both users have been assigned the temporary password `%bastion_password%`. You *must* change this password when you first log into the Azure portal.
 ====
 
-=== Azure Portal and change admin password
+== Azure Portal and change admin password
 
 The Azure Portal URL is https://portal.azure.com.
 
@@ -24,7 +24,7 @@ The Azure Portal URL is https://portal.azure.com.
 . You will be prompted to change your password. Use `%bastion_password%` as the current password and pick a password that you will remember throughout this lab. Make sure this password is reasonably complex. An example could be `Firstname-Lastname-Admin2023` (using your first and last name).
 . Click `Maybe Later` when asked if you want to take a tour of the Azure portal.
 
-=== Explore ARO
+== Explore ARO
 
 . In the search bar at the top type `aro` and then click on *Azure Red Hat OpenShift Clusters*.
 +
