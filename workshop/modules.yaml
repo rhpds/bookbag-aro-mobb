@@ -9,7 +9,7 @@ modules:
   100-setup/2-access-cluster:
     name: Access your cluster
     exit_sign: Continue
-  200-ops-idp/1-aad:
+  200-ops/idp/1-aad:
     name: Cluster Authentication
     exit_sign: Continue
   200-ops/idp/1a-configure-aad:
