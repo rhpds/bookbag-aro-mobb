@@ -2,7 +2,7 @@
 
 . From the OpenShift Console Administrator view click through *HOME* \-> *Operators* \-> *Operator Hub*, search for "Red Hat OpenShift GitOps" and hit *Install*. Make sure to select the *Channel* `gitops-1.8`. Accept all other defaults and click on *Install*.
 +
-image::media/gitops_operator.png[]
+image::../media/gitops_operator.png[]
 
 . Create a new project
 +
@@ -128,11 +128,11 @@ oc get route argocd-server -n bgd -o jsonpath='{"https://"}{.spec.host}{"\n"}'
 https://argocd-server-bgd.apps.c90qz1cy.eastus.aroapp.io
 ----
 +
-image::media/argo_app1.png[]
+image::../media/argo_app1.png[]
 
 . Click on the Application *bgd-app* to show its topology
 +
-image::media/argo_sync.png[]
+image::../media/argo_sync.png[]
 
 . Verify that OpenShift sees the Deployment as rolled out
 +
@@ -162,7 +162,7 @@ https://bgd-bgd.apps.c90qz1cy.eastus.aroapp.io
 
 . You should see a green box in the website like so
 +
-image::media/bgd_green.png[]
+image::../media/bgd_green.png[]
 
 . Patch the OpenShift resource to force it to be out of sync with git
 +
@@ -181,16 +181,16 @@ deployment.apps/bgd patched
 
 . Refresh Your browser and you should see a blue box in the website like so
 +
-image::media/app_blue.png[]
+image::../media/app_blue.png[]
 
 . Meanwhile check ArgoCD it should show the application as out of sync.
 Click the *Sync* button and then click on *Synchronize* to have it revert the change you made in OpenShift
 +
-image::media/sync_bgd.png[]
+image::../media/sync_bgd.png[]
 
 . Check again, you should see a green box in the website like so
 +
-image::media/bgd_green.png[]
+image::../media/bgd_green.png[]
 
 . Patch the ArgoCD application to automatically self heal
 +
