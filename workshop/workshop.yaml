@@ -7,10 +7,15 @@ modules:
   - 100-setup/2-access-cluster
   - 200-ops/idp/1a-configure-aad
   # - 200-ops/idp/1b-explore-aad
-  - lab_5_app_deploy
-  - lab_6_app_gitops
-  - lab_7_app_networkpolicy
-  - lab_8_resilient_app
+  - 200-ops/day2/upgrades
+  - 200-ops/day2/scaling-nodes
+  - 200-ops/day2/autoscaling
+  - 200-ops/day2/labels
+  - 200-ops/day2/observability
+  - 300-app/1-app-deploy
+  - 300-app/2-app-gitops
+  - 300-app/3-app-networkpolicy
+  - 300-app/4-resilient-app
   - lab_9_service_mesh_introduction
   - lab_10_service_mesh_deploy_operator
   - lab_11_service_mesh_deploy_control_plane

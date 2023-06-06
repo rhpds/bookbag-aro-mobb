@@ -1,0 +1,162 @@
+== Introduction
+
+When deploying your Azure Red Hat OpenShift (ARO) cluster, you can configure many aspects of your worker nodes, but what happens when you need to change your worker nodes after they've already been created?
+
+These activities include scaling the number of nodes, changing the instance type, adding labels or taints, just to name a few.
+
+Many of these changes are done using MachineSets.
+MachineSets ensure that a specified number of Machine replicas are running at any given time.
+Think of a MachineSet as a "template" for the kinds of Machines that make up the worker nodes of your cluster.
+
+These are similar to other Kubernetes resources, like a ReplicaSet is to Pods.
+
+One important caveat, is that MachineSets allow users to manage many Machines as a single entity, but are contained to a specific availability zone.
+
+If you'd like to learn more, see the https://docs.openshift.com/container-platform/latest/machine_management/index.html[Red Hat documentation on machine management].
+
+== Scaling worker nodes
+
+=== Via the CLI
+
+. First, let's see what MachineSets already exist in our cluster.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+oc -n openshift-machine-api get machineset
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+NAME                                         DESIRED   CURRENT   READY   AVAILABLE   AGE
+aro-cluster-vhtbl-8xd66-worker-westeurope1   1         1         1       1           15h
+aro-cluster-vhtbl-8xd66-worker-westeurope2   1         1         1       1           15h
+aro-cluster-vhtbl-8xd66-worker-westeurope3   1         1         1       1           15h
+----
++
+By default, ARO clusters have three MachineSets, one for each availability zone.
+
+. Now, let's take a look at the machines that have been created according to the instructions provided by the above MachineSets.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+oc -n openshift-machine-api get machine
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+NAME                                               PHASE     TYPE              REGION       ZONE   AGE
+aro-cluster-vhtbl-8xd66-master-0                   Running   Standard_D8s_v3   westeurope   1      15h
+aro-cluster-vhtbl-8xd66-master-1                   Running   Standard_D8s_v3   westeurope   2      15h
+aro-cluster-vhtbl-8xd66-master-2                   Running   Standard_D8s_v3   westeurope   3      15h
+aro-cluster-vhtbl-8xd66-worker-westeurope1-shj9g   Running   Standard_D4s_v3   westeurope   1      15h
+aro-cluster-vhtbl-8xd66-worker-westeurope2-8ckbq   Running   Standard_D4s_v3   westeurope   2      15h
+aro-cluster-vhtbl-8xd66-worker-westeurope3-6xc5s   Running   Standard_D4s_v3   westeurope   3      15h
+----
++
+For this workshop, we've deployed your ARO cluster with six total machines (three workers machines and three control plane machines), one in each availability zone.
+
+. Now that we know that we have three worker nodes, let's pick a MachineSet to scale up using the OpenShift CLI tools.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+MACHINESET=$(oc -n openshift-machine-api get machinesets -o name | head -1)
+
+echo ${MACHINESET}
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+machineset.machine.openshift.io/aro-cluster-vhtbl-8xd66-worker-westeurope1
+----
+
+. Now, let's scale up our selected MachineSet from one to two machines.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+oc -n openshift-machine-api scale --replicas=2 ${MACHINESET}
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+machineset.machine.openshift.io/aro-cluster-vhtbl-8xd66-worker-westeurope1 scaled
+----
+
+. Now that we've scaled the MachineSet to two machines, we can see that the machine is already being created.
+First, let's quickly check the output of the same command we ran in step 1:
++
+[source,sh,role=execute]
+----
+oc -n openshift-machine-api get machinesets
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+NAME                                         DESIRED   CURRENT   READY   AVAILABLE   AGE
+aro-cluster-vhtbl-8xd66-worker-westeurope1   2         2         1       1           15h
+aro-cluster-vhtbl-8xd66-worker-westeurope2   1         1         1       1           15h
+aro-cluster-vhtbl-8xd66-worker-westeurope3   1         1         1       1           15h
+----
++
+[NOTE]
+====
+Note, that the number of *desired* and *current* nodes matches the scale we specified, but only one is *ready* and *available*.
+====
++
+We can also run the same command we ran in step 2 to see the machine being provisioned:
++
+[source,sh,role=execute]
+----
+oc -n openshift-machine-api get machine
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+NAME                                               PHASE         TYPE              REGION       ZONE   AGE
+aro-cluster-vhtbl-8xd66-master-0                   Running       Standard_D8s_v3   westeurope   1      15h
+aro-cluster-vhtbl-8xd66-master-1                   Running       Standard_D8s_v3   westeurope   2      15h
+aro-cluster-vhtbl-8xd66-master-2                   Running       Standard_D8s_v3   westeurope   3      15h
+aro-cluster-vhtbl-8xd66-worker-westeurope1-mx4qw   Provisioned   Standard_D4s_v3   westeurope   1      2m7s
+aro-cluster-vhtbl-8xd66-worker-westeurope1-shj9g   Running       Standard_D4s_v3   westeurope   1      15h
+aro-cluster-vhtbl-8xd66-worker-westeurope2-8ckbq   Running       Standard_D4s_v3   westeurope   2      15h
+aro-cluster-vhtbl-8xd66-worker-westeurope3-6xc5s   Running       Standard_D4s_v3   westeurope   3      15h
+----
+
+=== Via the Console
+
+Now let's scale the cluster back down to a total of 3 worker nodes, but this time, from the web console.
+
+. Return to your tab with the OpenShift Web Console.
+. Using the menu on the left Select *Compute* \-> *MachineSets*.
++
+image::../../media/web-console-machineset-sidebar.png[Web Console - Cluster Settings]
+
+. In the overview you will see the same information about the MachineSets that you saw on the command line.
+Now, locate the MachineSet which has "2 of 2" machines, and click on the *⋮* icon, then select _Edit machine count_.
++
+[NOTE]
+====
+It may take up to 5 minutes for the MachineSet to scale to 2 nodes while the underlying machine provisions and becomes ready.
+Until this time, the machine count will read "1 of 2".
+====
++
+image::../../media/web-console-machinesets-three-dots.png[Web Console - MachineSets Menu]
++
+image::../../media/web-console-machinesets-edit-count-menu.png[Web Console - MachineSets Count Menu]
+
+. Next, reduce the count from "2" to "1" and click *Save* to save your changes.
++
+image::../../media/web-console-machinesets-edit-count.png[Web Console - MachineSets Edit Count]
+
+*Congratulations!*
+
+You've successfully scaled your cluster up and back down to three nodes.

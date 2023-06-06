@@ -28,23 +28,6 @@ echo "${IDP_CALLBACK}"
 ----
 https://oauth-openshift.apps.upd83re2.westeurope.aroapp.io/oauth2callback/AAD
 ----
-////
-+
-[source,sh,role=execute]
-----
-IDP_CALLBACK="https://oauth-openshift.apps.$(
-  az aro show -g ${AZ_RG} -n ${AZ_ARO} --query clusterProfile.domain \
-  -o tsv).${AZ_LOCATION}.aroapp.io/oauth2callback/AAD"
-
-echo "${IDP_CALLBACK}"
-----
-+
-.Sample Output
-[source,text,options=nowrap]
-----
-https://oauth-openshift.apps.upd83re2.westeurope.aroapp.io
-----
-////
 
 . Next, let's create a manifest file to configure the AAD application.
 To do so, run the following command:
@@ -249,7 +232,7 @@ If you do not see a new *AAD* login option, wait a few more minutes as this proc
 
 . You will be prompted to change your password. Provide your current password and select a new password that you will remember.
 +
-It is suggested to use something like *FirstnameLastnameMOBB2023*.
+It is suggested to use something like *FirstnameLastnameMOBB23*.
 
 . The first time you log in you will also be prompted to accept permissions for the _application_. Click *Accept*.
 +

@@ -9,12 +9,15 @@ modules:
   100-setup/2-access-cluster:
     name: Access your cluster
     exit_sign: Continue
+# The next module is for clusters without AAD configured
+# If the cluster did get AAD configured uncomment
+# this and use the 1b module instead.
   200-ops/idp/1a-configure-aad:
     name: Configuring cluster authentication
     exit_sign: Continue
-  # 200-ops/idp/1b-explore-aad:
-  #   name: Explore cluster authentication
-  #   exit_sign: Continue
+# 200-ops/idp/1b-explore-aad:
+#   name: Explore cluster authentication
+#   exit_sign: Continue
   200-ops/day2/upgrades:
     name: Managing Cluster Upgrades
     exit_sign: Continue
@@ -30,23 +33,16 @@ modules:
     name: Forward Metrics and Logs to Azure Files
     exit_sign: Continue  
 
-
-  lab_2_connect_cluster:
-    name: Connect to your Cluster
-    exit_sign: Continue
-  lab_4_explore_aad:
-    name: Authentication using AAD
-    exit_sign: Continue
-  lab_5_app_deploy:
+  300-app/1-app-deploy:
     name: Deploy a Go Microservices Application
     exit_sign: Continue
-  lab_6_app_gitops:
+  300-app/2-app-gitops:
     name: Using OpenShift GitOps
     exit_sign: Continue
-  lab_7_app_networkpolicy:
+  300-app/3-app-networkpolicy:
     name: Restrict Network Access
     exit_sign: Continue
-  lab_8_resilient_app:
+  300-app/4-resilient-app:
     name: Making your application resilient
     exit_sign: Continue
   lab_9_service_mesh_introduction:

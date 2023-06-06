@@ -1,0 +1,249 @@
+== Introduction
+
+Labels are a useful way to select which nodes that an application will run on.
+These nodes are created by machines which are defined by the MachineSets we worked with in previous sections of this workshop.
+An example of this would be running a memory intensive application only on a specific node type.
+
+While you can directly add a label to a node, it is not recommended because nodes can be recreated, which would cause the label to disappear.
+Therefore we need to label the MachineSet itself.
+An important caveat to this process is that only *new machines* created by the MachineSet will get the label.
+This means you will need to either scale the MachineSet down to zero then back up to create new machines with the label, or you can label the existing machines directly.
+
+== Set a label for the MachineSet
+
+. Just like the last section, let's pick a MachineSet to add our label.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+MACHINESET=$(oc -n openshift-machine-api get machinesets -o name | head -1)
+
+echo ${MACHINESET}
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+machineset.machine.openshift.io/aro-cluster-vhtbl-8xd66-worker-westeurope1
+----
+
+. Now, let's patch the MachineSet with our new label.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+oc -n openshift-machine-api patch ${MACHINESET} \
+  --type=merge \
+  --patch '{"spec":{"template":{"spec":{"metadata":{"labels":{"tier":"frontend"}}}}}}'
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+machineset.machine.openshift.io/aro-cluster-vhtbl-8xd66-worker-westeurope1 patched
+----
+
+. As you'll remember, the existing machines won't get this label, but all new machines will.
+While we could just scale this MachineSet down to zero and back up again, that could disrupt our workloads.
+Instead, let's just loop through and add the label to all of our nodes in that MachineSet.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+MACHINES=$(oc -n openshift-machine-api get machines -o name -l "machine.openshift.io/cluster-api-machineset=$(echo $MACHINESET | cut -d / -f2 )" | cut -d / -f2 | xargs)
+
+for MACHINE in $(echo ${MACHINES}); do
+  oc label -n openshift-machine-api machine ${MACHINE} tier=frontend
+  oc label node ${MACHINE} tier=frontend
+done
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+machine.machine.openshift.io/aro-cluster-vhtbl-8xd66-worker-westeurope1-lqkp5 labeled
+node/aro-cluster-vhtbl-8xd66-worker-westeurope1-lqkp5 labeled
+machine.machine.openshift.io/aro-cluster-vhtbl-8xd66-worker-westeurope1-shj9g labeled
+node/aro-cluster-vhtbl-8xd66-worker-westeurope1-shj9g labeled
+machine.machine.openshift.io/aro-cluster-vhtbl-8xd66-worker-westeurope1-vtr9n labeled
+node/aro-cluster-vhtbl-8xd66-worker-westeurope1-vtr9n labeled
+----
++
+[NOTE]
+====
+Depending when (or if) you did the Autoscaling lab you may have 1, 2 or 3 Machines and Nodes that get the label.
+====
+
+. Now, let's verify the nodes are properly labeled.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+oc get nodes --selector='tier=frontend' -o name
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+node/aro-cluster-vhtbl-8xd66-worker-westeurope1-lqkp5
+node/aro-cluster-vhtbl-8xd66-worker-westeurope1-shj9g
+node/aro-cluster-vhtbl-8xd66-worker-westeurope1-vtr9n
+----
++
+Pending that your output shows one or more node(s), this demonstrates that our MachineSet and associated nodes are properly annotated!
+
+== Deploy an app to the labeled nodes
+
+Now that we've successfully labeled our nodes, let's deploy a workload to demonstrate app placement using `nodeSelector`.
+This should force our app to only our labeled nodes.
+
+. First, let's create a namespace (also known as a project in OpenShift).
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+oc new-project nodeselector-ex
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+Now using project "nodeselector-ex" on server "https://api.rbrlitrg.westeurope.aroapp.io:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/e2e-test-images/agnhost:2.33 -- /agnhost serve-hostname
+----
+
+. Next, let's deploy our application and associated resources that will target our labeled nodes.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+cat << EOF | oc create -f -
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nodeselector-app
+  namespace: nodeselector-ex
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodeselector-app
+  template:
+    metadata:
+      labels:
+        app: nodeselector-app
+    spec:
+      nodeSelector:
+        tier: frontend
+      containers:
+        - name: hello-openshift
+          image: "docker.io/openshift/hello-openshift"
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8888
+              protocol: TCP
+EOF
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+Warning: would violate PodSecurity "restricted:v1.24": allowPrivilegeEscalation != false (container "hello-openshift" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "hello-openshift" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "hello-openshift" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "hello-openshift" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+deployment.apps/nodeselector-app created
+----
++
+[NOTE]
+====
+Once again you may ignore the warning that may be printed.
+====
+
+. Now, let's validate that the application has been deployed to one of the labeled nodes.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+oc -n nodeselector-ex get pod -l app=nodeselector-app \
+   -o jsonpath='{.items[0].spec.nodeName}'; echo
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+aro-cluster-vhtbl-8xd66-worker-westeurope1-shj9g
+----
+
+. Double check the name of the node to compare it to the output above to ensure the node selector worked to put the pod on the correct node:
++
+[source,sh,role=execute]
+----
+oc get nodes --selector='tier=frontend' -o name
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+node/aro-cluster-vhtbl-8xd66-worker-westeurope1-lqkp5
+node/aro-cluster-vhtbl-8xd66-worker-westeurope1-shj9g
+node/aro-cluster-vhtbl-8xd66-worker-westeurope1-vtr9n
+----
++
+In the list of nodes look for the final string to match, in this example `shj9g`)
+
+. Next create a `service` using the `oc expose` command:
++
+[source,sh,role=execute]
+----
+oc expose deployment nodeselector-app -n nodeselector-ex
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+service/nodeselector-app exposed
+----
+
+. Expose the newly created `service` with a `route`:
++
+[source,sh,role=execute]
+----
+oc create route edge --service=nodeselector-app --insecure-policy=Redirect -n nodeselector-ex
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+route.route.openshift.io/nodeselector-app created
+----
+
+. Fetch the URL for the newly created `route`:
++
+[source,sh,role=execute]
+----
+oc get routes/nodeselector-app -n nodeselector-ex -o jsonpath='https://{.spec.host}{"\n"}'
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+https://nodeselector-app-nodeselector-ex.apps.rbrlitrg.westeurope.aroapp.io
+----
++
+Then visit the URL presented in a new tab in your web browser (using HTTPS).
++
+[NOTE]
+====
+The application is exposed over the default ingress using a predetermined URL and trusted TLS certificate. This is done using the OpenShift `Route` resource which is an extension to the Kubernetes `Ingress` resource.
+====
+
+*Congratulations!*
+
+You've successfully demonstrated the ability to label nodes and target those nodes using a `nodeSelector`.
