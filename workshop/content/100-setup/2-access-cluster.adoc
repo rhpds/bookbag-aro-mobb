@@ -41,6 +41,8 @@ EOF
 
 source ~/.workshoprc
 
+echo "source ~/.workshoprc" >>~/.bashrc
+
 env | grep -E 'AZ_|OCP'
 ----
 +
@@ -48,9 +50,9 @@ env | grep -E 'AZ_|OCP'
 [source,text,options=nowrap]
 ----
 OCP_USER=kubeadmin
-OCP_API=https://api.c90qz1cy.eastus.aroapp.io:6443/
-OCP_PASS=uwU2s-AKKVn-msvcz-FWHga
-OCP_CONSOLE=https://console-openshift-console.apps.c90qz1cy.eastus.aroapp.io/
+OCP_API=%aro_api%
+OCP_PASS=%aro_kube_password%
+OCP_CONSOLE=%aro_console%
 ----
 +
 [INFO]
@@ -72,7 +74,7 @@ az aro list-credentials --name aro-cluster-${GUID} --resource-group openenv-${GU
 [source,json,options=nowrap]
 ----
 {
-  "kubeadminPassword": "uwU2s-AKKVn-msvcz-FWHga",
+  "kubeadminPassword": "%aro_kube_password%",
   "kubeadminUsername": "kubeadmin"
 }
 ----
@@ -88,7 +90,7 @@ az aro show --name aro-cluster-${GUID} --resource-group \
 .Sample Output
 [source,text,options=nowrap]
 ----
-https://console-openshift-console.apps.c90qz1cy.eastus.aroapp.io/
+%aro_console%
 ----
 
 . Finally, open the link to the console provided in a separate tab, and login with the provided credentials.
@@ -108,7 +110,7 @@ az aro show -g openenv-${GUID} -n aro-cluster-${GUID} --query apiserverProfile.u
 .Sample Output
 [source,text,options=nowrap]
 ----
-https://api.c90qz1cy.eastus.aroapp.io:6443/
+%aro_api%
 ----
 
 . Now that we've captured the API server endpoint, we can login to the cluster by running the following command:
