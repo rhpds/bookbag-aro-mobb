@@ -78,7 +78,7 @@ az storage container create --name "aro-metrics" \
 +
 [source,sh,role=execute]
 ----
-oc create -f https://raw.githubusercontent.com/openshift/elasticsearch-operator/release-5.7/bundle/manifests/logging.openshift.io_elasticsearches.yaml
+oc create -f https://raw.githubusercontent.com/openshift/elasticsearch-operator/release-5.5/bundle/manifests/logging.openshift.io_elasticsearches.yaml
 ----
 +
 .Sample Output
@@ -108,7 +108,7 @@ rm ~/helm.tar.gz
 +
 [source,sh,role=execute]
 ----
-helm verion
+helm version
 ----
 +
 .Sample Output
@@ -236,9 +236,9 @@ NOTES:
 +
 [INFO]
 ====
-These will loop through each type of resource until the CRDs for the Operators have been deployed.
+These commands will loop through each type of resource until the CRDs for the Operators have been deployed.
 
-Eventually you'll see the message `No resources found in custom-logging namespace.` and be returned to a prompt.
+Eventually you'll see the message `No resources found in custom-logging namespace` and be returned to a prompt.
 ====
 +
 [source,sh,role=execute]
@@ -373,7 +373,7 @@ daemonset.apps/collector restarted
 +
 [INFO]
 ====
-Sometimes the log collector agent starts before the operator has finished configuring Loki, restarting it here will resolve.
+Sometimes the log collector agent starts before the operator has finished configuring Loki, restarting it here will resolve the issue.
 
 The message about `priorityClassName` can be safely ignored.
 ====
