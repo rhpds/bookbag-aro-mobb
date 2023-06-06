@@ -31,7 +31,7 @@ modules:
     name: Labeling Nodes
   200-ops/day2/5-observability:
     name: Forward Metrics and Logs to Azure Files
-    exit_sign: Continue  
+    exit_sign: Continue
   300-app/1-app-deploy:
     name: Deploy a Go Microservices Application
     exit_sign: Continue
@@ -44,18 +44,19 @@ modules:
   300-app/4-resilient-app:
     name: Making your application resilient
     exit_sign: Continue
-  lab_9_service_mesh_introduction:
+
+  500-service-mesh/1-service-mesh-introduction:
     name: Introduction to OpenShift Service Mesh
     exit_sign: Continue
-  lab_10_service_mesh_deploy_operator:
+  500-service-mesh/2-service-mesh-deploy-operator:
     name: Deploy Service Mesh Operator
     exit_sign: Continue
-  lab_11_service_mesh_deploy_control_plane:
+  500-service-mesh/3-service-mesh-deploy-control-plane:
     name: Deploy Control Plane
     exit_sign: Continue
-  lab_12_service_mesh_deploy_app:
+  500-service-mesh/4-service-mesh-deploy-app:
     name: Deploy Workloads
     exit_sign: Continue
-  lab_13_service_mesh_observe:
+  500-service-mesh/5-service-mesh-observe:
     name: Configure and Observe Traffic
     exit_sign: Exit
