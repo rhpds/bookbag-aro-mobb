@@ -25,17 +25,10 @@ The Service Mesh Operator defines and monitors the ServiceMeshControlPlane resou
 ----
 oc whoami --show-console
 ----
-+
-or
-+
-[source,sh,role=execute]
-----
-rosa describe cluster -c rosa-${GUID} | grep Console
-----
 
 . In the OpenShift Container Platform web console, click *Operators → OperatorHub.*
 +
-image::media/operatorhub.png[Operator Hub]
+image::../media/operatorhub.png[Operator Hub]
 
 . Type the name of the Operator into the filter box and select the Red Hat version of the Operator.
 Community versions of the Operators are not supported.
@@ -44,7 +37,7 @@ Community versions of the Operators are not supported.
 . Click *Install*.
 . Wait until the Operator has installed before repeating the steps for the next Operator in the list.
 +
-image::media/operatorhub-click-install.png[Operator Install]
+image::../media/operatorhub-click-install.png[Operator Install]
 
 * The OpenShift Elasticsearch Operator is installed in the `openshift-operators-redhat` namespace and is available for all namespaces in the cluster.
 * The Red Hat OpenShift distributed tracing platform is installed in the `openshift-distributed-tracing` namespace and is available for all namespaces in the cluster.
@@ -52,4 +45,4 @@ image::media/operatorhub-click-install.png[Operator Install]
 
 . After all you have installed all four Operators, click *Operators → Installed Operators* to verify that your Operators installed.
 +
-image::media/show-installed-operators.png[Installed Operators]
+image::../media/show-installed-operators.png[Installed Operators]

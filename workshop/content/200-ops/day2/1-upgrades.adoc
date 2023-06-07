@@ -62,7 +62,7 @@ To do so, run the following command:
 [source,sh,role=execute]
 ----
 oc get clusterversion version -o \
-   jsonpath='{.status.availableUpdates[*].version}'
+  jsonpath='{.status.availableUpdates[*].version}'; echo
 ----
 +
 .Sample Output

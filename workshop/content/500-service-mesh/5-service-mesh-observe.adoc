@@ -92,11 +92,11 @@ history | grep login
 ----
 ====
 +
-image::media/kiali-login-with-cluster-credentials.png[Kiali Login]
+image::../media/kiali-login-with-cluster-credentials.png[Kiali Login]
 +
 Once logged in, the Kiali Overview screen presents tiles for each project namespace.
 +
-image::media/verify-overiview-bookinfoapp.png[Kiali Console]
+image::../media/verify-overiview-bookinfoapp.png[Kiali Console]
 
 . Now, let's generate some traffic against the product page service.
 To do so, run the following command in your terminal:
@@ -111,19 +111,19 @@ Leave the loop running and proceed to the next steps.
 . Return to the Kiali web console and click the _Graph_ option in the sidebar.
 . Next, select _bookinfo_ from the Namespace list, and App graph from the Graph Type list.
 +
-image::media/select-bookinfo-from-kiali-dropdown-graph-tab.png[Kiali Console]
+image::../media/select-bookinfo-from-kiali-dropdown-graph-tab.png[Kiali Console]
 
 . Next, click on the _Display idle nodes_ button.
 +
-image::media/kiali-click-display-idlenodes-graph-tab.png[Kiali Console]
+image::../media/kiali-click-display-idlenodes-graph-tab.png[Kiali Console]
 
 . Next, view the graph and change the display settings to add or remove information from the graph.
 +
-image::media/graph-example.png[Kiali Console]
+image::../media/graph-example.png[Kiali Console]
 
 . Next, click the _Workload_ tab and select the _details-v1_ workload.
 +
-image::media/example-details-workload.png[Kiali Console]
+image::../media/example-details-workload.png[Kiali Console]
 
 . In your terminal window stop the traffic generation by pressing `Ctrl-C`.
 

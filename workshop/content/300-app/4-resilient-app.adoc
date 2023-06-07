@@ -233,7 +233,7 @@ First you need to install the `siege` tool to your bastion VM:
 +
 [source,sh,role=execute]
 ----
-wget -o $HOME/bin/siege https://gpte-public.s3.amazonaws.com/siege
+wget -O $HOME/bin/siege https://gpte-public.s3.amazonaws.com/siege
 chmod +x $HOME/bin/siege
 mkdir $HOME/.siege
 ----

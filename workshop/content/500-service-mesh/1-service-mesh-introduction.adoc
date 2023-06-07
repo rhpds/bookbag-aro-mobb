@@ -22,7 +22,7 @@ OpenShift Service Mesh provides integrated metrics, logging, and tracing, tradit
 
 == Red Hat Service Mesh Benefits
 
-image::media/servicemeshp11.png[service mesh benefits diagram]
+image::../media/servicemeshp11.png[service mesh benefits diagram]
 
 === Ready for production
 
@@ -45,7 +45,8 @@ Based on the open source Istio project, Red Hat OpenShift Service Mesh provides 
 * Control: Configuration, Apply/Enforce Policies, Fair Resource Distribution
 * Observability: Layer 7 Visibility, Monitoring, Logging, Distributed Tracing
 
-== Difference Between Istio
+== Difference Between Istio and Red Hat OpenShift Service Mesh
+
 * OpenShift Service Mesh installs a multi-tenant control plane by default
 * OpenShift Service Mesh extends Role Based Access Control (RBAC) features
 * OpenShift Service Mesh replaces BoringSSL with OpenSSL

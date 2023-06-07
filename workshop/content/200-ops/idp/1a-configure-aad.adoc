@@ -259,3 +259,27 @@ It is suggested to use something like *FirstnameLastnameMOBB23*.
 . The first time you log in you will also be prompted to accept permissions for the _application_. Click *Accept*.
 +
 Now you should be logged into the OpenShift Console as user *openenv-admin-%guid%@azure.opentlc.com* with Cluster Administrator permissions.
+
+== Log into OpenShift CLI using Azure Credentials
+
+. Log into the terminal window that you have been using so far using the same user.
++
+On the top right of the OpenShift web console click on your user and then *Copy login command*.
+
+. Confirm by clicking on `AAD` and selecting your account again.
+. Click on *Display Token*
+. Copy the displayed login command under *Log in with this token* and paste it into the terminal window to log in with that user.
+. Double check that you are logged in as your Azure user:
++
+[source,sh,role=execute]
+----
+oc whoami
+----
++
+.Sample Output
+[source,texinfo,options=nowrap]
+----
+openenv-admin-%guid%@azure.opentlc.com
+----
+
+You now have full admin access to both the Azure console and the OpenShift console.

@@ -46,7 +46,9 @@ Now that your password has been changed for the Azure admin account you can use 
 If you are still logged into the Azure portal in the same browser this will be easy - Azure will present you with a list of users. Simply select your admin user. And because this is single sign on you will not even have to provide your password.
 ====
 
-. Also log into the terminal window that you have been using so far using the same user.
+== Log into OpenShift CLI using Azure Credentials
+
+. Log into the terminal window that you have been using so far using the same user.
 +
 On the top right of the OpenShift web console click on your user and then *Copy login command*.
 

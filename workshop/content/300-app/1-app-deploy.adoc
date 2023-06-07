@@ -66,7 +66,7 @@ In a real world scenario you would create a private database and connect to it o
 +
 [source,sh,role=execute]
 ----
-dnf -y install postgresql
+sudo dnf -y install postgresql
 ----
 
 . Check connectivity from to the database.
