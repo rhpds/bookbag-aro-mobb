@@ -1,0 +1,58 @@
+== Observe traffic using the Kiali web console
+
+Kiali is an observability console for the OpenShift Service Mesh with service mesh configuration and validation capabilities.
+It helps you understand the structure and health of your service mesh by monitoring traffic flow to infer the topology and report errors.
+
+. First, grab the Kiali web console URL.
+To do so, run the following command:
++
+[source,sh,role=execute]
+----
+echo "https://$(oc get routes -n istio-system kiali -o jsonpath='{.spec.host}')/console"
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+https://kiali-istio-system.apps.rosa-6n4s8.1c1c.p1.openshiftapps.com/console
+----
+
+. Next, navigate to that URL in your web browser and click the `Login With OpenShift` button.
++
+image::../media/kiali-login-with-cluster-credentials.png[Kiali Login]
++
+Once logged in, the Kiali Overview screen presents tiles for each project namespace.
++
+image::../media/verify-overiview-bookinfoapp.png[Kiali Console]
+
+. Now, let's generate some traffic against the product page service.
+To do so, run the following command in your terminal:
++
+[source,sh,role=execute]
+----
+while true; do curl -sSL "http://$(oc -n istio-system get route istio-ingressgateway -o jsonpath='{.spec.host}')/productpage" | head -n 5; sleep 1; done
+----
++
+Leave the loop running and proceed to the next steps.
+
+. Return to the Kiali web console and click the _Graph_ option in the sidebar.
+. Next, select _bookinfo_ from the Namespace list, and App graph from the Graph Type list.
++
+image::../media/select-bookinfo-from-kiali-dropdown-graph-tab.png[Kiali Console]
+
+. Next, click on the _Display idle nodes_ button.
++
+image::../media/kiali-click-display-idlenodes-graph-tab.png[Kiali Console]
+
+. Next, view the graph and change the display settings to add or remove information from the graph.
++
+image::../media/graph-example.png[Kiali Console]
+
+. Next, click the _Workload_ tab and select the _details-v1_ workload.
++
+image::../media/example-details-workload.png[Kiali Console]
+
+. In your terminal window stop the traffic generation by pressing `Ctrl-C`.
+
+Congratulations!
+You should now see traffic flowing between the various services in your bookinfo application.

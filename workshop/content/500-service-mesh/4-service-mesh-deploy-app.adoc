@@ -133,6 +133,8 @@ gateway.networking.istio.io/bookinfo-gateway created
 virtualservice.networking.istio.io/bookinfo created
 ----
 
+=== Adding default destination rules
+
 . Next, let's add some destination rules.
 Destination rules define policies that apply to traffic intended for a service after routing has occurred.
 To create the rules, run the following command:
@@ -188,4 +190,5 @@ http://istio-ingressgateway-istio-system.apps.rosa-6n4s8.1c1c.p1.openshiftapps.c
 ----
 
 . Copy and paste the URL provided in the previous step into your web browser and verify the Bookinfo product page is successfully deployed.
++
 You should see a book review of "The Comedy of Errors".

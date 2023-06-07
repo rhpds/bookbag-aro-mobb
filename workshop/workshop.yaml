@@ -21,4 +21,5 @@ modules:
   - 500-service-mesh/2-service-mesh-deploy-operator
   - 500-service-mesh/3-service-mesh-deploy-control-plane
   - 500-service-mesh/4-service-mesh-deploy-app
-  - 500-service-mesh/5-service-mesh-observe
+  - 500-service-mesh/5-service-mesh-weighted-routing
+  - 500-service-mesh/6-service-mesh-observe
