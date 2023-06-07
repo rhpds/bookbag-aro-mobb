@@ -210,6 +210,22 @@ oc apply should only be used on resources created declaratively by either oc cre
 The missing annotation will be patched automatically.` you can safely ignore this warning.
 ====
 
+. Watch the authentication pods until all three of them have restarted (hit `Ctrl-C` once you see that all three pods have been restarted):
++
+[source,sh,role=execute]
+----
+watch oc get pod -n openshift-authentication
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+NAME                               READY   STATUS    RESTARTS   AGE
+oauth-openshift-6686cdfd44-k6jzf   1/1     Running   0          3m7s
+oauth-openshift-6686cdfd44-rftbj   1/1     Running   0          4m7s
+oauth-openshift-6686cdfd44-rrmcw   1/1     Running   0          3m37s
+----
+
 . Next, give Cluster Admin permissions to your AAD user by running the following commands:
 +
 [source,sh,role=execute]
@@ -228,6 +244,7 @@ clusterrole.rbac.authorization.k8s.io/cluster-admin added: "openenv-admin-@azure
 . Logout from your OCP Console and browse back to the Console URL (`echo $OCP_CONSOLE` if you have forgotten it) and you should see a new option to login called `AAD`.
 +
 [TIP]
+====
 If you do not see a new *AAD* login option, wait a few more minutes as this process can take a few minutes to deploy across the cluster and revisit the Console URL.
 ====
 
