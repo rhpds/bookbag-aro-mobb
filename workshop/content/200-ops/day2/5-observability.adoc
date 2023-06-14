@@ -3,6 +3,8 @@
 OpenShift stores logs and metrics inside the cluster by default, however it also provides tooling to forward both to various locations.
 Here we will configure ARO to forward logs and metrics to Azure Files and use Grafana to view them.
 
+== Set up Azure Storage
+
 . Create a Storage Account:
 +
 [source,sh,role=execute]
@@ -24,6 +26,11 @@ The public access to all blobs or containers in the storage account will be disa
 
 [... Lots of output Omitted ...]
 ----
++
+[NOTE]
+====
+You may get an error about rate limiting when running the `az storage account create` command. If so just wait a few seconds and repeat the command.
+====
 
 . Fetch your storage account key
 +
@@ -56,6 +63,8 @@ az storage container create --name "aro-logs" \
   "created": true
 }
 ----
+
+== Set up Metrics forwarding
 
 . Create a storage bucket for metrics:
 +
@@ -321,15 +330,33 @@ oc -n custom-logging rollout restart deployment grafana-deployment
 ----
 ====
 
+== Set up Log Forwarding
+
+. Set the storage class to use for the persistent volumes to be created - using the storage class that is set as the default storage class:
++
+[source,sh,role=execute]
+----
+STORAGE_CLASS=$(oc get storageclass -o=jsonpath='{.items[?(@.metadata.annotations.storageclass\.kubernetes\.io/is-default-class=="true")].metadata.name}')
+
+echo ${STORAGE_CLASS}
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+managed-csi
+----
+
 . Deploy Helm Chart to enable Cluster Log forwarding to Azure:
 +
 [source,sh,role=execute]
 ----
 helm upgrade -n custom-logging aro-clf-blob \
-  --install mobb/aro-clf-blob --version 0.1.1 \
-  --set "azure.storageAccount=${AZR_STORAGE_ACCOUNT_NAME}" \
-  --set "azure.storageAccountKey=${AZR_STORAGE_KEY}" \
-  --set "azure.storageContainer=aro-logs"
+ --install mobb/aro-clf-blob --version 0.1.2 \
+ --set "azure.storageAccount=${AZR_STORAGE_ACCOUNT_NAME}"  \
+ --set "azure.storageAccountKey=${AZR_STORAGE_KEY}"   \
+ --set "azure.storageContainer=aro-logs" \
+ --set "lokiStack.storageClassName=${STORAGE_CLASS}"
 ----
 +
 .Sample Output
@@ -337,7 +364,7 @@ helm upgrade -n custom-logging aro-clf-blob \
 ----
 Release "aro-clf-blob" does not exist. Installing it now.
 NAME: aro-clf-blob
-LAST DEPLOYED: Tue Jun  6 09:47:38 2023
+LAST DEPLOYED: Wed Jun 14 08:39:02 2023
 NAMESPACE: custom-logging
 STATUS: deployed
 REVISION: 1
@@ -404,7 +431,7 @@ These dashboards are copies of the dashboards that are available directly on the
 +
 image::../../media/grafana-metrics.png[]
 
-. Click the Explore (compass) Icon in the left hand menu, select "`Loki (Application)`" in the dropdown and search for `{kubernetes_namespace_name="custom-logging"}`
+. Click the Explore (compass) Icon in the left hand menu, select "`Loki (Application)`" in the dropdown and search for `{kubernetes_namespace_name="custom-logging"}`. Click the blue *Run Query* button on the top right to execute the search.
 +
 image::../../media/grafana-logs.png[]
 

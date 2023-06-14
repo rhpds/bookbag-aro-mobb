@@ -33,7 +33,7 @@ modules:
     name: Forward Metrics and Logs to Azure Files
     exit_sign: Continue
   300-app/1-app-deploy:
-    name: Deploy a Go Microservices Application
+    name: Deploy a Quarkus Microservices Application
     exit_sign: Continue
   300-app/2-app-gitops:
     name: Using OpenShift GitOps
