@@ -58,7 +58,7 @@ modules:
     exit_sign: Continue
   500-service-mesh/5-service-mesh-weighted-routing:
     name: Weighted Routing
-    exit_sign: Exit
+    exit_sign: Continue
   500-service-mesh/6-service-mesh-observe:
     name: Configure and Observe Traffic
     exit_sign: Exit
