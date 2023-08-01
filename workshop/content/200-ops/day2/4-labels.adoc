@@ -247,3 +247,10 @@ The application is exposed over the default ingress using a predetermined URL an
 *Congratulations!*
 
 You've successfully demonstrated the ability to label nodes and target those nodes using a `nodeSelector`.
+
+== Summary
+
+Here you learned:
+
+* Set label for the MachineSets.
+* Deploy an application on nodes with certain label

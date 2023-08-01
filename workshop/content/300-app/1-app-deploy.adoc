@@ -1,8 +1,6 @@
-= Introduction
+== Introduction
 
-It's time for us to put our cluster to work and deploy a workload.
-We're going to build an example Java application, https://github.com/redhat-mw-demos/microsweeper-quarkus/tree/ARO[microsweeper], using https://quarkus.io/[Quarkus] (a Kubernetes Native Java stack) and https://azure.microsoft.com/en-us/products/postgresql/[Azure Database for PostgreSQL].
-We'll then deploy the application to our Azure Red Hat OpenShift cluster, connect to the database using Azure Private Link, and automate the deployment with OpenShift Pipelines.
+It's time for us to put our cluster to work and deploy a workload! We're going to build an example Java application, https://github.com/redhat-mw-demos/microsweeper-quarkus/tree/ARO[microsweeper], using https://quarkus.io/[Quarkus] (a Kubernetes-native Java stack) and https://azure.microsoft.com/en-us/products/postgresql/[Azure Database for PostgreSQL]. After configuring the database, we will use both Quarkus, a Kubernetes-native Java framework optimized for containers, and Source-to-Image (S2I), a toolkit for building container images from source code, to deploy the microsweeper application.
 
 == Create Azure Database for PostgreSQL instance
 
@@ -28,7 +26,7 @@ to build a new example application in Ruby. Or use kubectl to deploy a simple Ku
     kubectl create deployment hello-node --image=k8s.gcr.io/e2e-test-images/agnhost:2.33 -- /agnhost serve-hostname
 ----
 
-. Create the Azure Postgres Server resource.
+. Create the Azure Database for Postgres server resource.
 To do so, run the following command (this command will take ~ 5mins)
 +
 [source,sh,role=execute]
@@ -69,7 +67,7 @@ In a real world scenario you would create a private database and connect to it o
 sudo dnf -y install postgresql
 ----
 
-. Check connectivity from to the database.
+. Check connectivity to the database.
 To do so, run the following command:
 +
 [source,sh,role=execute]
@@ -402,3 +400,10 @@ Switch the timeframe to `5min`.
 ====
 While you're here, you might also want to look at the Dashboard tab to see the Project's CPU/Memory usage.
 ====
+
+== Summary 
+
+Here you learned how to:
+
+* Create Azure Database for PostgreSQL instance.
+* Build and deploy the Microsweeper app.

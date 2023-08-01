@@ -1,3 +1,21 @@
+== Introduction
+
+Red Hat® OpenShift® GitOps is an operator that provides a workflow that integrates git repositories, continuous integration/continuous delivery (CI/CD) tools, and Kubernetes to realize faster, more secure, scalable software development, without compromising quality.
+
+OpenShift GitOps enables customers to build and integrate declarative git driven CD workflows directly into their application development platform. 
+
+There's no single tool that converts a development pipeline to "DevOps". By implementing a GitOps framework, updates and changes are pushed through declarative code, automating infrastructure and deployment requirements, and CI/CD.
+
+OpenShift GitOps takes advantage of https://argoproj.github.io/cd[Argo CD] and integrates it into Red Hat OpenShift to deliver a consistent, fully supported, declarative Kubernetes platform to configure and use with GitOps principles.
+
+OpenShift and OpenShift GitOps:
+
+* Apply consistency across cluster and deployment lifecycles
+* Consolidate administration and management of applications across on-premises and cloud environments
+* Check the state of clusters making application constraints known early
+* Rollback code changes across clusters
+* Roll out new changes submitted via Git
+
 = Deploying your Application with OpenShift GitOps
 
 . From the OpenShift Console Administrator view click through *HOME* \-> *Operators* \-> *Operator Hub*, search for "Red Hat OpenShift GitOps" and hit *Install*. Make sure to select the *Channel* `gitops-1.8`. Accept all other defaults and click on *Install*.

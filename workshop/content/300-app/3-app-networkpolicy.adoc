@@ -1,8 +1,47 @@
-= Applying Network Policies to lock down networking
+== Introduction
 
-You should have two application deployed in your cluster, the `microsweeper` application deployed in the `Deploy an App` portion of this workshop and the `bgd` app deployed in the `gitops` portion of this workshop.
-Each live in their own named Projects (or namespace in Kubernetes-speak).
+NetworkPolicies are used to control and secure communication between pods within a cluster. They provide a declarative approach to define and enforce network traffic rules, allowing you to specify the desired network behavior. By using NetworkPolicies, you can enhance the overall security of your applications by isolating and segmenting different components within the cluster. These policies enable fine-grained control over network access, allowing you to define ingress and egress rules based on criteria such as IP addresses, ports, and pod selectors.
 
+For this module we will be applying networkpolices to the previously created 'microsweeper-ex' namespace and using the 'microsweeper' app to test these policies. In addition, we will deploy two new applications to test against the 'microsweeper app
+
+== Applying Network Policies
+
+. First, let's create a new project for us to deploy a new test application. To do so, run the following command:
++
+[source,sh,role=execute]
+----
+ oc new-project networkpolicy-test
+----
++
+.  Next, we will create a new application that will allow us to test connectivity to the microsweeper application. To do so, run the following command:
++
+[source,sh,role=execute]
+----
+ cat << EOF | oc apply -f -
+ apiVersion: v1
+ kind: Pod
+ metadata:
+   name: networkpolicy-pod
+   namespace: networkpolicy-test
+   labels:
+     app: networkpolicy
+ spec:
+   securityContext:
+     allowPrivilegeEscalation: false
+   containers:
+     - name: networkpolicy-pod
+       image: registry.access.redhat.com/ubi9/ubi-minimal
+       command: ["sleep", "infinity"]
+EOF
+----
++
+. Now we will change to the microsweeper-ex project to start applying the network policies
++
+[source,sh,role=execute]
+----
+ oc project microsweeper-ex
+----
++
 . Fetch the IP address of the `microsweeper` Pod
 +
 [source,sh,role=execute]
@@ -16,18 +55,18 @@ echo $MS_IP
 .Sample Output
 [source,text,options=nowrap]
 ----
-10.131.0.21
+10.128.2.242
 ----
 
-. Check to see if the `bgd` app can access the Pod.
+. Now, let's validate that the `networkpolicy-pod` can access the `microsweeper` pod. By default, ARO does not implement any NetworkPolicy, so we should be able to easily verify that we can access the microsweeper application. To test this, let's run the following command:
 +
 [source,sh,role=execute]
 ----
-oc -n bgd exec -ti deployment/bgd -- curl $MS_IP:8080 | head
+oc -n networkpolicy-test exec -ti pod/networkpolicy-pod -- curl $MS_IP:8080 | head
 ----
 +
 .Sample Output
-[source,text,options=nowrap]
+[source,texinfo,options=nowrap]
 ----
 <!DOCTYPE html>
 <html lang="en">
@@ -41,8 +80,12 @@ oc -n bgd exec -ti deployment/bgd -- curl $MS_IP:8080 | head
             src="https://code.jquery.com/jquery-3.2.1.min.js"
 ----
 
-. It's common to want to not allow Pods from another Project.
-This can be done by a fairly simple Network Policy.
+. While ARO doesn't block inter-project pod traffic by default, it is a common use case to not allow pods to cross communicate between projects (namespaces). This can be done by a fairly simple NetworkPolicy.
++
+[INFO]
+====
+This Network Policy will restrict ingress to the pods in the project `microsweeper-ex` to only allow traffic from the OpneShift IngressController and only on port 8080.
+====
 +
 [source,sh,role=execute]
 ----
@@ -70,65 +113,58 @@ EOF
 ----
 networkpolicy.networking.k8s.io/allow-from-openshift-ingress created
 ----
-+
-[INFO]
-====
-This Network Policy will restrict Ingress to the Pods in the project `microsweeper-ex` to just the OpenShift Ingress Pods and only on port 8080.
-====
 
-. Try to access microsweeper from the bgd pod again
+. Now that we've implemented that NetworkPolicy, let's try to access the `microsweeper` pod from the `networkpolicy-pod` pod again. To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
-oc -n bgd exec -ti deployment/bgd -- curl $MS_IP:8080 | head
+oc -n networkpolicy-test exec -ti pod/networkpolicy-pod -- curl $MS_IP:8080 | head
 ----
 +
-This time it should fail to connect.
+This time it should fail to connect - it will just sit there.
 Hit Ctrl-C to avoid having to wait until a timeout.
 +
-[INFO]
+[TIP]
 ====
 If you have your browser still open to the microsweeper app, you can refresh and see that you can still access it.
 ====
 
-. Sometimes you want your application to be accessible to other namespaces.
-You can allow access to just your microsweeper frontend from the `bgd` pods in the `bgd` namespace like so
+. In other cases, it you may want to allow your application to be accessible to only _certain_ namespaces. In this example, lets allow access to just your `microsweeper` application from only the `networkpolicy-pod` in the `networkpolicy-test` namespace using a label selector. To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
 cat <<EOF | oc apply -f -
----
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: allow-bgd-ap
+  name: allow-networkpolicy-pod-ap
   namespace: microsweeper-ex
 spec:
   podSelector:
     matchLabels:
       app.kubernetes.io/name: microsweeper-appservice
   ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: bgd
-      podSelector:
-        matchLabels:
-          app: bgd
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: networkpolicy-test
+        podSelector:
+          matchLabels:
+            app: networkpolicy
 EOF
 ----
 +
 .Sample Output
 [source,text,options=nowrap]
 ----
-networkpolicy.networking.k8s.io/allow-bgd-ap created
+networkpolicy.networking.k8s.io/allow-networkpolicy-pod-ap created
 ----
 
-. Check to see if the `bgd` app can access the Pod.
+. Now, let's check to see if `networkpolicy-pod` can access the pod. To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
-oc -n bgd exec -ti deployment/bgd -- curl $MS_IP:8080 | head
+oc -n networkpolicy-test exec -ti pod/networkpolicy-pod -- curl $MS_IP:8080 | head
 ----
 +
 .Sample Output
@@ -146,17 +182,46 @@ oc -n bgd exec -ti deployment/bgd -- curl $MS_IP:8080 | head
             src="https://code.jquery.com/jquery-3.2.1.min.js"
 ----
 
-. To verify that only the bgd app can access microsweeper run
+. Now, let's try a different pod (with a different label) in the `networkpolicy-test` namespace. Let's create a new pod called `new-test`. To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
-oc -n bgd exec -ti deployment/argocd-server -- curl $MS_IP:8080 | head
+cat << EOF | oc apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: new-test
+  namespace: networkpolicy-test
+  labels:
+    app: new-test
+spec:
+  securityContext:
+    allowPrivilegeEscalation: false
+  containers:
+    - name: new-test
+      image: registry.access.redhat.com/ubi9/ubi-minimal
+      command: ["sleep", "infinity"]
+EOF
 ----
 +
-This should fail.
+. Now, let's try to curl the `microsweeper` application by running the following command:
++
+[source,sh,role=execute]
+----
+oc -n networkpolicy-test exec -ti pod/new-test -- curl $MS_IP:8080 | head
+----
++
+This will fail with a timeout again.
 Hit Ctrl-C to avoid waiting for a timeout.
 
 [INFO]
 ====
-For information on setting default network policies for new projects you can read the OpenShift documentation on https://docs.openshift.com/container-platform/4.10/networking/network_policy/default-network-policy.html[modifying the default project template].
+To learn more about configuring NetworkPolicy objects, visit the https://docs.openshift.com/container-platform/4.13/networking/network_policy/about-network-policy.html[Red Hat documentation on NetworkPolicy]. Interested in creating a set of default NetworkPolicy objects for new projects? Read more at the https://docs.openshift.com/container-platform/4.13/networking/network_policy/default-network-policy.html[Red Hat documentation on modifying the default project template].
 ====
+
+== Summary
+
+Here's what you learned:
+* Network Policies are a powerful way to apply zero-trust networking patterns.
+* Access to pods can be restricted to other Pods, Namespaces, or other labels.
+* Access can be completely denied, allowed, or set to particular ports or services.

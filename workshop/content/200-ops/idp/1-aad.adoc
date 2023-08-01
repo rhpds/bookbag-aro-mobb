@@ -1,4 +1,4 @@
-= Azure AD for Cluster authentication
+= Azure AD for Cluster Authentication
 
 Authentication to your cluster is best managed via Azure Active Directory.
 
