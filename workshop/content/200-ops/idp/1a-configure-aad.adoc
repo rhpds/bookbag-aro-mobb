@@ -12,11 +12,11 @@ https://azure.microsoft.com/en-us/products/active-directory[Azure Active Directo
 
 As part of the Access Your Cluster page, we utilized a temporary cluster-admin user using the `az aro list-credentials` command. This uses a local identity provider to allow you to access the cluster. In this section of the workshop, we'll configure Azure Active Directory as the cluster identity provider in your ARO cluster.
 
-Your ARO cluster has a built-in OAuth server. Developers and administrators do not really directly interact with the OAuth server itself, but instead interact with an external identity provider (such as Azure Active Directory) which is brokered by the OAuth server in the cluster. To learn more about cluster authentication, visit the https://docs.openshift.com/container-platform/latest/authentication/understanding-identity-provider.html[Red Hat documentation for identity provider configuration] and the https://learn.microsoft.com/en-us/azure/openshift/configure-azure-ad-cli[Microsoft documentation for configuring Azure Active Directory authentication for ARO].
+Your ARO cluster has a built-in OAuth server. Developers and administrators do not really directly interact with the OAuth server itself, but instead interact with an external identity provider (such as Azure Active Directory) which is brokered by the OAuth server in the cluster. 
 
 The following diagram illustrates the ARO authentication process for a cluster configured with Azure Active Directory.
 
-image:../../media/aro_idp_aad.png[Flow chart illustrating the ARO authentication process for a cluster configured with Azure Active Directory]{ align=center }
+image:../../media/aro_idp_aad.png[Flow chart illustrating the ARO authentication process for a cluster configured with Azure Active Directory]
 
 To learn more about cluster authentication, visit the https://docs.openshift.com/container-platform/latest/authentication/understanding-identity-provider.html[Red Hat documentation for identity provider configuration] and the https://learn.microsoft.com/en-us/azure/openshift/configure-azure-ad-cli[Microsoft documentation for configuring Azure Active Directory authentication for ARO].
 

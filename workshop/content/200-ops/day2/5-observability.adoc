@@ -279,6 +279,13 @@ REVISION: 1
 TEST SUITE: None
 ----
 
+. Wait until Grafana has successfully deployed. Run the following command:
++
+[source,sh,role=execute]
+---
+oc -n custom-logging rollout status deploy grafana-deployment
+---
+
 . Next, let's ensure that we can access Grafana. To do so, we should fetch its route and try browsing to it with your web browser. To grab the route, run the following command:
 +
 [source,sh,role=execute]
@@ -511,12 +518,13 @@ data:
 EOF
 ----
 
-*Congratulations*
+*Congratulations!*
+
 Your cluster is now configured to allow custom metrics.
 
 == Summary
 
 Here you learned how to:
 
-* Configured metrics and log forwarding to Azure Files.
-* View the metrics and logs in a Grafana dashboard.
+* Configure metrics and log forwarding to Azure Files
+* View the metrics and logs in a Grafana dashboard

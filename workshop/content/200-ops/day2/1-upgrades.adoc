@@ -40,7 +40,7 @@ The Managed Upgrade Operator has been created to manage the orchestration of aut
 
 Whilst the operator's job is to invoke a cluster upgrade, it does not perform any activities of the cluster upgrade process itself.
 
-This remains the responsibility of OpenShift itself.
+This remains the responsibility of OpenShift.
 
 The operator's goal is to satisfy the operating conditions that a managed cluster must hold, both pre- and post-invocation of the cluster upgrade.
 
@@ -120,7 +120,7 @@ oc -n openshift-managed-upgrade-operator get \
 [source,text,options=nowrap]
 ----
 NAME                     DESIRED_VERSION   PHASE   STAGE   STATUS   REASON   MESSAGE
-managed-upgrade-config   4.11.41
+managed-upgrade-config   4.11.45
 ----
 
 *Congratulations!*
@@ -142,12 +142,12 @@ In this scenario to upgrade your cluster from version 4.11.0 to 4.12.15, you mus
 
 * https://learn.microsoft.com/en-us/azure/openshift/howto-upgrade[Upgrade an Azure Red Hat OpenShift cluster]
 * https://learn.microsoft.com/en-us/azure/openshift/howto-upgrade#scheduling-individual-upgrades-using-the-managed-upgrade-operator[Scheduling individual upgrades using the managed-upgrade-operator]
-* https://docs.openshift.com/container-platform/4.11/updating/understanding-openshift-updates.html#update-service-about_understanding-openshift-updates[About the OpenShift Update Service]
+* https://docs.openshift.com/container-platform/4.13/updating/understanding_updates/intro-to-updates.html#update-service-about_understanding-openshift-updates[About the OpenShift Update Service]
 
-=== Summary and Next Steps
+=== Summary
 
 Here you learned:
 
 * All upgrades are monitored and managed by the ARO SRE Team
-* Use the OpenShift Web Console or the Managed Upgrade Operator to schedule an upgrade for your ARO cluster
-* Explore the OpenShift Upgrade Graph Tool to see available upgrade paths
+* How to use the OpenShift Web Console or the Managed Upgrade Operator to schedule an upgrade for your ARO cluster
+* How to explore the OpenShift Upgrade Graph Tool to see available upgrade paths
