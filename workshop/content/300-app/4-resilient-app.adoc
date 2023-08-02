@@ -19,10 +19,10 @@ In this section of the workshop, we will use the previously deployed microsweepe
 ----
 +
 Requests state the minimum CPU and memory requirements for a container. This will ensure that the pod is placed on a node that can meet those requirements. Limits set the maximum amount of CPU and Memory that can be consumed by a container and ensure that a whole container does not consume all of the resources on a node. Setting limits and requests for deployments is best practice for resource management and ensuring the stability and reliability of your applications.
-+
+
 [INFO]
 ====
-     It is important to know the resource needs of the application before setting limits and requests to avoid resource starvation or over allocating resources. If you are unsure of the resource consumption of your application, you can use 'oc adm top pods' to view the current memory and CPU being currently consumed by each pod. Running the following command multiple times while the application is running can help set a general picture:
+It is important to know the resource needs of the application before setting limits and requests to avoid resource starvation or over allocating resources. If you are unsure of the resource consumption of your application, you can use 'oc adm top pods' to view the current memory and CPU being currently consumed by each pod. Running the following command multiple times while the application is running can help set a general picture:
 ====     
 +
 [source,sh,role=execute]
@@ -49,11 +49,9 @@ We'll see a new pod (created 28 seconds earlier in this case):
 .Sample Output
 [source,text,options=nowrap]
 ----
- [user0_mobbws@bastion ~]$ oc get pods microsweeper-ex
  NAME                                       READY   STATUS      RESTARTS   AGE
  microsweeper-appservice-1-build            0/1     Completed   0          17h
  microsweeper-appservice-69596ccc54-fsw2b   1/1     Running     0          28s
-+
 ----
 +
 To see what the limits and requests added to the pod, run the following command, being sure to change the Pod name to the name shown in the above output:
@@ -137,7 +135,7 @@ In that case, you'd visit `+http://microsweeper-appservice-microsweeper-ex.apps.
 
 A Pod disruption Budget (PBD) allows you to limit the disruption to your application when its pods need to be rescheduled for upgrades or routine maintenance work on ARO nodes. In essence, it lets developers define the minimum tolerable operational requirements for a deployment so that it remains stable even during a disruption.
 
-For example, microsweeper-appservice deployed as part of the last step contains three replicas distributed evenly across three nodes. We can tolerate losing two pods but not one, so we create a PDB that requires a minimum of one replica.
+For example, microsweeper-appservice deployed as part of the last step contains three replicas distributed evenly across three nodes. We can tolerate losing two pods but not all, so we create a PDB that requires a minimum of one replica.
 
 A PodDisruptionBudget object's configuration consists of the following key parts:
 
@@ -289,9 +287,9 @@ After a minute or two, your output should be similar to below:
 
 == Summary
 
-Here you learned:
+Here you learned how to:
 
 * Set Limits and Requests on the Microsweeper application from the previous section
 * Scale the Microsweeper application up and down
 * Set a Pod Disruption Budget on the Microsweeper application
-* Set a Horizontal Pod Autoscaler to automatically scale application based on load.
+* Set a Horizontal Pod Autoscaler to automatically scale application based on load

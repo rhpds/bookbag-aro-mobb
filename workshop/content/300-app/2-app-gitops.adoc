@@ -197,7 +197,7 @@ oc patch deploy/bgd --type='json' \
 deployment.apps/bgd patched
 ----
 
-. Refresh Your browser and you should see a blue box in the website like so
+. Refresh your browser and you should see a blue box in the website like so
 +
 image::../media/app_blue.png[]
 
@@ -244,3 +244,10 @@ deployment.apps/bgd patched
 The self healing may happen so fast you don't even see it happen.
 ====
 
+== Summary 
+
+Here you learned how to:
+
+* Install OpenShift GitOps
+* Deploy an application using GitOps
+* Synchronize application configuration and configure self-healing with GitOps

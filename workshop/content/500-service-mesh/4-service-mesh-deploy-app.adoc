@@ -192,3 +192,11 @@ http://istio-ingressgateway-istio-system.apps.rosa-6n4s8.1c1c.p1.openshiftapps.c
 . Copy and paste the URL provided in the previous step into your web browser and verify the Bookinfo product page is successfully deployed.
 +
 You should see a book review of "The Comedy of Errors".
+
+== Summary 
+
+Here you learned how to:
+
+* Enroll a project into a Service Mesh
+* Configure default destination rules
+* Access an application via the Service Mesh Ingress Gateway
