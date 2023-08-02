@@ -1,10 +1,11 @@
+:preconfigure_aad: %preconfigure_aad%
 = Configuring Azure AD for Cluster Authentication
-
+ifeval::[{preconfigure_aad} == true]
 [WARNING]
 ====
-Only do the module for Azure Active Directory that your instructor told you to do. If Azure AD is already preconfigured move on to the next module.
+Your ARO cluster has been preconfigured with Azure AD. Please complete the link:./1b-explore-aad[Explore Azure Active Directory for Cluster Authentication] module.
 ====
-
+endif::[]
 https://azure.microsoft.com/en-us/products/active-directory[Azure Active Directory] is a fully managed authentication, authorization, and user management service provided by Microsoft Azure. It simplifies the process of adding user sign-up, sign-in, and access control to your ARO Cluster. Integrating your ARO cluster with Azure Active Directory simplifies user authentication, provides secure access control, supports federated identity and SSO, and enables centralized user management and audit trails.
 
 As part of the Access Your Cluster page, we utilized a temporary cluster-admin user using the `az aro list-credentials` command. This uses a local identity provider to allow you to access the cluster. In this section of the workshop, we'll configure Azure Active Directory as the cluster identity provider in your ARO cluster.
