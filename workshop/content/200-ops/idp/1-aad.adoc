@@ -20,14 +20,3 @@ You will need to do *one* of the following two modules:
 * link:./1a-configure-aad[Configure Azure Active Directory for Cluster Authentication]
 * link:./1b-explore-aad[Explore Azure Active Directory for Cluster Authentication]
 endif::[]
-
-ifeval::["{preconfigure_aad}" == "%preconfigure_aad%"]
-Depending on which environment your instructor deployed this authentication is either preconfigured or you need to set it up.
-
-Your instructor should tell you how your environment was set up.
-
-You will need to do *one* of the following two modules:
-
-* link:./1a-configure-aad[Configure Azure Active Directory for Cluster Authentication]
-* link:./1b-explore-aad[Explore Azure Active Directory for Cluster Authentication]
-endif::[]
