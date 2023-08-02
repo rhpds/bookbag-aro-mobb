@@ -6,8 +6,8 @@ Many of these changes are done using MachineSets. MachineSets ensure that a spec
 
 Here are some of the advantages of using ARO MachineSets to manage the size of your cluster
 
-* Scalability - MachineSets enables horizontal scaling of your cluster. It can easily add or remove worker to handle the changes in workload. This flexibility ensures that your cluster can dynamically scale to meet the needs of your applications
-* Infrastructure Diversity - MachineSets allow you to provision worker nodes of different instance type. This enables you you leverage the best kind of instance family for different workloads.
+* Scalability - MachineSets enables horizontal scaling of your cluster. It can easily add or remove workers to handle the changes in workload. This flexibility ensures that your cluster can dynamically scale to meet the needs of your applications.
+* Infrastructure Diversity - MachineSets allow you to provision worker nodes of different instance type. This enables you to leverage the best kind of instance family for different workloads.
 * Integration with Cluster Autoscaler - MachineSets seamlessly integrate with the Cluster Autoscaler feature, which automatically adjusts the number of worker nodes based on the current demand. This integration ensures efficient resource utilization by scaling the cluster up or down as needed, optimizing costs and performance.
 
 image:../../media/scale_machinesets.png[scale_machinesets]
@@ -163,5 +163,5 @@ You've successfully scaled your cluster up and back down to three nodes.
 
 Here you learned how to:
 
-* Scaling an existing MachineSet up to add more nodes to the cluster
-* Scaling your MachineSet down to remove worker nodes from the cluster
+* Scale an existing MachineSet up to add more nodes to the cluster
+* Scale your MachineSet down to remove worker nodes from the cluster

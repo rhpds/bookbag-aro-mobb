@@ -285,7 +285,7 @@ You've successfully demonstrated cluster autoscaling.
 
 == Summary
 
-Here you learned:
+Here you learned how to:
 
 * Create and configure a machine autoscaler
 * Deploy an application on the cluster and watch the cluster autoscaler scale your cluster to support the increased workload

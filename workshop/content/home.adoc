@@ -1,10 +1,10 @@
 = Building a Modern Application Platform with Azure & ARO 
 
-Welcome to the Building a Modern Application Platform workshop. In this workshop you will learn the building blocks of modern application platform and leverage Microsoft Azure and  Azure Red Hat OpenShift (ARO) to build a modern application platform. 
+Welcome to the Building a Modern Application Platform workshop. In this workshop you will learn the building blocks of a modern application platform and leverage Microsoft Azure and  Azure Red Hat OpenShift (ARO) to build a modern application platform. 
 
 https://azure.microsoft.com/en-us/services/openshift/[Azure Red Hat OpenShift] is a fully managed Red Hat OpenShift service in Azure that is jointly engineered and supported by Microsoft and Red Hat.
 
-*Who this workshop is for:* This workshop is aimed at Platform Engineers, DevOps Engineers, CLoud Operations, Architects, and Developers that wnat to learn what makes a modern application platform, and how they can leverage cloud services to streamline the delivery and operations of their application platforms.
+*Who this workshop is for:* This workshop is aimed at Platform Engineers, DevOps Engineers, Cloud Operations, Architects, and Developers that want to learn what makes a modern application platform, and how they can leverage cloud services to streamline the delivery and operations of their application platforms.
 
 *What to expect:* During the workshop, attendees will learn how to build a modern application platform by leveraging Azure Red Hat OpenShift, and other Azure cloud services. Through a series of hands on modules and instructor led presentations, attendees will:
 
