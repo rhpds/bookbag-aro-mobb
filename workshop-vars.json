@@ -11,6 +11,5 @@
   "bastion_ssh_command": "ssh azure@bastion.abcde.azure.opentlc.com",
   "generated_password": "redacted",
   "openenv_admin_upn": "openenv-admin-abcde@azure.opentlc.com",
-  "openenv_user_upn": "openenv-abcde@azure.opentlc.com",
-  "preconfigure_aad": "true"
+  "openenv_user_upn": "openenv-abcde@azure.opentlc.com"
 }
