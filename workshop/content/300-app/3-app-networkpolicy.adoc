@@ -2,7 +2,7 @@
 
 NetworkPolicies are used to control and secure communication between pods within a cluster. They provide a declarative approach to define and enforce network traffic rules, allowing you to specify the desired network behavior. By using NetworkPolicies, you can enhance the overall security of your applications by isolating and segmenting different components within the cluster. These policies enable fine-grained control over network access, allowing you to define ingress and egress rules based on criteria such as IP addresses, ports, and pod selectors.
 
-For this module we will be applying networkpolices to the previously created 'microsweeper-ex' namespace and using the 'microsweeper' app to test these policies. In addition, we will deploy two new applications to test against the 'microsweeper app
+For this module we will be applying networkpolices to the previously created 'microsweeper-ex' namespace and using the 'microsweeper' app to test these policies. In addition, we will deploy two new applications to test against the 'microsweeper' app.
 
 == Applying Network Policies
 
@@ -84,7 +84,7 @@ oc -n networkpolicy-test exec -ti pod/networkpolicy-pod -- curl $MS_IP:8080 | he
 +
 [INFO]
 ====
-This Network Policy will restrict ingress to the pods in the project `microsweeper-ex` to only allow traffic from the OpneShift IngressController and only on port 8080.
+This Network Policy will restrict ingress to the pods in the project `microsweeper-ex` to only allow traffic from the OpenShift IngressController and only on port 8080.
 ====
 +
 [source,sh,role=execute]
@@ -129,7 +129,7 @@ Hit Ctrl-C to avoid having to wait until a timeout.
 If you have your browser still open to the microsweeper app, you can refresh and see that you can still access it.
 ====
 
-. In other cases, it you may want to allow your application to be accessible to only _certain_ namespaces. In this example, lets allow access to just your `microsweeper` application from only the `networkpolicy-pod` in the `networkpolicy-test` namespace using a label selector. To do so, run the following command:
+. In other cases, you may want to allow your application to be accessible to only _certain_ namespaces. In this example, lets allow access to just your `microsweeper` application from only the `networkpolicy-pod` in the `networkpolicy-test` namespace using a label selector. To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
@@ -221,7 +221,8 @@ To learn more about configuring NetworkPolicy objects, visit the https://docs.op
 
 == Summary
 
-Here's what you learned:
+Here you learned:
+
 * Network Policies are a powerful way to apply zero-trust networking patterns.
 * Access to pods can be restricted to other Pods, Namespaces, or other labels.
 * Access can be completely denied, allowed, or set to particular ports or services.

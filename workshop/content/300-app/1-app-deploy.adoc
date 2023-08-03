@@ -326,16 +326,16 @@ When you ran the `quarkus build` command, this created the BuildConfig you can s
 In our quarkus settings, we set the deployment strategy to build the image using Docker.
 The Dockerfile file from the git repo that we cloned was used for this BuildConfig.
 
-!!!
-info "A build configuration describes a single build definition and a set of triggers for when a new build is created.
-Build configurations are defined by a BuildConfig, which is a REST object that can be used in a POST to the API server to create a new instance."
+A build configuration describes a single build definition and a set of triggers for when a new build is created.
+Build configurations are defined by a BuildConfig, which is a REST object that can be used in a POST to the API server to create a new instance.
 
-You can read more about BuildConfigs https://docs.openshift.com/container-platform/latest/cicd/builds/understanding-buildconfigs.html[here]
+You can read more about BuildConfigs https://docs.openshift.com/container-platform/latest/cicd/builds/understanding-buildconfigs.html[here].
 
 Once the BuildConfig was created, the source-to-image process kicked off a Build of that BuildConfig.
 The build is what actually does the work in building and deploying the image.
 We started with defining what to be built with the BuildConfig and then actually did the work with the Build.
-You can read more about Builds https://docs.openshift.com/container-platform/latest/cicd/builds/understanding-image-builds.html[here]
+
+You can read more about Builds https://docs.openshift.com/container-platform/latest/cicd/builds/understanding-image-builds.html[here].
 
 To look at what the build actually did, click on Builds tab and then into the first Build in the list.
 
@@ -369,7 +369,7 @@ When you create a Route, you have the option to specify a hostname.
 To start with, we will just use the default domain that comes with ARO (`useast.aroapp.io` in our case).
 In next section, we will expose the same application to a custom domain leveraging Azure Front Door.
 
-You can read more about routes https://docs.openshift.com/container-platform/latest/networking/routes/route-configuration.html[in the Red Hat documentation]
+You can read more about routes in the https://docs.openshift.com/container-platform/latest/networking/routes/route-configuration.html[Red Hat documentation].
 
 From the OpenShift Web Console menu, click on _Networking_\->__Routes__, and the _microsweeper-appservice_ route.
 image::../media/web-console-routes.png[OpenShift Web Console - Routes]
