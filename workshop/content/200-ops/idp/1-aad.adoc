@@ -1,7 +1,19 @@
-= Azure AD for Cluster authentication
+// uncomment the below line and delete the `:preconfigure_aad: disabled` line
+// when deployments send preconfigure_aad=true/false
+// :preconfigure_aad: %preconfigure_aad%
+:preconfigure_aad: disabled
+= Azure AD for Cluster Authentication
 
 Authentication to your cluster is best managed via Azure Active Directory.
 
+ifeval::[{preconfigure_aad} == true]
+Your ARO cluster has been preconfigured with Azure AD. Please complete the link:./1b-explore-aad[Explore Azure Active Directory for Cluster Authentication] module.
+endif::[]
+ifeval::[{preconfigure_aad} == false]
+Your ARO cluster has NOT been preconfigured with Azure AD. Please complete the link:./1a-configure-aad[Configure Azure Active Directory for Cluster Authentication] module.
+endif::[]
+
+ifeval::["{preconfigure_aad}" == "disabled"]
 Depending on which environment your instructor deployed this authentication is either preconfigured or you need to set it up.
 
 Your instructor should tell you how your environment was set up.
@@ -10,3 +22,5 @@ You will need to do *one* of the following two modules:
 
 * link:./1a-configure-aad[Configure Azure Active Directory for Cluster Authentication]
 * link:./1b-explore-aad[Explore Azure Active Directory for Cluster Authentication]
+endif::[]
+

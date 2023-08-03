@@ -1,8 +1,6 @@
-= Introduction
+== Introduction
 
-It's time for us to put our cluster to work and deploy a workload.
-We're going to build an example Java application, https://github.com/redhat-mw-demos/microsweeper-quarkus/tree/ARO[microsweeper], using https://quarkus.io/[Quarkus] (a Kubernetes Native Java stack) and https://azure.microsoft.com/en-us/products/postgresql/[Azure Database for PostgreSQL].
-We'll then deploy the application to our Azure Red Hat OpenShift cluster, connect to the database using Azure Private Link, and automate the deployment with OpenShift Pipelines.
+It's time for us to put our cluster to work and deploy a workload! We're going to build an example Java application, https://github.com/redhat-mw-demos/microsweeper-quarkus/tree/ARO[microsweeper], using https://quarkus.io/[Quarkus] (a Kubernetes-native Java stack) and https://azure.microsoft.com/en-us/products/postgresql/[Azure Database for PostgreSQL]. After configuring the database, we will use both Quarkus, a Kubernetes-native Java framework optimized for containers, and Source-to-Image (S2I), a toolkit for building container images from source code, to deploy the microsweeper application.
 
 == Create Azure Database for PostgreSQL instance
 
@@ -28,7 +26,7 @@ to build a new example application in Ruby. Or use kubectl to deploy a simple Ku
     kubectl create deployment hello-node --image=k8s.gcr.io/e2e-test-images/agnhost:2.33 -- /agnhost serve-hostname
 ----
 
-. Create the Azure Postgres Server resource.
+. Create the Azure Database for Postgres server resource.
 To do so, run the following command (this command will take ~ 5mins)
 +
 [source,sh,role=execute]
@@ -69,7 +67,7 @@ In a real world scenario you would create a private database and connect to it o
 sudo dnf -y install postgresql
 ----
 
-. Check connectivity from to the database.
+. Check connectivity to the database.
 To do so, run the following command:
 +
 [source,sh,role=execute]
@@ -328,16 +326,16 @@ When you ran the `quarkus build` command, this created the BuildConfig you can s
 In our quarkus settings, we set the deployment strategy to build the image using Docker.
 The Dockerfile file from the git repo that we cloned was used for this BuildConfig.
 
-!!!
-info "A build configuration describes a single build definition and a set of triggers for when a new build is created.
-Build configurations are defined by a BuildConfig, which is a REST object that can be used in a POST to the API server to create a new instance."
+A build configuration describes a single build definition and a set of triggers for when a new build is created.
+Build configurations are defined by a BuildConfig, which is a REST object that can be used in a POST to the API server to create a new instance.
 
-You can read more about BuildConfigs https://docs.openshift.com/container-platform/latest/cicd/builds/understanding-buildconfigs.html[here]
+You can read more about BuildConfigs https://docs.openshift.com/container-platform/latest/cicd/builds/understanding-buildconfigs.html[here].
 
 Once the BuildConfig was created, the source-to-image process kicked off a Build of that BuildConfig.
 The build is what actually does the work in building and deploying the image.
 We started with defining what to be built with the BuildConfig and then actually did the work with the Build.
-You can read more about Builds https://docs.openshift.com/container-platform/latest/cicd/builds/understanding-image-builds.html[here]
+
+You can read more about Builds https://docs.openshift.com/container-platform/latest/cicd/builds/understanding-image-builds.html[here].
 
 To look at what the build actually did, click on Builds tab and then into the first Build in the list.
 
@@ -371,7 +369,7 @@ When you create a Route, you have the option to specify a hostname.
 To start with, we will just use the default domain that comes with ARO (`useast.aroapp.io` in our case).
 In next section, we will expose the same application to a custom domain leveraging Azure Front Door.
 
-You can read more about routes https://docs.openshift.com/container-platform/latest/networking/routes/route-configuration.html[in the Red Hat documentation]
+You can read more about routes in the https://docs.openshift.com/container-platform/latest/networking/routes/route-configuration.html[Red Hat documentation].
 
 From the OpenShift Web Console menu, click on _Networking_\->__Routes__, and the _microsweeper-appservice_ route.
 image::../media/web-console-routes.png[OpenShift Web Console - Routes]
@@ -402,3 +400,10 @@ Switch the timeframe to `5min`.
 ====
 While you're here, you might also want to look at the Dashboard tab to see the Project's CPU/Memory usage.
 ====
+
+== Summary 
+
+Here you learned how to:
+
+* Create Azure Database for PostgreSQL instance.
+* Build and deploy the Microsweeper app.

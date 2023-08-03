@@ -13,12 +13,12 @@ It provides behavioral insight into and control of the networked microservices i
 Applications are changing from monoliths into collections of small, independent, and loosely coupled services often referred to as cloud-native applications.
 These services are organized in a microservices architecture.
 
-Managing the communication between different services, and analyzing and maintaining security, can be a challenge.
-This can be greatly simplified and optimized by using a service mesh to route requests from one service to another, and optimizing how the different services work with one another.
+As a microservices architecture grows in size and complexity, it becomes more challenging to manage, analyze, and secure the communication between different services.
+This can be greatly simplified and optimized by using a service mesh to route requests from one service to another, and optimize how the different services interact with one another.
 
-With Red Hat OpenShift Service Mesh, you get a uniform way to connect, manage, and observe your microservices, without requiring you to redesign your application.
-As your containers and services evolve, Service Mesh allows you control of--the networked microservices through the use of a sidecar proxy that intercepts network communication between microservices.
-OpenShift Service Mesh provides integrated metrics, logging, and tracing, traditionally available only deep within the application or service.
+With Red Hat OpenShift Service Mesh, you get a uniform way to connect, manage, and observe your microservices, without requiring you to redesign your applications. It adds a transparent layer on existing distributed applications with a sidecar proxy that intercepts network communication between microservices.
+
+OpenShift Service Mesh also provides integrated metrics, logging, and tracing, traditionally available only deep within the application or service.
 
 == Red Hat Service Mesh Benefits
 

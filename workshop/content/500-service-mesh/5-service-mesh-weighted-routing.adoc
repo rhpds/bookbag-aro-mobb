@@ -62,3 +62,9 @@ echo "http://$(oc -n istio-system get route istio-ingressgateway -o jsonpath='{.
 ----
 http://istio-ingressgateway-istio-system.apps.rosa-6n4s8.1c1c.p1.openshiftapps.com/productpage
 ----
+
+== Summary 
+
+Here you learned how to:
+
+* Configure weighted load balancing using virtual services

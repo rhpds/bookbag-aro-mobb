@@ -1,5 +1,4 @@
----
-name: ARO Workshop  
+name: Building a Modern Application Platform  
 modules:
   activate:
   - home

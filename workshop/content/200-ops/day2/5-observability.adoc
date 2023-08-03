@@ -1,11 +1,12 @@
-= Configure Metrics and Log Forwarding to Azure Files
+== Introduction
 
-OpenShift stores logs and metrics inside the cluster by default, however it also provides tooling to forward both to various locations.
-Here we will configure ARO to forward logs and metrics to Azure Files and use Grafana to view them.
+Azure Red Hat OpenShift (ARO) clusters store log data inside the cluster by default. Understanding metrics and logs is critical in successfully running your cluster. Included with ARO is the OpenShift Cluster Logging Operator, which is intended to simplify log management and analysis within an ARO cluster, offering centralized log collection, powerful search capabilities, visualization tools, and integration with other other Azure systems like https://azure.microsoft.com/en-us/products/storage/files[Azure Files].
 
-== Set up Azure Storage
+In this section of the workshop, we'll configure ARO to forward logs and metrics to Azure Files and view them using Grafana.
 
-. Create a Storage Account:
+== Configure Metrics and Log Forwarding to Azure Files
+
+. First, let's create our Azure Files storage account. To do so, run the following command::
 +
 [source,sh,role=execute]
 ----
@@ -32,7 +33,7 @@ The public access to all blobs or containers in the storage account will be disa
 You may get an error about rate limiting when running the `az storage account create` command. If so just wait a few seconds and repeat the command.
 ====
 
-. Fetch your storage account key
+. Next, let's grab our storage account key. To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
@@ -47,11 +48,14 @@ echo ${AZR_STORAGE_KEY}
 gr6ujd144KyO14BVQ5cEupJw/MWQx/XvXxQE/eG62oOvoVfnLVO68EcFGDygSXQD4pUGx+oA+wNJ+AStwccBSw==
 ----
 
-. Create a storage bucket for logs:
+. Now, let's create a separate storage bucket for logs and metrics. To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
 az storage container create --name "aro-logs" \
+  --account-name "${AZR_STORAGE_ACCOUNT_NAME}" \
+  --account-key "${AZR_STORAGE_KEY}"
+az storage container create --name "aro-metrics" \
   --account-name "${AZR_STORAGE_ACCOUNT_NAME}" \
   --account-key "${AZR_STORAGE_KEY}"
 ----
@@ -62,22 +66,6 @@ az storage container create --name "aro-logs" \
 {
   "created": true
 }
-----
-
-== Set up Metrics forwarding
-
-. Create a storage bucket for metrics:
-+
-[source,sh,role=execute]
-----
-az storage container create --name "aro-metrics" \
-  --account-name "${AZR_STORAGE_ACCOUNT_NAME}" \
-  --account-key "${AZR_STORAGE_KEY}"
-----
-+
-.Sample Output
-[source,text,options=nowrap]
-----
 {
   "created": true
 }
@@ -126,7 +114,7 @@ helm version
 version.BuildInfo{Version:"v3.11.1+6.el8", GitCommit:"66bfc44f827aea6eb8e001150914170ac0d49e2d", GitTreeState:"clean", GoVersion:"go1.18.9"}
 ----
 
-. Set up the MOBB Helm Chart Repository:
+. Next, let's add the MOBB Helm Chart repository. To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
@@ -144,7 +132,7 @@ Hang tight while we grab the latest from your chart repositories...
 Update Complete. ⎈Happy Helming!⎈
 ----
 
-. Create a project to deploy the Helm charts into:
+. Now, we need to create a project (namespace) to deploy our logging resources to. To create that, run the following command:
 +
 [source,sh,role=execute]
 ----
@@ -165,7 +153,7 @@ to build a new example application in Ruby. Or use kubectl to deploy a simple Ku
     kubectl create deployment hello-node --image=k8s.gcr.io/e2e-test-images/agnhost:2.33 -- /agnhost serve-hostname
 ----
 
-. Create list of Operators to install:
+. Next, we need to install a few operators to run our logging setup. These operators include the Red Hat Cluster Logging Operator, the Loki operator, the Grafana operator, and more. First, we'll create a list of all the operators we'll need to install by running the following command:
 +
 [source,sh,role=execute]
 ----
@@ -209,7 +197,7 @@ operatorGroups:
 EOF
 ----
 
-. Deploy the Grafana, Cluster Logging, and Loki Operator from the file just created above using Helm:
+.  Next, let's deploy the Grafana, Cluster Logging, and Loki operators from the file we just created above. To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
@@ -241,7 +229,7 @@ NOTES:
 .
 ----
 
-. Wait for the Operators to be installed.
+. Now, let's wait for the operators to be installed.
 +
 [INFO]
 ====
@@ -267,7 +255,7 @@ No resources found in custom-logging namespace.
 No resources found in custom-logging namespace.
 ----
 
-. Deploy Helm Chart to deploy Grafana and forward metrics to Azure:
+. Now that the operators have been successfully installed, let's use a helm chart to deploy Grafana and forward metrics to Azure Files. To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
@@ -291,7 +279,14 @@ REVISION: 1
 TEST SUITE: None
 ----
 
-. Validate Grafana is accessible, by fetching it's Route and browsing to it with your web browser.
+. Wait until Grafana has successfully deployed. Run the following command:
++
+[source,sh,role=execute]
+---
+oc -n custom-logging rollout status deploy grafana-deployment
+---
+
+. Next, let's ensure that we can access Grafana. To do so, we should fetch its route and try browsing to it with your web browser. To grab the route, run the following command:
 +
 [source,sh,role=execute]
 ----
@@ -332,7 +327,7 @@ oc -n custom-logging rollout restart deployment grafana-deployment
 
 == Set up Log Forwarding
 
-. Set the storage class to use for the persistent volumes to be created - using the storage class that is set as the default storage class:
+. Now, set the storage class to use for the persistent volumes to be created - using the storage class that is set as the default storage class:
 +
 [source,sh,role=execute]
 ----
@@ -347,7 +342,7 @@ echo ${STORAGE_CLASS}
 managed-csi
 ----
 
-. Deploy Helm Chart to enable Cluster Log forwarding to Azure:
+. Next, let's use another helm chart to deploy forward logs to Azure Files. To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
@@ -371,7 +366,7 @@ REVISION: 1
 TEST SUITE: None
 ----
 
-. Wait for the Log Collector agent to be started:
+. Once the Helm Chart deploys its resource, we need to wait for the Log Collector agent to be started. To watch its status, run the following command:
 +
 [source,sh,role=execute]
 ----
@@ -384,7 +379,7 @@ oc -n openshift-logging rollout status daemonset collector
 daemon set "collector" successfully rolled out
 ----
 
-. Restart Log Collector:
+. Occasionally, the log collector agent starts before the operator has finished configuring Loki. To proactively address this, we need to restart the agent. To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
@@ -396,17 +391,12 @@ oc -n openshift-logging rollout restart daemonset collector
 ----
 daemonset.apps/collector restarted
 ----
-+
-[INFO]
-====
-Sometimes the log collector agent starts before the operator has finished configuring Loki, restarting it here will resolve the issue.
-====
 
 == View the Metrics and Logs
 
-Now that the Metrics and Log forwarding is set up we can view them in Grafana.
+Now that the metrics and log forwarding are forwarding to Azure Files, let's view them in Granfa.
 
-. Fetch the Route for Grafana again:
+. First, we'll need to fetch the route for Grafana and visit it in our web browser. To get the route, run the following command
 +
 [source,sh,role=execute]
 ----
@@ -528,4 +518,13 @@ data:
 EOF
 ----
 
+*Congratulations!*
+
 Your cluster is now configured to allow custom metrics.
+
+== Summary
+
+Here you learned how to:
+
+* Configure metrics and log forwarding to Azure Files
+* View the metrics and logs in a Grafana dashboard

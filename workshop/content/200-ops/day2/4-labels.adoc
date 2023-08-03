@@ -95,7 +95,7 @@ Pending that your output shows one or more node(s), this demonstrates that our M
 == Deploy an app to the labeled nodes
 
 Now that we've successfully labeled our nodes, let's deploy a workload to demonstrate app placement using `nodeSelector`.
-This should force our app to only our labeled nodes.
+This should force our app to deploy only on labeled nodes.
 
 . First, let's create a namespace (also known as a project in OpenShift).
 To do so, run the following command:
@@ -120,7 +120,8 @@ to build a new example application in Ruby. Or use kubectl to deploy a simple Ku
 ----
 
 . Next, let's deploy our application and associated resources that will target our labeled nodes.
-To do so, run the following command:
+Notice how we added the `nodeSelector` to the specification of our Deployment to do this.
+Run the following command:
 +
 [source,sh,role=execute]
 ----
@@ -247,3 +248,11 @@ The application is exposed over the default ingress using a predetermined URL an
 *Congratulations!*
 
 You've successfully demonstrated the ability to label nodes and target those nodes using a `nodeSelector`.
+
+== Summary
+
+Here you learned how to:
+
+* Set labels on new nodes in a MachineSet
+* Set labels on existing nodes in a MachineSet
+* Deploy an application on nodes with a certain label
