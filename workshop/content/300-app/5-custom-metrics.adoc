@@ -1,0 +1,134 @@
+= Custom Metrics Autoscaling
+
+In the previous section, we built a `HorizontalPodAutoscaler` resource that allows our workload to scale by adjusting the number of replicas in the `Deployment` resource. The HPA we created defines a set of threshold values for resource consumption metrics that the cluster automatically gathers from all workloads (i.e., memory and CPU consumption). The cluster can do this because the container runtime provides those metrics in a consistent fashion. Periodically, each HPA defined on the cluster is evaluated against the current metrics and the workloads they target are scaled if need be.
+
+There are many cases, however, where scaling might better be driven by *other* metrics rather than simple resource consumption. As an example, consider the possibility of an event-driven architecture where the number of items in a queue drives the number of deployed `Pod` resources in the workload that processes that queue.
+
+Another example would be workloads that would be able to scale to `0` when there was no demand for them. Because the HPA uses consumption metrics, scaling to zero isn't possible.
+
+The OpenShift https://docs.openshift.com/container-platform/4.14/nodes/cma/nodes-cma-autoscaling-custom.html[Custom Metrics Autoscaler] provides the abstractions needed to drive scaling with arbitrary metrics, and this lab will demonstrate how to enable the CMA on your cluster and then configure it against a workload.
+
+== CMA Architecture
+
+The Custom Metrics Autoscaler works as a wrapper around the core HPA functionality rather than a parallel set of tools. In practice, this means that instead of defining a `HorizontalPodAutoscaler` resource, you'll define a `ScaledObject` that the CMA will use to manage an underyling HPA on your behalf. The `ScaledObject` also defines *where* the desired scaling information will come from (typyically a Prometheus datasource) in terms of an endpoint and a query. 
+
+Most examples (including this one) will demonstrate the configuration and use of an in-cluster datasource (in this case, metrics scraped from the workload itself) 
+
+== Lab Outline
+
+- Configure user workload metrics on the cluster
+- Install the CMA Operator
+- Create a CMA instance
+- Deploy a workload
+- Create a `ScaledObject` resource
+- Test the configuration
+
+== User Workload Monitoring
+
+While there is no requirement that the CMA use metrics that originate in-cluster, that is the most common use-case and is in fact how we'll do it in this lab. So the cluster first needs to be configured to scrape metrics from user workloads to make that possible, as the CMA needs to have metrics to query to drive it.
+
+NOTE: Skip this section if you've already done the 'Day 2 | Observability' section of the lab, which includes configuring User Workload Monitoring. You can go directly to the 'Install the CMA' section.
+
+. Check the cluster-monitoring-config ConfigMap object:
++
+[source,sh,role=execute]
+----
+oc -n openshift-monitoring get configmap cluster-monitoring-config -o yaml
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+apiVersion: v1
+data: {}
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2023-06-06T17:11:22Z"
+  name: cluster-monitoring-config
+  namespace: openshift-monitoring
+  resourceVersion: "391968"
+  uid: 5d84fef5-d798-4b11-bb2f-dd93fc6e76d8
+----
+
+. Enable User Workload Monitoring:
++
+[source,sh,role=execute]
+----
+oc patch configmap cluster-monitoring-config -n openshift-monitoring \
+  --patch='{"data":{"config.yaml": "enableUserWorkload: true\n"}}'
+----
+
+. Check that the User workload monitoring is starting up (wait until the output below matches what you see):
++
+[source,sh,role=execute]
+----
+oc -n openshift-user-workload-monitoring get pods
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+NAME                                   READY   STATUS    RESTARTS   AGE
+prometheus-operator-78774d88c8-vq2pz   2/2     Running   0          23m
+prometheus-user-workload-0             6/6     Running   0          23m
+prometheus-user-workload-1             6/6     Running   0          23m
+thanos-ruler-user-workload-0           3/3     Running   0          23m
+thanos-ruler-user-workload-1           3/3     Running   0          23m
+----
+
+=== Install the CMA
+
+TIP: For the purposes of the lab, we're going to install the Custom Metrics Autoscaler Operator via the cluter's web console and the OperatorHub. On a production cluster it's generally recommended to use the GitOps pattern for cluster-level configuration like this. 
+
+. In the OpenShift Container Platform web console, click *Operators → OperatorHub.*
+. Type 'Custom Metrics' into the filter box and select the Red Hat version of the Operator.
++
+image::../media/cma-operatorhub.png[Operator Hub]
+. Click *Install*.
+. On the *Install Operator* page for the CMA, accept the default settings.
+. Click *Install*.
+. Wait until the Operator has installed.
++
+image::../media/cma-operatorhub-install.png[CMA Install]
+
+. After all you have installed the CMA Operator, click *Operators → Installed Operators* to verify that it was installed.
++
+image::../media/cma-show-installed-operators.png[Installed Operators]
+
+=== Create a KEDA Controller
+
+The installation of the Operator allows us to deploy an actual Controller that performs the adapter functions discussed at the beginning of the lab. Again, we'll use the web console to make creating this easy:
+
+. We'll create a Resource of type `KedaController` by clicking on the *Custom Metrics Autoscaler* in the *Installed Operators* view.
+
+. Make sure to select the Project of `openshift-keda` in the *Project* drop-down at the top of the page.
+
++
+image::../media/cma-keda-controller-create.png[Installed Operators]
+
+. Click 'Create instance' in the `KedaController` panel.
+
++
+image::../media/cma-keda-controller-configure.png[Installed Operators]
+
+. Verify that the instance name defaults to `keda` and then click the *Create* button at the bottom of the page.
+
+. After a few seconds, you can verify that it installed correctly by looking at the running Pods in the `openshift-keda` namespace:
++
+[source,sh,role=execute]
+----
+oc -n openshift-keda get pods
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+NAME                                                  READY   STATUS    RESTARTS   AGE
+custom-metrics-autoscaler-operator-6cbc75447c-gtldf   1/1     Running   0          14m
+keda-admission-75fb5fcbcf-znj2d                       1/1     Running   0          118s
+keda-metrics-apiserver-65b86548c4-2mqzq               1/1     Running   0          118s
+keda-operator-7944475998-cqp55                        1/1     Running   0          119s
+----
+
+
+
