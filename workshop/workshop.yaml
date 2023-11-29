@@ -1,10 +1,10 @@
-name: Building a Modern Application Platform  
+name: Building a Modern Application Platform
 modules:
   activate:
   - home
   - 100-setup/1-environment
   - 100-setup/2-access-cluster
-  - 200-ops/idp/1-aad
+  # - 200-ops/idp/1-aad
   - 200-ops/idp/1a-configure-aad
   - 200-ops/idp/1b-explore-aad
   - 200-ops/day2/1-upgrades
