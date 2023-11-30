@@ -154,7 +154,7 @@ kind: Deployment
 metadata:
   labels:
     app: cma-demo-app
-  name: cma-demo-app
+    name: cma-demo-app
 spec:
   replicas: 1
   selector:
@@ -275,6 +275,150 @@ spec:
     name: thanos-token-nng46
     key: ca.crt
 EOF
+----
+
+=== Create a `Role` for the `ServiceAccount`
+
+We have the `ServiceAccount`, now we need a `Role` that gives it the correct permissions on the OCP API to retrieve data.
+
+. Create the `Role`:
++
+[source,sh,role=execute]
+----
+cat <<EOF | oc -n cma-demo apply -f -
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: thanos-metrics-reader
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+- apiGroups:
+  - metrics.k8s.io
+  resources:
+  - pods
+  - nodes
+  verbs:
+  - get
+  - list
+  - watch
+EOF
+----
++
+. Bind it to the `ServiceAccount`
++
+[source,sh,role=execute]
+----
+oc adm policy add-role-to-user thanos-metrics-reader -z thanos --role-namespace=cma-demo
+----
+
+=== Create the `ScaledObject`
+
+Finally, it's time to tell the CMA how to scale the workload based on a custom metric:
+
+. Create the `ScaledObject` resource:
++
+[source,sh,role=execute]
+----
+cat <<EOF | oc -n cma-demo apply -f -
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: prometheus-scaledobject
+spec:
+  scaleTargetRef:
+    name: cma-demo-app
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: https://thanos-querier.openshift-monitoring.svc.cluster.local:9092
+      namespace: cma-demo
+      authModes: "bearer"
+      metricName: http_requests_total
+      threshold: '5'
+      query: sum(rate(http_requests_total{job="cma-demo-app"}[2m]))
+    authenticationRef:
+      name: keda-trigger-auth-prometheus
+EOF
+----
++
+Note the reference to the `Deployment` we created earlier, both in the `scaleTargetRef` (which identifies the workload to be scaled) as well as in the actual `query` field.
++
+Also note the reference to the `TriggerAuthentication` resource in the `authenticationRef` field.
++
+Finally, note that just like the HPA, CMA allows for hard `min` and `max` values for the scaled workload.
++
+The `threshold` field sets the scaling factor on a *per-replica* basis, so if there is one `Pod` but `11` requests per 2 minutes, it will scale to `3` replicas.
++
+. Validate the `ScaledObject`
++
+[source,sh,role=execute]
+----
+oc -n cma-demo get so prometheus-scaledobject
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+NAME                      SCALETARGETKIND      SCALETARGETNAME   MIN   MAX   TRIGGERS     AUTHENTICATION                 READY   ACTIVE   FALLBACK   PAUSED    AGE
+prometheus-scaledobject   apps/v1.Deployment   cma-demo-app      1     10    prometheus   keda-trigger-auth-prometheus   True    False    False      Unknown   2m40s
+----
++ 
+We want to make sure the `READY` column is `True`
+
+=== Test the `ScaledObject` resource
+
+Finally, we'll use the `Batch` API to run a bunch of Pods to generate some load and demonstrate the CMA doing its job:
+
+. Create the `Job`:
++
+[source,sh,role=execute]
+----
+cat <<EOF | oc -n cma-demo create -f -
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: generate-requests-
+spec:
+  template:
+    spec:
+      containers:
+      - image: quay.io/zroubalik/hey
+        name: test
+        command: ["/bin/sh"]
+        args: ["-c", "for i in $(seq 1 30);do echo $i;/hey -c 5 -n 100 http://cam-demo-app.cma-demo.svc;sleep 1;done"]
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          capabilities:
+            drop:
+              - ALL
+          seccompProfile:
+            type: RuntimeDefault
+      restartPolicy: Never
+  activeDeadlineSeconds: 120
+  backoffLimit: 2
+EOF
+----
++
+. Watch the workload to see it scale:
++
+[source,sh,role=execute]
+----
+watch -n cma-demo oc get deployment cma-demo-app
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+NAME                      SCALETARGETKIND      SCALETARGETNAME   MIN   MAX   TRIGGERS     AUTHENTICATION                 READY   ACTIVE   FALLBACK   PAUSED    AGE
+prometheus-scaledobject   apps/v1.Deployment   cma-demo-app      1     10    prometheus   keda-trigger-auth-prometheus   True    False    False      Unknown   2m40s
 ----
 
 
