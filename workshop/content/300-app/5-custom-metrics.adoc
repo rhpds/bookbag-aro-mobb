@@ -130,5 +130,151 @@ keda-metrics-apiserver-65b86548c4-2mqzq               1/1     Running   0       
 keda-operator-7944475998-cqp55                        1/1     Running   0          119s
 ----
 
+=== Demo Workload
+
+The CMA needs custom metrics to query, so we need to create a demo workload next.
+
+We're going to create one that literally just responds to HTTP requests and increments a request counter.
+
+. Start by creating a new Project, either via the web console or with the `oc new-project cma-demo` command. In the web console, you'll probably want to switch to the 'Developer' view available at the top of menu.
+For the purposes of this demo and making the code snippets work, use `cma-demo` as the project name.
+
+. The default view of a new Project in the Developer view is the 'Add' screen:
++
+image::../media/cma-demo-workload-create.png[Workload Creation]
+Click the 'Import YAML' button in the 'From Local Machine' panel because we're going to pull a pre-built container image from an external registry.
+
+. Cut and paste in this YAML:
+
+.Demo Deployment
+[source,yaml,role=execute]
+----
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: cma-demo-app
+  name: cma-demo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cma-demo-app
+  template:
+    metadata:
+      labels:
+        app: cma-demo-app
+        type: keda-testing
+    spec:
+      containers:
+      - name: prom-demo-app
+        image: quay.io/zroubalik/prometheus-app:latest
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          capabilities:
+            drop:
+              - ALL
+          seccompProfile:
+            type: RuntimeDefault
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: cma-demo-app
+  annotations:
+    prometheus.io/scrape: "true"
+  name: cma-demo-app
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    type: keda-testing
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+  name: keda-testing-sm
+spec:
+  endpoints:
+  - scheme: http
+    port: http
+  namespaceSelector: {}
+  selector:
+    matchLabels:
+       app: cma-demo-app
+----
+
+This will create the `Deployment` and `Service` resources, as well as the necessary `ServiceMonitor` resource that instructs the User Workload Monitoring stack to gather metrics from it.
+
+. Make sure the workload has started
++
+[source,sh,role=execute]
+----
+oc -n cma-demo get pods
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+NAME                            READY   STATUS    RESTARTS   AGE
+cma-demo-app-7cbc9968bb-v9zbz   1/1     Running   0          1m
+----
+
+=== CMA Authentication
+
+The next step is to provide the CMA an identity to allow it to query the API for this custom metrics data our app is producing. The CMA allows for a unique identity per scaled resource, so there is a lot of flexibility and granularity in terms of controlling access to this data.
+
+. Create a `ServiceAccount`
++
+[source,sh,role=execute]
+----
+oc -n cma-demo create serviceaccount thanos
+----
++
+[source,sh,role=execute]
+----
+oc -n cma-demo describe sa thanos
+----
++
+.Sample Output
+[source,text,options=nowrap]
+----
+Name:                thanos
+Namespace:           cma-demo
+Labels:              <none>
+Annotations:         <none>
+Image pull secrets:  thanos-dockercfg-x5dmh
+Mountable secrets:   thanos-dockercfg-x5dmh
+Tokens:              thanos-token-nng46
+Events:              <none>
+----
++
+You'll need the value in the `Tokens` field for the next step.
+. Create an `AuthenticationTrigger` for the CMA. You'll need to replace the `name` key in the two parameters with the value from the `Tokens` field in the previous step.
++
+[source,sh,role=execute]
+----
+cat <<EOF | oc -n cma-demo apply -f -
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: keda-trigger-auth-prometheus
+spec:
+  secretTargetRef:
+  - parameter: bearerToken
+    name: thanos-token-nng46
+    key: token
+  - parameter: ca
+    name: thanos-token-nng46
+    key: ca.crt
+EOF
+----
 
 
