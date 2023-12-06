@@ -19,12 +19,11 @@ In this section of the workshop, we will use the previously deployed microsweepe
 ----
 +
 Requests state the minimum CPU and memory requirements for a container. This will ensure that the pod is placed on a node that can meet those requirements. Limits set the maximum amount of CPU and Memory that can be consumed by a container and ensure that a whole container does not consume all of the resources on a node. Setting limits and requests for deployments is best practice for resource management and ensuring the stability and reliability of your applications.
-
-[INFO]
++
+[TIP]
 ====
 It is important to know the resource needs of the application before setting limits and requests to avoid resource starvation or over allocating resources. If you are unsure of the resource consumption of your application, you can use 'oc adm top pods' to view the current memory and CPU being currently consumed by each pod. Running the following command multiple times while the application is running can help set a general picture:
 ====  
-
 +
 [source,sh,role=execute]
 ----
@@ -37,6 +36,11 @@ It is important to know the resource needs of the application before setting lim
  NAME                                       CPU(cores)   MEMORY(bytes)
  microsweeper-appservice-65799476b6-vh9q7   0m           191Mi
 ----
++
+[TIP]
+====
+If you have trouble with this command see https://access.redhat.com/solutions/4966301[this Knowledge Base article]
+====
 +
 . Now that we've updated the resource, we can see that a new pod was automatically rolled out with these new limits and requests. To do so, run the following command:
 +
