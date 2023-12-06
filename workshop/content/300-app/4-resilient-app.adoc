@@ -23,7 +23,8 @@ Requests state the minimum CPU and memory requirements for a container. This wil
 [INFO]
 ====
 It is important to know the resource needs of the application before setting limits and requests to avoid resource starvation or over allocating resources. If you are unsure of the resource consumption of your application, you can use 'oc adm top pods' to view the current memory and CPU being currently consumed by each pod. Running the following command multiple times while the application is running can help set a general picture:
-====     
+====  
+
 +
 [source,sh,role=execute]
 ----
