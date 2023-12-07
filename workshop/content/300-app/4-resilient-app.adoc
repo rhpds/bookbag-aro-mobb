@@ -294,7 +294,7 @@ After a minute or two, your output should be similar to below:
 
 Here you learned how to:
 
-* Set Limits and Requests on the Microsweeper application from the previous section
+* Set Limits and Requests on the Microsweeper application
 * Scale the Microsweeper application up and down
 * Set a Pod Disruption Budget on the Microsweeper application
 * Set a Horizontal Pod Autoscaler to automatically scale application based on load
