@@ -1,0 +1,32 @@
+*Building a Modern Application Platform*
+
+* xref:100-setup/lab_1_environment.adoc[Explore the environment]
+* xref:100-setup/lab_2_access_cluster.adoc[Access your ARO cluster]
+
+*Basic Operational Tasks*
+
+* xref:200-ops/lab_1_cluster_upgrades.adoc[Upgrade your ARO cluster]
+* xref:200-ops/lab_2_managing_worker_nodes.adoc[Managing Worker Nodes]
+* xref:200-ops/lab_3_autoscaling.adoc[Autoscale your ARO Cluster]
+* xref:200-ops/lab_4_labeling_nodes.adoc[Labeling your Worker Nodes]
+\* xref:200-ops/lab_5_observability.adoc[Configure Red Hat OpenShift Logging with Azure Files]
+
+*Deploy an Application to ARO*
+
+* xref:300-apps/lab_1_deploy_app.adoc[Deploy an application with AWS Database]
+* xref:300-apps/lab_2_openshift_gitops.adoc[Deploy an application with Red Hat OpenShift GitOps]
+* xref:300-apps/lab_3_network_policy.adoc[Secure your applications with Network Policies]
+* xref:300-apps/lab_4_resilient_app.adoc[Make your application resilient]
+
+*Red Hat OpenShift Service Mesh*
+
+* xref:400-service-mesh/lab_1_service_mesh_introduction.adoc[Service Mesh Introduction]
+* xref:400-service-mesh/lab_2_service_mesh_deploy_operator.adoc[Install Service Mesh Operator]
+* xref:400-service-mesh/lab_3_service_mesh_deploy_control_plane.adoc[Deploy Service Mesh Control Plane]
+* xref:400-service-mesh/lab_4_service_mesh_deploy_app.adoc[Deploy a Service Mesh example application]
+* xref:400-service-mesh/lab_5_service_mesh_weighted_routing.adoc[Set up Service Mesh Weighted Routing]
+* xref:400-service-mesh/lab_6_service_mesh_observe.adoc[Configure and observe Service Mesh traffic]
+
+*Conclusion and What's Next*
+
+* xref:conclusion.adoc[Conclusion & What's Next]

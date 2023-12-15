@@ -1,0 +1,17 @@
+== Conclusion & What's Next
+
+*Congratulations!*
+
+Now you have completed all the modules for the ARO Workshop. We hope you found it valuable, saw the value of ARO as an application platform, and learned something new!
+
+// Take the next step and https://console.redhat.com/openshift/create/rosa/getstarted?source=rhhe6[get started,window=_blank] with ROSA in your AWS account.
+
+Our onboarding specialists are here to help. If you have any questions or need help getting started with ARO, send us a chat in the console at any time by clicking the blue hat icon in the bottom right corner.
+
+// Additional resources to help you get started:
+
+// * ROSA https://youtu.be/roiCLvcR8fE[install video,window=_blank]
+// * ROSA https://www.redhat.com/en/technologies/cloud-computing/openshift/aws/learn[Learning Hub,window=_blank]
+// * ROSA https://docs.aws.amazon.com/ROSA/latest/userguide/getting-started.html[user guide,window=_blank]
+
+*Thank you for taking the time to explore ARO!*

@@ -18,7 +18,7 @@ OpenShift and OpenShift GitOps:
 
 = Deploying your Application with OpenShift GitOps
 
-. From the OpenShift Console Administrator view click through *HOME* \-> *Operators* \-> *Operator Hub*, search for "Red Hat OpenShift GitOps" and hit *Install*. Make sure to select the *Channel* `gitops-1.8`. Accept all other defaults and click on *Install*.
+. From the OpenShift Console Administrator view click through *HOME* \-> *Operators* \-> *Operator Hub*, search for "Red Hat OpenShift GitOps" and hit *Install*. Make sure to select the *Channel* `gitops-1.11`. Accept all other defaults and click on *Install*.
 +
 image::../media/gitops_operator.png[]
 
