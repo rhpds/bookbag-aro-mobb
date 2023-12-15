@@ -304,7 +304,7 @@ Return to your tab with the OpenShift Web Console.
 
 From the Administrator perspective, expand _Builds_ and then _ImageStreams_, and select the _microsweeper-ex_ project.
 
-image::../media/web-console-imagestreams.png[OpenShift Web Console - Imagestreams]
+image::web-console-imagestreams.png[OpenShift Web Console - Imagestreams]
 
 You will see two images that were created on your behalf when you ran the quarkus build command.
 There is one image for `openjdk-11` that comes with OpenShift as a Universal Base Image (UBI) that the application will run under.
@@ -319,8 +319,8 @@ This is the image for the application that was built automatically for you and p
 How did those images get built you ask?
 Back on the OpenShift Web Console, click on _BuildConfigs_ and then the _microsweeper-appservice_ entry.
 
-image::../media/web-console-buildconfigs.png[OpenShift Web Console - BuildConfigs]
-image::../media/web-console-microsweeper-appservice-buildconfig.png[OpenShift Web Console - microsweeper-appservice BuildConfig]
+image::web-console-buildconfigs.png[OpenShift Web Console - BuildConfigs]
+image::web-console-microsweeper-appservice-buildconfig.png[OpenShift Web Console - microsweeper-appservice BuildConfig]
 
 When you ran the `quarkus build` command, this created the BuildConfig you can see here.
 In our quarkus settings, we set the deployment strategy to build the image using Docker.
@@ -339,13 +339,13 @@ You can read more about Builds https://docs.openshift.com/container-platform/lat
 
 To look at what the build actually did, click on Builds tab and then into the first Build in the list.
 
-image::../media/web-console-builds.png[OpenShift Web Console - Builds]
+image::web-console-builds.png[OpenShift Web Console - Builds]
 
 On the next screen, explore around.
 Look specifically at the YAML definition of the build and the logs to see what the build actually did.
 If you build failed for some reason, the logs are a great first place to start to look at to debug what happened.
 
-image::../media/web-console-build-logs.png[OpenShift Web Console - Build Logs]
+image::web-console-build-logs.png[OpenShift Web Console - Build Logs]
 
 === Image Deployment
 
@@ -353,15 +353,15 @@ After the image was built, the source-to-image process then deployed the applica
 In the quarkus properties file, we specified that a deployment should be created.
 You can view the deployment under _Workloads_ \-> _Deployments_, and then click on the Deployment name.
 
-image::../media/web-console-deployments.png[OpenShift Web Console - Deployments]
+image::web-console-deployments.png[OpenShift Web Console - Deployments]
 
 Explore around the deployment screen, check out the different tabs, look at the YAML that was created.
 
-image::../media/web-console-deployment-yaml.png[OpenShift Web Console - Deployment YAML]
+image::web-console-deployment-yaml.png[OpenShift Web Console - Deployment YAML]
 
 Look at the pod the deployment created, and see that it is running.
 
-image::../media/web-console-deployment-pods.png[OpenShift Web Console - Deployment Pods]
+image::web-console-deployment-pods.png[OpenShift Web Console - Deployment Pods]
 
 The last thing we will look at is the route that was created for our application.
 In the quarkus properties file, we specified that the application should be exposed to the Internet.
@@ -372,11 +372,11 @@ In next section, we will expose the same application to a custom domain leveragi
 You can read more about routes in the https://docs.openshift.com/container-platform/latest/networking/routes/route-configuration.html[Red Hat documentation].
 
 From the OpenShift Web Console menu, click on _Networking_\->__Routes__, and the _microsweeper-appservice_ route.
-image::../media/web-console-routes.png[OpenShift Web Console - Routes]
+image::web-console-routes.png[OpenShift Web Console - Routes]
 
 === Test the application
 
-While in the route section of the OpenShift Web Console, click the URL under _Location_: image::../media/web-console-route-link.png[OpenShift Web Console - Route Link]
+While in the route section of the OpenShift Web Console, click the URL under _Location_: image::web-console-route-link.png[OpenShift Web Console - Route Link]
 
 You can also get the the URL for your application using the command line:
 
