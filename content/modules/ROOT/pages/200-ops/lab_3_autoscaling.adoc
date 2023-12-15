@@ -2,7 +2,7 @@
 
 ARO Cluster Autoscaler is a feature that helps automatically adjust the size of an ARO cluster based on the current workload and resource demands. Cluster Autoscaler offers automatic and intelligent scaling of ARO clusters, leading to efficient resource utilization, improved application performance, high availability, and simplified cluster management. By dynamically adjusting the cluster size based on workload demands, it helps organizations optimize their infrastructure costs while ensuring optimal application performance and scalability. The cluster autoscaler does not increase the cluster resources beyond the limits that you specify.
 
-image:../../media/diagram-cluster-autoscaler.png[Diagram illustrating the cluster autoscaler process]
+image::diagram-cluster-autoscaler.png[Diagram illustrating the cluster autoscaler process]
 
 To learn more about cluster autoscaling, visit the https://docs.openshift.com/container-platform/latest/machine_management/applying-autoscaling.html[Red Hat documentation for cluster autoscaling].
 

@@ -10,7 +10,7 @@ Here are some of the advantages of using ARO MachineSets to manage the size of y
 * Infrastructure Diversity - MachineSets allow you to provision worker nodes of different instance type. This enables you to leverage the best kind of instance family for different workloads.
 * Integration with Cluster Autoscaler - MachineSets seamlessly integrate with the Cluster Autoscaler feature, which automatically adjusts the number of worker nodes based on the current demand. This integration ensures efficient resource utilization by scaling the cluster up or down as needed, optimizing costs and performance.
 
-image:../../media/scale_machinesets.png[scale_machinesets]
+image::scale_machinesets.png[scale_machinesets]
 
 == Scaling worker nodes
 

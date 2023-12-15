@@ -134,7 +134,7 @@ While the workshop environment will be deleted before then, you now have the exp
 
 Occasionally, you may be not be able to go directly from your current version to a desired version. In these cases, you must first upgrade your cluster from your current version, to an intermediary version, and then to your desired version. To help you navigate these decisions, you can take advantage of the https://access.redhat.com/labs/ocpupgradegraph/update_path[Red Hat OpenShift Upgrade Graph Tool].
 
-image:../../media/aro_upgrade_graph.png[ARO Upgrade Graph Tool Screenshot]
+image::aro_upgrade_graph.png[ARO Upgrade Graph Tool Screenshot]
 
 In this scenario to upgrade your cluster from version 4.11.0 to 4.12.15, you must first upgrade to 4.11.39, then you can upgrade to 4.12.15. The ARO Upgrade Graph Tool helps you easily see which version you should upgrade to.
 
