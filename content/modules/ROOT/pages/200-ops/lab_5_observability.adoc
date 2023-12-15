@@ -419,11 +419,11 @@ https://grafana-route-custom-logging.apps.rbrlitrg.westeurope.aroapp.io
 These dashboards are copies of the dashboards that are available directly on the OpenShift web console under *Observability*".
 ====
 +
-image::../../media/grafana-metrics.png[]
+image::grafana-metrics.png[]
 
 . Click the Explore (compass) Icon in the left hand menu, select "`Loki (Application)`" in the dropdown and search for `{kubernetes_namespace_name="custom-logging"}`. Click the blue *Run Query* button on the top right to execute the search.
 +
-image::../../media/grafana-logs.png[]
+image::grafana-logs.png[]
 
 == Enabling Custom Metrics
 

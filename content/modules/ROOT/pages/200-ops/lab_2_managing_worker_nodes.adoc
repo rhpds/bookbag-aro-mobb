@@ -136,7 +136,7 @@ Now let's scale the cluster back down to a total of 3 worker nodes, but this tim
 . Return to your tab with the OpenShift Web Console.
 . Using the menu on the left Select *Compute* \-> *MachineSets*.
 +
-image::../../media/web-console-machineset-sidebar.png[Web Console - Cluster Settings]
+image::web-console-machineset-sidebar.png[Web Console - Cluster Settings]
 
 . In the overview you will see the same information about the MachineSets that you saw on the command line.
 Now, locate the MachineSet which has "2 of 2" machines, and click on the *⋮* icon, then select _Edit machine count_.
@@ -147,13 +147,13 @@ It may take up to 5 minutes for the MachineSet to scale to 2 nodes while the und
 Until this time, the machine count will read "1 of 2".
 ====
 +
-image::../../media/web-console-machinesets-three-dots.png[Web Console - MachineSets Menu]
+image::web-console-machinesets-three-dots.png[Web Console - MachineSets Menu]
 +
-image::../../media/web-console-machinesets-edit-count-menu.png[Web Console - MachineSets Count Menu]
+image::web-console-machinesets-edit-count-menu.png[Web Console - MachineSets Count Menu]
 
 . Next, reduce the count from "2" to "1" and click *Save* to save your changes.
 +
-image::../../media/web-console-machinesets-edit-count.png[Web Console - MachineSets Edit Count]
+image::web-console-machinesets-edit-count.png[Web Console - MachineSets Edit Count]
 
 *Congratulations!*
 

@@ -9,11 +9,11 @@ During ARO upgrades, one node is upgraded at a time. This is done to ensure cust
 . Return to your tab with the OpenShift Web Console.
 . Using the menu on the left Select *Administration* \-> *Cluster Settings*.
 +
-image::../../media/web-console-cluster-settings.png[Web Console - Cluster Settings]
+image::web-console-cluster-settings.png[Web Console - Cluster Settings]
 
 . Click on the *Not Configured* link under the *Upgrade Channel* heading.
 +
-image::../../media/web-console-upgrade-channel-not-configured.png[Web Console - Upgrade Channel Not Configured]
+image::web-console-upgrade-channel-not-configured.png[Web Console - Upgrade Channel Not Configured]
 +
 [NOTE]
 ====
@@ -24,7 +24,7 @@ By default, the https://docs.openshift.com/container-platform/4.11/updating/unde
 
 . In the *Channel* field, enter `stable-4.11` to set the upgrade channel to the stable releases of OpenShift 4.11 and click *Save*.
 +
-image::../../media/web-console-input-channel.png[Web Console - Input Channel]
+image::web-console-input-channel.png[Web Console - Input Channel]
 
 . In a moment, you'll begin to see what upgrades are available for your cluster.
 From here, you could click the *Select a version* button and upgrade the cluster, or you could follow the instructions below to use the Managed Upgrade Operator.
@@ -52,7 +52,7 @@ Examples of activities that are not core to an OpenShift upgrade process but cou
 Configuring the Managed Upgrade Operator for ARO ensures that your cluster functions as you need it to during upgrades.
 The process of executing upgrades is shown here:
 
-image::../../media/upgradecluster-flow.svg[MUO Upgrade Process Flow Chart]
+image::upgradecluster-flow.svg[MUO Upgrade Process Flow Chart]
 
 . First, let's check for available upgrades on your current upgrade channel.
 To do so, run the following command:
