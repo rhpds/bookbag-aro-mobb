@@ -14,7 +14,7 @@ AZR_STORAGE_ACCOUNT_NAME="storage${GUID}"
 
 ARO_LOCATION=$(az aro show --resource-group openenv-${GUID} --name aro-cluster-${GUID} --query location -o tsv)
 
-az storage account create --name "${AZR_STORAGE_ACCOUNT_NAME}" --resource-group "openenv-${GUID}" --location "${AZ_LOCATION}" --sku Standard_LRS
+az storage account create --name "${AZR_STORAGE_ACCOUNT_NAME}" --allow-blob-public-access --resource-group "openenv-${GUID}" --location "${AZ_LOCATION}" --sku Standard_LRS
 ----
 +
 .Sample Output
@@ -22,8 +22,10 @@ az storage account create --name "${AZR_STORAGE_ACCOUNT_NAME}" --resource-group 
 ----
 The public access to all blobs or containers in the storage account will be disallowed by default in the future, which means default value for --allow-blob-public-access is still null but will be equivalent to false.
 {
-  "accessTier": "Hot",
+ "accessTier": "Hot",
+  "accountMigrationInProgress": null,
   "allowBlobPublicAccess": true,
+  "allowCrossTenantReplication": false,
 
 [... Lots of output Omitted ...]
 ----
@@ -111,7 +113,7 @@ helm version
 .Sample Output
 [source,text,options=nowrap]
 ----
-version.BuildInfo{Version:"v3.11.1+6.el8", GitCommit:"66bfc44f827aea6eb8e001150914170ac0d49e2d", GitTreeState:"clean", GoVersion:"go1.18.9"}
+version.BuildInfo{Version:"v3.12.1+11.el8", GitCommit:"8cc4ba6fcc61d4c2ad2084c214dda40124bf5d32", GitTreeState:"clean", GoVersion:"go1.19.10"}
 ----
 
 . Next, let's add the MOBB Helm Chart repository. To do so, run the following command:
@@ -220,7 +222,7 @@ namespace/openshift-operators-redhat created
 namespace/resource-locker-operator created
 Release "clf-operators" does not exist. Installing it now.
 NAME: clf-operators
-LAST DEPLOYED: Tue Jun  6 09:40:28 2023
+LAST DEPLOYED: Tue Dec 19 09:40:44 2023
 NAMESPACE: custom-logging
 STATUS: deployed
 REVISION: 1
@@ -272,7 +274,7 @@ helm upgrade -n "custom-logging" aro-thanos-af \
 ----
 Release "aro-thanos-af" does not exist. Installing it now.
 NAME: aro-thanos-af
-LAST DEPLOYED: Tue Jun  6 09:42:05 2023
+LAST DEPLOYED: Tue Dec 19 09:41:57 2023
 NAMESPACE: custom-logging
 STATUS: deployed
 REVISION: 1
@@ -297,7 +299,7 @@ oc -n custom-logging get route grafana-route \
 .Sample Output
 [source,text,options=nowrap]
 ----
-https://grafana-route-custom-logging.apps.rbrlitrg.westeurope.aroapp.io
+https://grafana-route-custom-logging.apps.nbybk9f3.eastus.aroapp.io
 ----
 
 . Then click on the `AAD` authentication provider - you should already be logged into the cluster because you logged into the web console earlier. Accept all permissions by clicking on *Allow selected permissions*. You should see the Grafana dashboard.
@@ -359,7 +361,7 @@ helm upgrade -n custom-logging aro-clf-blob \
 ----
 Release "aro-clf-blob" does not exist. Installing it now.
 NAME: aro-clf-blob
-LAST DEPLOYED: Wed Jun 14 08:39:02 2023
+LAST DEPLOYED: Tue Dec 19 09:43:20 2023
 NAMESPACE: custom-logging
 STATUS: deployed
 REVISION: 1
@@ -394,7 +396,7 @@ daemonset.apps/collector restarted
 
 == View the Metrics and Logs
 
-Now that the metrics and log forwarding are forwarding to Azure Files, let's view them in Granfa.
+Now that the metrics and log forwarding are forwarding to Azure Files, let's view them in Grafana.
 
 . First, we'll need to fetch the route for Grafana and visit it in our web browser. To get the route, run the following command
 +
@@ -407,7 +409,7 @@ oc -n custom-logging get route grafana-route \
 .Sample Output
 [source,text,options=nowrap]
 ----
-https://grafana-route-custom-logging.apps.rbrlitrg.westeurope.aroapp.io
+https://grafana-route-custom-logging.apps.nbybk9f3.eastus.aroapp.io
 ----
 
 . Browse to the provided route address in the same browser window as your OCP console and login using your OpenShift credentials (either AAD or kubeadmin). If you tested this before you are already logged in.

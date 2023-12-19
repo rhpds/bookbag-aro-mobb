@@ -49,7 +49,7 @@ to build a new example application in Ruby. Or use kubectl to deploy a simple Ku
 ----
 cat <<EOF | oc apply -f -
 ---
-apiVersion: argoproj.io/v1alpha1
+apiVersion: argoproj.io/v1beta1
 kind: ArgoCD
 metadata:
   name: argocd

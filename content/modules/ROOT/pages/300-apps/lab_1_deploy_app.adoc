@@ -112,7 +112,7 @@ quarkus --version
 .Sample Output
 [source,text,options=nowrap]
 ----
-3.1.0.Final
+3.6.3
 ----
 
 . Now, let's clone the application from GitHub to our local bastion VM.
@@ -382,14 +382,19 @@ You can also get the the URL for your application using the command line:
 
 [source,sh,role=execute]
 ----
-oc -n microsweeper-ex get route microsweeper-appservice -o jsonpath='{.spec.host}' ; echo
+oc get route microsweeper-appservice -n microsweeper-ex -o jsonpath='{"http://"}{.spec.host}{"\n"}'
 ----
 
 .Sample Output
 [source,text,options=nowrap]
 ----
-microsweeper-appservice-microsweeper-ex.apps.c90qz1cy.eastus.aroapp.io
+http://microsweeper-appservice-microsweeper-ex.apps.nbybk9f3.eastus.aroapp.io/
 ----
++
+[WARNING]
+====
+This is an `http` route - some browsers automatically convert `http` to `https` which means the application will appear unavailable.
+====
 
 === View custom metrics for the App
 

@@ -18,6 +18,7 @@ For this module we will be applying networkpolices to the previously created 'mi
 [source,sh,role=execute]
 ----
  cat << EOF | oc apply -f -
+ ---
  apiVersion: v1
  kind: Pod
  metadata:
@@ -35,6 +36,11 @@ For this module we will be applying networkpolices to the previously created 'mi
 EOF
 ----
 +
+[TIP]
+====
+You may ignore any warning you  may see.
+====
+
 . Now we will change to the microsweeper-ex project to start applying the network policies
 +
 [source,sh,role=execute]
@@ -134,6 +140,7 @@ If you have your browser still open to the microsweeper app, you can refresh and
 [source,sh,role=execute]
 ----
 cat <<EOF | oc apply -f -
+---
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
@@ -187,6 +194,7 @@ oc -n networkpolicy-test exec -ti pod/networkpolicy-pod -- curl $MS_IP:8080 | he
 [source,sh,role=execute]
 ----
 cat << EOF | oc apply -f -
+---
 apiVersion: v1
 kind: Pod
 metadata:
@@ -204,6 +212,11 @@ spec:
 EOF
 ----
 +
+[TIP]
+====
+Again you may ignore any warning you may see.
+====
+
 . Now, let's try to curl the `microsweeper` application by running the following command:
 +
 [source,sh,role=execute]
