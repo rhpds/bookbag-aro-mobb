@@ -50,7 +50,7 @@ env | grep -E 'AZ_|OCP'
 [source,text,options=nowrap,subs="attributes"]
 ----
 OCP_USER=kubeadmin
-OCP_API={aro_api}
+OCP_API={aro_public_api_url}
 OCP_PASS={aro_kube_password}
 OCP_CONSOLE={aro_console}
 ----
@@ -110,7 +110,7 @@ az aro show -g openenv-${GUID} -n aro-cluster-${GUID} --query apiserverProfile.u
 .Sample Output
 [source,text,options=nowrap,subs="attributes"]
 ----
-{aro_api}
+{aro_public_api_url}
 ----
 
 . Now that we've captured the API server endpoint, we can login to the cluster by running the following command:
