@@ -29,12 +29,12 @@ to build a new example application in Ruby. Or use kubectl to deploy a simple Ku
 . Create the Azure Database for Postgres server resource.
 To do so, run the following command (this command will take ~ 5mins)
 +
-[source,sh,role=execute]
+[source,sh,role=execute,subs="attributes"]
 ----
-az postgres server create --resource-group openenv-${GUID} \
+az postgres server create --resource-group openenv-$GUID \
   --location eastus --sku-name GP_Gen5_2 \
-  --name microsweeper-${GUID} --storage-size 51200 \
-  --admin-user myAdmin --admin-pass %generated_password% \
+  --name microsweeper-$GUID --storage-size 51200 \
+  --admin-user myAdmin --admin-pass {generated_password} \
   --public 0.0.0.0
 ----
 +
@@ -70,12 +70,12 @@ sudo dnf -y install postgresql
 . Check connectivity to the database.
 To do so, run the following command:
 +
-[source,sh,role=execute]
+[source,sh,role=execute,subs="attributes"]
 ----
 psql \
-  "host=microsweeper-${GUID}.postgres.database.azure.com port=5432
+  "host=microsweeper-$GUID.postgres.database.azure.com port=5432
   dbname=postgres
-  user=myAdmin@microsweeper-${GUID}.postgres.database.azure.com password=%generated_password% sslmode=require" \
+  user=myAdmin@microsweeper-$GUID.postgres.database.azure.com password={generated_password} sslmode=require" \
   -c "select now();"
 ----
 +
@@ -176,7 +176,7 @@ Looking for the newly published extensions in registry.quarkus.io
 
 . Create a OpenShift secret containing Database credentials for Quarkus to use:
 +
-[source,sh,role=execute]
+[source,sh,role=execute,subs="attributes"]
 ----
 cat << EOF | oc apply -f -
 ---
@@ -187,9 +187,9 @@ metadata:
   namespace: microsweeper-ex
 type: Opaque
 stringData:
-  PG_URL: jdbc:postgresql://microsweeper-${GUID}.postgres.database.azure.com:5432/postgres
-  PG_USER: myAdmin@microsweeper-${GUID}.postgres.database.azure.com
-  PG_PASS: %generated_password%
+  PG_URL: jdbc:postgresql://microsweeper-$GUID.postgres.database.azure.com:5432/postgres
+  PG_USER: myAdmin@microsweeper-$GUID.postgres.database.azure.com
+  PG_PASS: {generated_password}
 EOF
 ----
 +

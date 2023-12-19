@@ -46,13 +46,13 @@ oc -n openshift-machine-api get machine
 .Sample Output
 [source,text,options=nowrap]
 ----
-NAME                                               PHASE     TYPE              REGION       ZONE   AGE
-aro-cluster-vhtbl-8xd66-master-0                   Running   Standard_D8s_v3   westeurope   1      15h
-aro-cluster-vhtbl-8xd66-master-1                   Running   Standard_D8s_v3   westeurope   2      15h
-aro-cluster-vhtbl-8xd66-master-2                   Running   Standard_D8s_v3   westeurope   3      15h
-aro-cluster-vhtbl-8xd66-worker-westeurope1-shj9g   Running   Standard_D4s_v3   westeurope   1      15h
-aro-cluster-vhtbl-8xd66-worker-westeurope2-8ckbq   Running   Standard_D4s_v3   westeurope   2      15h
-aro-cluster-vhtbl-8xd66-worker-westeurope3-6xc5s   Running   Standard_D4s_v3   westeurope   3      15h
+NAME                                           PHASE     TYPE              REGION   ZONE   AGE
+aro-cluster-lwqq8-8mkmr-master-0               Running   Standard_D8s_v3   eastus   1      107m
+aro-cluster-lwqq8-8mkmr-master-1               Running   Standard_D8s_v3   eastus   2      107m
+aro-cluster-lwqq8-8mkmr-master-2               Running   Standard_D8s_v3   eastus   3      107m
+aro-cluster-lwqq8-8mkmr-worker-eastus1-vgmng   Running   Standard_D4s_v3   eastus   1      102m
+aro-cluster-lwqq8-8mkmr-worker-eastus2-m4dgh   Running   Standard_D4s_v3   eastus   2      102m
+aro-cluster-lwqq8-8mkmr-worker-eastus3-k65k6   Running   Standard_D4s_v3   eastus   3      102m
 ----
 +
 For this workshop, we've deployed your ARO cluster with six total machines (three workers machines and three control plane machines), one in each availability zone.
@@ -70,7 +70,7 @@ echo ${MACHINESET}
 .Sample Output
 [source,text,options=nowrap]
 ----
-machineset.machine.openshift.io/aro-cluster-vhtbl-8xd66-worker-westeurope1
+machineset.machine.openshift.io/aro-cluster-lwqq8-8mkmr-worker-eastus1
 ----
 
 . Now, let's scale up our selected MachineSet from one to two machines.
@@ -98,10 +98,10 @@ oc -n openshift-machine-api get machinesets
 .Sample Output
 [source,text,options=nowrap]
 ----
-NAME                                         DESIRED   CURRENT   READY   AVAILABLE   AGE
-aro-cluster-vhtbl-8xd66-worker-westeurope1   2         2         1       1           15h
-aro-cluster-vhtbl-8xd66-worker-westeurope2   1         1         1       1           15h
-aro-cluster-vhtbl-8xd66-worker-westeurope3   1         1         1       1           15h
+NAME                                     DESIRED   CURRENT   READY   AVAILABLE   AGE
+aro-cluster-lwqq8-8mkmr-worker-eastus1   2         2         1       1           108m
+aro-cluster-lwqq8-8mkmr-worker-eastus2   1         1         1       1           108m
+aro-cluster-lwqq8-8mkmr-worker-eastus3   1         1         1       1           108m
 ----
 +
 [NOTE]
@@ -119,14 +119,14 @@ oc -n openshift-machine-api get machine
 .Sample Output
 [source,text,options=nowrap]
 ----
-NAME                                               PHASE         TYPE              REGION       ZONE   AGE
-aro-cluster-vhtbl-8xd66-master-0                   Running       Standard_D8s_v3   westeurope   1      15h
-aro-cluster-vhtbl-8xd66-master-1                   Running       Standard_D8s_v3   westeurope   2      15h
-aro-cluster-vhtbl-8xd66-master-2                   Running       Standard_D8s_v3   westeurope   3      15h
-aro-cluster-vhtbl-8xd66-worker-westeurope1-mx4qw   Provisioned   Standard_D4s_v3   westeurope   1      2m7s
-aro-cluster-vhtbl-8xd66-worker-westeurope1-shj9g   Running       Standard_D4s_v3   westeurope   1      15h
-aro-cluster-vhtbl-8xd66-worker-westeurope2-8ckbq   Running       Standard_D4s_v3   westeurope   2      15h
-aro-cluster-vhtbl-8xd66-worker-westeurope3-6xc5s   Running       Standard_D4s_v3   westeurope   3      15h
+NAME                                           PHASE         TYPE              REGION   ZONE   AGE
+aro-cluster-lwqq8-8mkmr-master-0               Running       Standard_D8s_v3   eastus   1      108m
+aro-cluster-lwqq8-8mkmr-master-1               Running       Standard_D8s_v3   eastus   2      108m
+aro-cluster-lwqq8-8mkmr-master-2               Running       Standard_D8s_v3   eastus   3      108m
+aro-cluster-lwqq8-8mkmr-worker-eastus1-8vzrw   Provisioned   Standard_D4s_v3   eastus   1      17s
+aro-cluster-lwqq8-8mkmr-worker-eastus1-vgmng   Running       Standard_D4s_v3   eastus   1      104m
+aro-cluster-lwqq8-8mkmr-worker-eastus2-m4dgh   Running       Standard_D4s_v3   eastus   2      104m
+aro-cluster-lwqq8-8mkmr-worker-eastus3-k65k6   Running       Standard_D4s_v3   eastus   3      104m
 ----
 
 === Via the Console

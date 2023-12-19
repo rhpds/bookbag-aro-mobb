@@ -26,7 +26,7 @@ echo ${MACHINESET}
 .Sample Output
 [source,text,options=nowrap]
 ----
-aro-cluster-vhtbl-8xd66-worker-westeurope1
+aro-cluster-lwqq8-8mkmr-worker-eastus1
 ----
 
 . Next, let's use that information to populate a manifest to create a machine autoscaler.
@@ -54,7 +54,7 @@ EOF
 .Sample Output
 [source,text,options=nowrap]
 ----
-machineautoscaler.autoscaling.openshift.io/aro-cluster-vhtbl-8xd66-worker-westeurope1 created
+machineautoscaler.autoscaling.openshift.io/aro-cluster-lwqq8-8mkmr-worker-eastus1 created
 ----
 
 . Next, let's check to see that our machine autoscaler has been created.
@@ -68,8 +68,8 @@ oc -n openshift-machine-api get machineautoscaler
 .Sample Output
 [source,text,options=nowrap]
 ----
-NAME                                         REF KIND     REF NAME                                     MIN   MAX   AGE
-aro-cluster-vhtbl-8xd66-worker-westeurope1   MachineSet   aro-cluster-vhtbl-8xd66-worker-westeurope1   1     3     18s
+NAME                                     REF KIND     REF NAME                                 MIN   MAX   AGE
+aro-cluster-lwqq8-8mkmr-worker-eastus1   MachineSet   aro-cluster-lwqq8-8mkmr-worker-eastus1   1     3     16s
 ----
 
 == Create a Cluster Autoscaler
@@ -188,14 +188,8 @@ EOF
 .Sample Output
 [source,text,options=nowrap]
 ----
-Warning: would violate PodSecurity "restricted:v1.24": allowPrivilegeEscalation != false (container "work" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "work" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "work" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "work" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
 job.batch/maxscale7s6c6 created
 ----
-+
-[TIP]
-====
-You may ignore the warning that is being printed.
-====
 
 . After a few seconds, run the following to see what pods have been created.
 +
@@ -235,10 +229,10 @@ oc -n openshift-machine-api get machinesets
 .Sample Output
 [source,text,options=nowrap]
 ----
-NAME                                         DESIRED   CURRENT   READY   AVAILABLE   AGE
-aro-cluster-vhtbl-8xd66-worker-westeurope1   3         3         1       1           15h
-aro-cluster-vhtbl-8xd66-worker-westeurope2   1         1         1       1           15h
-aro-cluster-vhtbl-8xd66-worker-westeurope3   1         1         1       1           15h
+NAME                                     DESIRED   CURRENT   READY   AVAILABLE   AGE
+aro-cluster-lwqq8-8mkmr-worker-eastus1   3         3         1       1           111m
+aro-cluster-lwqq8-8mkmr-worker-eastus2   1         1         1       1           111m
+aro-cluster-lwqq8-8mkmr-worker-eastus3   1         1         1       1           111m
 ----
 +
 [INFO]
@@ -260,14 +254,14 @@ watch oc -n openshift-machine-api get machines \
 .Sample Output
 [source,text,options=nowrap]
 ----
-Every 2.0s: oc -n openshift-machine-api get machines -l machine.openshift.io/cluster-api-machine...  bastion-vhtbl: Tue Jun  6 08:59:14 2023
+Every 2.0s: oc -n openshift-machine-api get machines -l machine.openshift...  bastion-lwqq8: Tue Dec 19 09:04:00 2023
 
-NAME                                               PHASE         TYPE              REGION	ZONE   AGE
-aro-cluster-vhtbl-8xd66-worker-westeurope1-lqkp5   Provisioned   Standard_D4s_v3   westeurope   1      107s
-aro-cluster-vhtbl-8xd66-worker-westeurope1-shj9g   Running	 Standard_D4s_v3   westeurope   1      15h
-aro-cluster-vhtbl-8xd66-worker-westeurope1-vtr9n   Provisioned   Standard_D4s_v3   westeurope   1      107s
-aro-cluster-vhtbl-8xd66-worker-westeurope2-8ckbq   Running	 Standard_D4s_v3   westeurope   2      15h
-aro-cluster-vhtbl-8xd66-worker-westeurope3-6xc5s   Running	 Standard_D4s_v3   westeurope   3      15h
+NAME                                           PHASE         TYPE              REGION   ZONE   AGE
+aro-cluster-lwqq8-8mkmr-worker-eastus1-6qt5v   Provisioned   Standard_D4s_v3   eastus   1      53s
+aro-cluster-lwqq8-8mkmr-worker-eastus1-8vzrw   Provisioned   Standard_D4s_v3   eastus   1      3m46s
+aro-cluster-lwqq8-8mkmr-worker-eastus1-vgmng   Running       Standard_D4s_v3   eastus   1      107m
+aro-cluster-lwqq8-8mkmr-worker-eastus2-m4dgh   Running       Standard_D4s_v3   eastus   2      107m
+aro-cluster-lwqq8-8mkmr-worker-eastus3-k65k6   Running       Standard_D4s_v3   eastus   3      107m
 ----
 +
 [INFO]

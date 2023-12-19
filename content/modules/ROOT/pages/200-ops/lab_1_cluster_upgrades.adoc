@@ -19,10 +19,10 @@ image::web-console-upgrade-channel-not-configured.png[Web Console - Upgrade Chan
 ====
 Upgrade channel is not configured by default
 
-By default, the https://docs.openshift.com/container-platform/4.11/updating/understanding-upgrade-channels-release.html[upgrade channel] (which is used to recommend the appropriate release versions for cluster updates), is not set in ARO.
+By default, the https://docs.openshift.com/container-platform/4.13/updating/understanding-upgrade-channels-release.html[upgrade channel] (which is used to recommend the appropriate release versions for cluster updates), is not set in ARO.
 ====
 
-. In the *Channel* field, enter `stable-4.11` to set the upgrade channel to the stable releases of OpenShift 4.11 and click *Save*.
+. In the *Channel* field, enter `stable-4.13` to set the upgrade channel to the stable releases of OpenShift 4.13 and click *Save*.
 +
 image::web-console-input-channel.png[Web Console - Input Channel]
 
@@ -66,12 +66,12 @@ oc get clusterversion version -o \
 .Sample Output
 [source,text,options=nowrap]
 ----
-4.11.41 4.11.40 4.11.39 4.11.38 4.11.37 4.11.35 4.11.34 4.11.33
+4.13.24
 ----
 +
 [WARNING]
 ====
-If the output of the command is `parse error: Invalid numeric literal at EOF at line 1, column 5` you may not have set the `stable-4.11` channel as instructed earlier, or there are no available upgrades and you should skip the rest of these steps.
+If the output of the command is `parse error: Invalid numeric literal at EOF at line 1, column 5` you may not have set the `stable-4.13` channel as instructed earlier, or there are no available upgrades and you should skip the rest of these steps.
 ====
 
 . Next, let's use that information to populate a manifest for the Managed Upgrade Operator to use.
@@ -95,7 +95,7 @@ spec:
   PDBForceDrainTimeout: 60
   capacityReservation: true
   desired:
-    channel: "stable-4.11"
+    channel: "stable-4.13"
     version: "${OCP_UPGRADE_TO}"
 EOF
 ----
@@ -106,7 +106,7 @@ EOF
 upgradeconfig.upgrade.managed.openshift.io/managed-upgrade-config created
 ----
 +
-This manifest will schedule an upgrade to the latest available version available in the `stable-4.11` channel for 1 day from now, allow nodes which are blocked by PodDisruptionBudgets to drain for 60 minutes before a drain is forced, and sets a capacity reservation so that workloads are not interrupted during an upgrade.
+This manifest will schedule an upgrade to the latest available version available in the `stable-4.13` channel for 1 day from now, allow nodes which are blocked by PodDisruptionBudgets to drain for 60 minutes before a drain is forced, and sets a capacity reservation so that workloads are not interrupted during an upgrade.
 
 . Once created, we can see that the update is pending by running the following command:
 +
@@ -119,8 +119,8 @@ oc -n openshift-managed-upgrade-operator get \
 .Sample Output
 [source,text,options=nowrap]
 ----
-NAME                     DESIRED_VERSION   PHASE   STAGE   STATUS   REASON   MESSAGE
-managed-upgrade-config   4.11.45
+NAME                     DESIRED_VERSION   PHASE     STAGE   STATUS   REASON   MESSAGE
+managed-upgrade-config   4.13.24           Pending                             
 ----
 
 *Congratulations!*

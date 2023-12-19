@@ -24,7 +24,7 @@ echo ${MACHINESET}
 .Sample Output
 [source,text,options=nowrap]
 ----
-machineset.machine.openshift.io/aro-cluster-vhtbl-8xd66-worker-westeurope1
+machineset.machine.openshift.io/aro-cluster-lwqq8-8mkmr-worker-eastus1
 ----
 
 . Now, let's patch the MachineSet with our new label.
@@ -40,7 +40,7 @@ oc -n openshift-machine-api patch ${MACHINESET} \
 .Sample Output
 [source,text,options=nowrap]
 ----
-machineset.machine.openshift.io/aro-cluster-vhtbl-8xd66-worker-westeurope1 patched
+machineset.machine.openshift.io/aro-cluster-lwqq8-8mkmr-worker-eastus1 patched
 ----
 
 . As you'll remember, the existing machines won't get this label, but all new machines will.
@@ -61,12 +61,12 @@ done
 .Sample Output
 [source,text,options=nowrap]
 ----
-machine.machine.openshift.io/aro-cluster-vhtbl-8xd66-worker-westeurope1-lqkp5 labeled
-node/aro-cluster-vhtbl-8xd66-worker-westeurope1-lqkp5 labeled
-machine.machine.openshift.io/aro-cluster-vhtbl-8xd66-worker-westeurope1-shj9g labeled
-node/aro-cluster-vhtbl-8xd66-worker-westeurope1-shj9g labeled
-machine.machine.openshift.io/aro-cluster-vhtbl-8xd66-worker-westeurope1-vtr9n labeled
-node/aro-cluster-vhtbl-8xd66-worker-westeurope1-vtr9n labeled
+machine.machine.openshift.io/aro-cluster-lwqq8-8mkmr-worker-eastus1-6qt5v labeled
+node/aro-cluster-lwqq8-8mkmr-worker-eastus1-6qt5v labeled
+machine.machine.openshift.io/aro-cluster-lwqq8-8mkmr-worker-eastus1-8vzrw labeled
+node/aro-cluster-lwqq8-8mkmr-worker-eastus1-8vzrw labeled
+machine.machine.openshift.io/aro-cluster-lwqq8-8mkmr-worker-eastus1-vgmng labeled
+node/aro-cluster-lwqq8-8mkmr-worker-eastus1-vgmng labeled
 ----
 +
 [NOTE]
@@ -85,9 +85,9 @@ oc get nodes --selector='tier=frontend' -o name
 .Sample Output
 [source,text,options=nowrap]
 ----
-node/aro-cluster-vhtbl-8xd66-worker-westeurope1-lqkp5
-node/aro-cluster-vhtbl-8xd66-worker-westeurope1-shj9g
-node/aro-cluster-vhtbl-8xd66-worker-westeurope1-vtr9n
+node/aro-cluster-lwqq8-8mkmr-worker-eastus1-6qt5v
+node/aro-cluster-lwqq8-8mkmr-worker-eastus1-8vzrw
+node/aro-cluster-lwqq8-8mkmr-worker-eastus1-vgmng
 ----
 +
 Pending that your output shows one or more node(s), this demonstrates that our MachineSet and associated nodes are properly annotated!
@@ -158,14 +158,8 @@ EOF
 .Sample Output
 [source,text,options=nowrap]
 ----
-Warning: would violate PodSecurity "restricted:v1.24": allowPrivilegeEscalation != false (container "hello-openshift" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "hello-openshift" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "hello-openshift" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "hello-openshift" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
 deployment.apps/nodeselector-app created
 ----
-+
-[NOTE]
-====
-Once again you may ignore the warning that may be printed.
-====
 
 . Now, let's validate that the application has been deployed to one of the labeled nodes.
 To do so, run the following command:
@@ -179,7 +173,7 @@ oc -n nodeselector-ex get pod -l app=nodeselector-app \
 .Sample Output
 [source,text,options=nowrap]
 ----
-aro-cluster-vhtbl-8xd66-worker-westeurope1-shj9g
+aro-cluster-lwqq8-8mkmr-worker-eastus1-6qt5v
 ----
 
 . Double check the name of the node to compare it to the output above to ensure the node selector worked to put the pod on the correct node:
@@ -192,9 +186,9 @@ oc get nodes --selector='tier=frontend' -o name
 .Sample Output
 [source,text,options=nowrap]
 ----
-node/aro-cluster-vhtbl-8xd66-worker-westeurope1-lqkp5
-node/aro-cluster-vhtbl-8xd66-worker-westeurope1-shj9g
-node/aro-cluster-vhtbl-8xd66-worker-westeurope1-vtr9n
+node/aro-cluster-lwqq8-8mkmr-worker-eastus1-6qt5v
+node/aro-cluster-lwqq8-8mkmr-worker-eastus1-8vzrw
+node/aro-cluster-lwqq8-8mkmr-worker-eastus1-vgmng
 ----
 +
 In the list of nodes look for the final string to match, in this example `shj9g`)
@@ -235,7 +229,7 @@ oc get routes/nodeselector-app -n nodeselector-ex -o jsonpath='https://{.spec.ho
 .Sample Output
 [source,text,options=nowrap]
 ----
-https://nodeselector-app-nodeselector-ex.apps.rbrlitrg.westeurope.aroapp.io
+https://nodeselector-app-nodeselector-ex.apps.nbybk9f3.eastus.aroapp.io
 ----
 +
 Then visit the URL presented in a new tab in your web browser (using HTTPS).

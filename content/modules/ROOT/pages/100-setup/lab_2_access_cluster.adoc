@@ -47,12 +47,12 @@ env | grep -E 'AZ_|OCP'
 ----
 +
 .Sample Output
-[source,text,options=nowrap]
+[source,text,options=nowrap,subs="attributes"]
 ----
 OCP_USER=kubeadmin
-OCP_API=%aro_api%
-OCP_PASS=%aro_kube_password%
-OCP_CONSOLE=%aro_console%
+OCP_API={aro_api}
+OCP_PASS={aro_kube_password}
+OCP_CONSOLE={aro_console}
 ----
 +
 [INFO]
@@ -71,10 +71,10 @@ az aro list-credentials --name aro-cluster-${GUID} --resource-group openenv-${GU
 ----
 +
 .Sample Output
-[source,json,options=nowrap]
+[source,json,options=nowrap,subs="attributes"]
 ----
 {
-  "kubeadminPassword": "xxxxx-xxxxx-xxxxx-xxxxx",
+  "kubeadminPassword": "{aro_kube_password}",
   "kubeadminUsername": "kubeadmin"
 }
 ----
@@ -88,7 +88,7 @@ az aro show --name aro-cluster-${GUID} --resource-group \
 ----
 +
 .Sample Output
-[source,text,options=nowrap,subs=attributes]
+[source,text,options=nowrap,subs="attributes"]
 ----
 {aro_console}
 ----
@@ -108,7 +108,7 @@ az aro show -g openenv-${GUID} -n aro-cluster-${GUID} --query apiserverProfile.u
 ----
 +
 .Sample Output
-[source,text,options=nowrap,subs=attributes]
+[source,text,options=nowrap,subs="attributes"]
 ----
 {aro_api}
 ----
@@ -125,7 +125,7 @@ oc login "${OCP_API}" -u "${OCP_USER}" -p "${OCP_PASS}"
 ----
 Login successful.
 
-You have access to 71 projects, the list has been suppressed. You can list all projects with
+You have access to 70 projects, the list has been suppressed. You can list all projects with
 'oc projects'
 
 Using project "default".
