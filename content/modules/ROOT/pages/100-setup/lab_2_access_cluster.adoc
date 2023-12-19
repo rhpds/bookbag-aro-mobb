@@ -74,7 +74,7 @@ az aro list-credentials --name aro-cluster-${GUID} --resource-group openenv-${GU
 [source,json,options=nowrap]
 ----
 {
-  "kubeadminPassword": "%aro_kube_password%",
+  "kubeadminPassword": "xxxxx-xxxxx-xxxxx-xxxxx",
   "kubeadminUsername": "kubeadmin"
 }
 ----
@@ -88,9 +88,9 @@ az aro show --name aro-cluster-${GUID} --resource-group \
 ----
 +
 .Sample Output
-[source,text,options=nowrap]
+[source,text,options=nowrap,subs=attributes]
 ----
-%aro_console%
+{aro_console}
 ----
 
 . Finally, open the link to the console provided in a separate tab, and login with the provided credentials.
@@ -108,9 +108,9 @@ az aro show -g openenv-${GUID} -n aro-cluster-${GUID} --query apiserverProfile.u
 ----
 +
 .Sample Output
-[source,text,options=nowrap]
+[source,text,options=nowrap,subs=attributes]
 ----
-%aro_api%
+{aro_api}
 ----
 
 . Now that we've captured the API server endpoint, we can login to the cluster by running the following command:

@@ -2,36 +2,6 @@
 
 Your environment has already been set up and you are ready to use your first ARO cluster.
 
-== Connect to your bastion VM
-
-. In the terminal window to the right connect to the bastion VM (you can also just click the command below to have it copied and executed automatically):
-+
-[TIP]
-====
-Answer `yes` when asked if to accept the host key.
-
-The password for the user `azure` is `%bastion_password%`
-====
-+
-[source,sh,role=execute]
-----
-%bastion_ssh_command%
-----
-+
-.Click in the box below to copy and paste the string `yes` to your terminal:
-+
-[source,sh,role=execute]
-----
-yes
-----
-+
-.Click in the box below to copy and paste the password to your terminal:
-+
-[source,sh,role=execute]
-----
-%bastion_password%
-----
-
 === Validate installed tools
 
 You will be using the `az` and `oc` command line tools throughout this lab.
