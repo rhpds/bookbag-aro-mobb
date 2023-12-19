@@ -77,30 +77,13 @@ az storage container create --name "aro-metrics" \
 +
 [source,sh,role=execute]
 ----
-oc create -f https://raw.githubusercontent.com/openshift/elasticsearch-operator/release-5.5/bundle/manifests/logging.openshift.io_elasticsearches.yaml
+oc create -f https://raw.githubusercontent.com/openshift/elasticsearch-operator/release-5.8/bundle/manifests/logging.openshift.io_elasticsearches.yaml
 ----
 +
 .Sample Output
 [source,text,options=nowrap]
 ----
 customresourcedefinition.apiextensions.k8s.io/elasticsearches.logging.openshift.io created
-----
-
-. Download and set up the `helm` template manager:
-+
-[source,sh,role=execute]
-----
-cd $HOME
-
-wget https://mirror.openshift.com/pub/openshift-v4/clients/helm/latest/helm-linux-amd64.tar.gz -O ~/helm.tar.gz
-
-tar -xvf ~/helm.tar.gz
-
-mkdir ~/bin
-
-mv ~/helm-linux-amd64 ~/bin/helm
-
-rm ~/helm.tar.gz
 ----
 
 . Check that `helm` is installed properly:
@@ -184,6 +167,12 @@ subscriptions:
   source: community-operators
   sourceNamespace: openshift-marketplace
   namespace: resource-locker-operator
+- name: patch-operator
+  channel: alpha
+  installPlanApproval: Automatic
+  source: community-operators
+  sourceNamespace: openshift-marketplace
+  namespace: patch-operator
 operatorGroups:
 - name: custom-logging
   targetNamespace: ~
@@ -195,6 +184,9 @@ operatorGroups:
   targetNamespace: all
 - name: resource-locker
   namespace: resource-locker-operator
+  targetNamespace: all
+- name: patch-operator
+  namespace: patch-operator
   targetNamespace: all
 EOF
 ----
@@ -208,6 +200,8 @@ oc create ns openshift-logging
 oc create ns openshift-operators-redhat
 
 oc create ns resource-locker-operator
+
+oc create ns patch-operator
 
 helm upgrade -n custom-logging clf-operators \
   mobb/operatorhub --install \
@@ -262,7 +256,7 @@ No resources found in custom-logging namespace.
 [source,sh,role=execute]
 ----
 helm upgrade -n "custom-logging" aro-thanos-af \
-  --install mobb/aro-thanos-af --version 0.4.1 \
+  --install mobb/aro-thanos-af --version 0.6.3 \
   --set "aro.storageAccount=${AZR_STORAGE_ACCOUNT_NAME}" \
   --set "aro.storageAccountKey=${AZR_STORAGE_KEY}" \
   --set "aro.storageContainer=aro-metrics" \
@@ -349,7 +343,7 @@ managed-csi
 [source,sh,role=execute]
 ----
 helm upgrade -n custom-logging aro-clf-blob \
- --install mobb/aro-clf-blob --version 0.1.2 \
+ --install mobb/aro-clf-blob --version 0.1.3 \
  --set "azure.storageAccount=${AZR_STORAGE_ACCOUNT_NAME}"  \
  --set "azure.storageAccountKey=${AZR_STORAGE_KEY}"   \
  --set "azure.storageContainer=aro-logs" \

@@ -27,10 +27,10 @@ oc -n openshift-machine-api get machineset
 .Sample Output
 [source,text,options=nowrap]
 ----
-NAME                                         DESIRED   CURRENT   READY   AVAILABLE   AGE
-aro-cluster-vhtbl-8xd66-worker-westeurope1   1         1         1       1           15h
-aro-cluster-vhtbl-8xd66-worker-westeurope2   1         1         1       1           15h
-aro-cluster-vhtbl-8xd66-worker-westeurope3   1         1         1       1           15h
+NAME                                     DESIRED   CURRENT   READY   AVAILABLE   AGE
+aro-cluster-lwqq8-8mkmr-worker-eastus1   1         1         1       1           108m
+aro-cluster-lwqq8-8mkmr-worker-eastus2   1         1         1       1           108m
+aro-cluster-lwqq8-8mkmr-worker-eastus3   1         1         1       1           108m
 ----
 +
 By default, ARO clusters have three MachineSets, one for each availability zone.
