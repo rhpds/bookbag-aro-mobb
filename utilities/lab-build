@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+echo "Starting build process..."
+echo Backing up old www to .cache/showroom/www
+
+if [ ! -d ".cache/showroom" ]; then
+  mkdir -p .cache/showroom
+fi
+
+cp -r ./www .cache/showroom/www
+
+echo "Removing old site..."
+
+rm -rf ./www/*
+
+echo "Building new site..."
+# Setup Container Runtime
+# Check if Podman is available
+if podman ps &>/dev/null; then
+  CONTAINER_RUNTIME="podman"
+  # If Podman is not available, check for Docker
+elif docker ps &>/dev/null; then
+  CONTAINER_RUNTIME="docker"
+  # If neither is available
+else
+  CONTAINER_RUNTIME="none"
+  echo No container runtime found. Please install Podman or Docker.
+  exit 1
+fi
+
+# Optionally, you can print the value for confirmation
+echo "CONTAINER_RUNTIME: $CONTAINER_RUNTIME"
+
+volume_mount_flag=""
+os_name="$(uname -s)" # Detect the operating system, Linux needs `:z` macos does not
+
+# Set the volume mount flag to ":z" if the OS is Linux
+if [ "$os_name" = "Linux" ]; then
+  volume_mount_flag=":z"
+fi
+
+${CONTAINER_RUNTIME} \
+  run --rm --name showroom-builder \
+  --platform linux/amd64 \
+  -v "./:/antora${volume_mount_flag}" \
+  docker.io/antora/antora default-site.yml
+
+echo "Build process complete. Check the ./www folder for the generated site."
+echo "To view the site locally, run the following command: utilities/lab-serve"
+echo "If already running then browse to http://localhost:8443/index.html"

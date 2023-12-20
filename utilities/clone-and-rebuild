@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# Check if .cache/showroom exists, if not, create it
+if [ ! -d ".cache/showroom/content" ]; then
+  mkdir -p .cache/showroom/content
+fi
+
+# Copy content/antora.yml to .cache/showroom if it exists
+if [ -f "content/antora.yml" ]; then
+  cp content/antora.yml .cache/showroom/content/anotra.yml
+fi
+
+# Copy www/index.html to .cache/showroom if it exists
+if [ -f "www/index.html" ]; then
+  cp -r www .cache/showroom/
+fi
+
+# Git clone operation
+
+git pull
+
+# Copy back the antora.yml whether required or not
+
+if [ -f ".cache/showroom/antora.yml" ]; then
+  cp .cache/showroom/content/antora.yml content/
+fi
+
+# Rebuild html
+# podman run --rm --name showroom-builder --platform linux/amd64 -v "./:/antora:z" docker.io/antora/antora rh1-site.yml
+
+./utilities/lab-build
+
+# Reinsert index.html
+
+if [ -f ".cache/showroom/www/index.html" ]; then
+  cp .cache/showroom/www/index.html www/
+fi
+
+# replace any .css files
+
+for file in .cache/showroom/www/*.css; do
+  if [ -f "$file" ]; then
+    css_file_exists=true
+    break # Stop the loop if at least one file is found
+  fi
+done
+
+# Check if any file was found
+if $css_file_exists; then
+  cp .cache/showroom/www/*.css www/
+fi
