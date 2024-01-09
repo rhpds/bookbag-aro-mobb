@@ -97,7 +97,7 @@ az aro show --name aro-cluster-${GUID} --resource-group \
 
 === Login to the OpenShift CLI
 
-Now that you're logged into the cluster's console, return to your Azure Cloud Shell.
+Now that you're logged into the cluster's console, return to the lab command line console.
 
 . To login to the cluster using the OpenShift CLI tools (`oc`), first we need to retrieve the API server endpoint.
 To do so, run the following command:

@@ -14,16 +14,16 @@ In this section of the workshop, we will use the previously deployed microsweepe
 [source,sh,role=execute]
 ----
  oc -n microsweeper-ex set resources deployment/microsweeper-appservice \
-   --limits=cpu=60m,memory=250Mi \
-   --requests=cpu=50m,memory=200Mi
+   --limits=cpu=500m,memory=900Mi \
+   --requests=cpu=500m,memory=900Mi
 ----
 +
 Requests state the minimum CPU and memory requirements for a container. This will ensure that the pod is placed on a node that can meet those requirements. Limits set the maximum amount of CPU and Memory that can be consumed by a container and ensure that a whole container does not consume all of the resources on a node. Setting limits and requests for deployments is best practice for resource management and ensuring the stability and reliability of your applications.
-
-[INFO]
++
+[TIP]
 ====
 It is important to know the resource needs of the application before setting limits and requests to avoid resource starvation or over allocating resources. If you are unsure of the resource consumption of your application, you can use 'oc adm top pods' to view the current memory and CPU being currently consumed by each pod. Running the following command multiple times while the application is running can help set a general picture:
-====     
+====  
 +
 [source,sh,role=execute]
 ----
@@ -36,6 +36,11 @@ It is important to know the resource needs of the application before setting lim
  NAME                                       CPU(cores)   MEMORY(bytes)
  microsweeper-appservice-65799476b6-vh9q7   0m           191Mi
 ----
++
+[TIP]
+====
+If you have trouble with this command see https://access.redhat.com/solutions/4966301[this Knowledge Base article]
+====
 +
 . Now that we've updated the resource, we can see that a new pod was automatically rolled out with these new limits and requests. To do so, run the following command:
 +
@@ -66,11 +71,11 @@ To see what the limits and requests added to the pod, run the following command,
 [source,text,options=nowrap]
 ----
  limits:
-   cpu: 60m
-   memory: 250Mi
+   cpu: 500m
+   memory: 900Mi
  requests:
-   cpu: 50m
-   memory: 200Mi
+   cpu: 500m
+   memory: 900Mi
 ----
 +
 . We can now use the route of the application to ensure the application is functioning with the new limits and requests. To get the route, run the following command:
@@ -289,7 +294,7 @@ After a minute or two, your output should be similar to below:
 
 Here you learned how to:
 
-* Set Limits and Requests on the Microsweeper application from the previous section
+* Set Limits and Requests on the Microsweeper application
 * Scale the Microsweeper application up and down
 * Set a Pod Disruption Budget on the Microsweeper application
 * Set a Horizontal Pod Autoscaler to automatically scale application based on load
