@@ -40,7 +40,7 @@ Leave the loop running and proceed to the next steps.
 +
 image::select-bookinfo-from-kiali-dropdown-graph-tab.png[Kiali Console]
 
-. Next, click on the _Display idle nodes_ button.
+. Next, choose the _Display_ drop down and tick the _Idle nodes_ box.
 +
 image::kiali-click-display-idlenodes-graph-tab.png[Kiali Console]
 
