@@ -115,7 +115,7 @@ deployment.apps/productpage-v1 created
 You may ignore the Warnings.
 +
 Interested in seeing the configuration you're deploying?
-Check it out on GitHub https://github.com/rh-mobb/rosa-workshop-content/blob/main/rosa-content/assets/scripts/bookinfo.yaml[here].
+Check it out on GitHub https://github.com/rh-mobb/rosa-workshop-content/blob/main/rosa-content/assets/scripts/bookinfo.yaml[here,window=_blank].
 
 . Now, let's create the service mesh ingress gateway.
 To do so, run the following command:
