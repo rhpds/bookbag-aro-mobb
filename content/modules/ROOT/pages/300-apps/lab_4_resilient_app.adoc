@@ -61,7 +61,7 @@ microsweeper-appservice-1-build            0/1     Completed   0          17h
 microsweeper-appservice-69596ccc54-fsw2b   1/1     Running     0          28s
 ----
 
-. To see what the limits and requests added to the pod, run the following command, being sure to change the Pod name to the name shown in the above output:
+. To see what the limits and requests added to the pod, run the following command:
 +
 [source,sh,role=execute]
 ----
@@ -116,11 +116,11 @@ oc -n microsweeper-ex get pods
 .Sample Output
 [source,text,options=nowrap]
 ----
- NAME                                       READY   STATUS      RESTARTS   AGE
- microsweeper-appservice-1-build            0/1     Completed   0          18h
- microsweeper-appservice-69596ccc54-6lstj   1/1     Running     0          2m41s
- microsweeper-appservice-69596ccc54-fsw2b   1/1     Running     0          39m
- microsweeper-appservice-69596ccc54-rkpgj   1/1     Running     0          2m41s
+NAME                                      READY   STATUS              RESTARTS   AGE
+microsweeper-appservice-1-build           0/1     Completed           0          68m
+microsweeper-appservice-94b647d8b-2xckl   1/1     Running             0          4m11s
+microsweeper-appservice-94b647d8b-5k26l   1/1     Running             0          11s
+microsweeper-appservice-94b647d8b-tj24c   0/1     ContainerCreating   0          11s
 ----
 
 . In addition you can see the number of pods, how many are on the current version, and how many are available by running the following:
