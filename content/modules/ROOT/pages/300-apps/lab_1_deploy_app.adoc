@@ -1,6 +1,6 @@
 == Introduction
 
-It's time for us to put our cluster to work and deploy a workload! We're going to build an example Java application, https://github.com/redhat-mw-demos/microsweeper-quarkus/tree/ARO[microsweeper], using https://quarkus.io/[Quarkus] (a Kubernetes-native Java stack) and https://azure.microsoft.com/en-us/products/postgresql/[Azure Database for PostgreSQL]. After configuring the database, we will use both Quarkus, a Kubernetes-native Java framework optimized for containers, and Source-to-Image (S2I), a toolkit for building container images from source code, to deploy the microsweeper application.
+It's time for us to put our cluster to work and deploy a workload! We're going to build an example Java application, https://github.com/redhat-mw-demos/microsweeper-quarkus/tree/ARO[microsweeper,window=_blank], using https://quarkus.io/[Quarkus,window=_blank] (a Kubernetes-native Java stack) and https://azure.microsoft.com/en-us/products/postgresql/[Azure Database for PostgreSQL,window=_blank]. After configuring the database, we will use both Quarkus, a Kubernetes-native Java framework optimized for containers, and Source-to-Image (S2I), a toolkit for building container images from source code, to deploy the microsweeper application.
 
 == Create Azure Database for PostgreSQL instance
 
@@ -200,7 +200,7 @@ secret/microsweeper-secret created
 ----
 
 . Now, we'll configure Quarkus to use the PostgreSQL database that we created earlier in this section.
-To do so, we'll create an `application.properties` file using by running the following command:
+To do so, we'll create an `application.properties` file to use by running the following command:
 +
 [source,sh,role=execute]
 ----
@@ -227,7 +227,7 @@ EOF
 ----
 
 . Now that we've provided the proper configuration, we will build our application.
-We'll do this using https://github.com/openshift/source-to-image[source-to-image], a tool built-in to OpenShift.
+We'll do this using https://github.com/openshift/source-to-image[source-to-image,window=_blank], a tool built-in to OpenShift.
 To start the build and deploy, run the following command:
 +
 [source,sh,role=execute]
@@ -254,7 +254,7 @@ Downloaded from central: https://repo.maven.apache.org/maven2/io/quarkus/platfor
 +
 [INFO]
 ====
-Quarkus will build the .jar locally and then work with the OpenShift build system to inject it into a Red Hat UBI image, save that to the inbuild OpenShift registry, and then run the resulting image in OpenShift.
+Quarkus will build the .jar locally and then work with the OpenShift build system to inject it into a Red Hat UBI image, save that to the built in OpenShift registry, and then run the resulting image in OpenShift.
 ====
 
 . We want to see custom metrics from the Quarkus app (they're exposed by the Quarkus micrometer plugin) so we can configure a Prometheus `ServiceMonitor` resource to watch for the applications label.
@@ -309,7 +309,7 @@ image::web-console-imagestreams.png[OpenShift Web Console - Imagestreams]
 You will see two images that were created on your behalf when you ran the quarkus build command.
 There is one image for `openjdk-11` that comes with OpenShift as a Universal Base Image (UBI) that the application will run under.
 With UBI, you get highly optimized and secure container images that you can build your applications with.
-For more information on UBI please read this https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image[article].
+For more information on UBI please read this https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image[article,window=_blank].
 
 The second image you see is the the `microsweeper-appservice` image.
 This is the image for the application that was built automatically for you and pushed to the built-in container registry inside of OpenShift.
@@ -329,13 +329,13 @@ The Dockerfile file from the git repo that we cloned was used for this BuildConf
 A build configuration describes a single build definition and a set of triggers for when a new build is created.
 Build configurations are defined by a BuildConfig, which is a REST object that can be used in a POST to the API server to create a new instance.
 
-You can read more about BuildConfigs https://docs.openshift.com/container-platform/latest/cicd/builds/understanding-buildconfigs.html[here].
+You can read more about BuildConfigs https://docs.openshift.com/container-platform/latest/cicd/builds/understanding-buildconfigs.html[here,window=_blank].
 
 Once the BuildConfig was created, the source-to-image process kicked off a Build of that BuildConfig.
 The build is what actually does the work in building and deploying the image.
 We started with defining what to be built with the BuildConfig and then actually did the work with the Build.
 
-You can read more about Builds https://docs.openshift.com/container-platform/latest/cicd/builds/understanding-image-builds.html[here].
+You can read more about Builds https://docs.openshift.com/container-platform/latest/cicd/builds/understanding-image-builds.html[here,window=_blank].
 
 To look at what the build actually did, click on Builds tab and then into the first Build in the list.
 
@@ -367,16 +367,19 @@ The last thing we will look at is the route that was created for our application
 In the quarkus properties file, we specified that the application should be exposed to the Internet.
 When you create a Route, you have the option to specify a hostname.
 To start with, we will just use the default domain that comes with ARO (`useast.aroapp.io` in our case).
-In next section, we will expose the same application to a custom domain leveraging Azure Front Door.
+In the next section, we will expose the same application to a custom domain leveraging Azure Front Door.
 
-You can read more about routes in the https://docs.openshift.com/container-platform/latest/networking/routes/route-configuration.html[Red Hat documentation].
+You can read more about routes in the https://docs.openshift.com/container-platform/latest/networking/routes/route-configuration.html[Red Hat documentation,window=_blank].
 
 From the OpenShift Web Console menu, click on _Networking_\->__Routes__, and the _microsweeper-appservice_ route.
+
 image::web-console-routes.png[OpenShift Web Console - Routes]
 
 === Test the application
 
-While in the route section of the OpenShift Web Console, click the URL under _Location_: image::web-console-route-link.png[OpenShift Web Console - Route Link]
+While in the route section of the OpenShift Web Console, click the URL under _Location_: 
+
+image::web-console-route-link.png[OpenShift Web Console - Route Link]
 
 You can also get the the URL for your application using the command line:
 
@@ -391,6 +394,7 @@ oc get route microsweeper-appservice -n microsweeper-ex -o jsonpath='{"http://"}
 http://microsweeper-appservice-microsweeper-ex.apps.nbybk9f3.eastus.aroapp.io/
 ----
 +
+
 [WARNING]
 ====
 This is an `http` route - some browsers automatically convert `http` to `https` which means the application will appear unavailable.
@@ -399,12 +403,19 @@ This is an `http` route - some browsers automatically convert `http` to `https` 
 === View custom metrics for the App
 
 Switch the OpenShift Web Console to the Developer view, select the project `microsweeper-ex` and go to menu:Observe[Metrics] and type `process_uptime_seconds` into custom metrics.
+
+image::custom-metrics.png[OpenShift Web Console - Custom Metrics]
+
 Switch the timeframe to `5min`.
+
+image::custom-metrics-timeframe.png[OpenShift Web Console - Custom Metrics Timeframe]
 
 [INFO]
 ====
-While you're here, you might also want to look at the Dashboard tab to see the Project's CPU/Memory usage.
+While you're here, expore the other available dashboards to learn more about your project's metrics.
 ====
+
+image::custom-metrics-projects.png[OpenShift Web Console - Custom Metrics Timeframe]
 
 == Summary 
 
