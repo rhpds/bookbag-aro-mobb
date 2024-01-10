@@ -6,6 +6,8 @@ Your environment has already been set up and you are ready to use your first ARO
 
 You will be using the `az` and `oc` command line tools throughout this lab.
 
+The https://learn.microsoft.com/en-us/cli/azure/[Azure command-line interface (az),window=_blank] is a set of commands used to create and manage Azure resources. It has extensions for it that allow you to use this native Azure tool directly with ARO!
+
 . Verify that the `az` command line tool is installed:
 +
 [source,sh,role=execute]
