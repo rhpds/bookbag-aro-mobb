@@ -3,7 +3,7 @@
 Based on the open source Istio project, Red Hat OpenShift Service Mesh adds a transparent layer on existing distributed applications without requiring any changes to the service code.
 You add Red Hat OpenShift Service Mesh support to services by deploying a special sidecar proxy to relevant services in the mesh that intercepts all network communication between microservices.
 You configure and manage the Service Mesh using the Service Mesh control plane features.
-To learn more about the OpenShift Service Mesh, review the https://docs.openshift.com/rosa/service_mesh/v2x/ossm-about.html[OpenShift documentation].
+To learn more about the OpenShift Service Mesh, review the https://docs.openshift.com/rosa/service_mesh/v2x/ossm-about.html[OpenShift documentation,window=_blank].
 
 . First, let's create a project (namespace) for us to deploy the service mesh control plane into.
 To do so, run the following command:
