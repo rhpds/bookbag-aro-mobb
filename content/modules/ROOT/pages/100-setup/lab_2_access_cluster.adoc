@@ -2,7 +2,7 @@
 
 === Login to the OpenShift Web Console
 
-. Make sure your cluster is ready
+. Make sure your cluster is ready  by using the `aro show` extension to the `az` command. Use this command to check on the state of your ARO clusters.
 +
 [source,sh,role=execute]
 ----
@@ -18,7 +18,7 @@ az aro show \
 Succeeded
 ----
 
-. First, let's configure your workshop environment with our helper variables.
+. First, let's configure your workshop environment with some helper variables to store key values of our cluster to make accessing it easier.
 To do so, let's run the following command:
 +
 [source,sh,role=execute]
