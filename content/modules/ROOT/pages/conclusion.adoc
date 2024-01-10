@@ -6,7 +6,9 @@ Now you have completed all the modules for the ARO Workshop. We hope you found i
 
 // Take the next step and https://console.redhat.com/openshift/create/rosa/getstarted?source=rhhe6[get started,window=_blank] with ROSA in your AWS account.
 
-Our onboarding specialists are here to help. If you have any questions or need help getting started with ARO, send us a chat in the console at any time by clicking the blue hat icon in the bottom right corner.
+Our onboarding specialists are here to help. If you have any questions or need help getting started with ARO or other Red Hat products, send us a chat in the console at any time by clicking the blue hat icon in the bottom right corner:
+
+image::BlueHat-ARO.gif[Click for Help]
 
 // Additional resources to help you get started:
 
