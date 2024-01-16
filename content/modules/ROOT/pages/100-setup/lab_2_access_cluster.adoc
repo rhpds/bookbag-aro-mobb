@@ -54,11 +54,6 @@ OCP_API={aro_public_api_url}
 OCP_PASS={aro_kube_password}
 OCP_CONSOLE={aro_console}
 ----
-+
-[INFO]
-----
-Helper Variables: We use helper variables extensively throughout this workshop, but we also include the commands we used to populate these helper variables to ensure you can craft these commands later.
-----
 
 . To access the OpenShift CLI tools (`oc`) and web console you will need to retrieve your cluster credentials.
 The helper variables from above will make this simple!

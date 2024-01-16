@@ -274,6 +274,11 @@ STATUS: deployed
 REVISION: 1
 TEST SUITE: None
 ----
++
+[NOTE]
+====
+If you get an error during that command wait a few seconds and try it again. Sometimes the Patch Operator takes a little longer to fully deploy.
+====
 
 . Wait until Grafana has successfully deployed. Run the following command:
 +
@@ -416,6 +421,11 @@ These dashboards are copies of the dashboards that are available directly on the
 ====
 +
 image::grafana-metrics.png[]
++
+[NOTE]
+====
+If you don't see the graphs as in the screenshot above wait a minute and refresh the browser window - it takes a few minutes for the Grafana dashboard to start showing data.
+====
 
 . Click the Explore (compass) Icon in the left hand menu, select "`Loki (Application)`" in the dropdown and search for `{kubernetes_namespace_name="custom-logging"}`. Click the blue *Run Query* button on the top right to execute the search.
 +

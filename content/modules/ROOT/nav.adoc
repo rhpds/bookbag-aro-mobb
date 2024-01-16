@@ -9,7 +9,7 @@
 * xref:200-ops/lab_2_managing_worker_nodes.adoc[Managing Worker Nodes]
 * xref:200-ops/lab_3_autoscaling.adoc[Autoscale your ARO Cluster]
 * xref:200-ops/lab_4_labeling_nodes.adoc[Labeling your Worker Nodes]
-// * xref:200-ops/lab_5_observability.adoc[Configure Red Hat OpenShift Logging with Azure Files]
+* xref:200-ops/lab_5_observability.adoc[Configure Red Hat OpenShift Logging with Azure Files]
 
 *Deploy an Application to ARO*
 

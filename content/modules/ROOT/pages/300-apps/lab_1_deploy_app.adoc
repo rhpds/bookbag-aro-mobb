@@ -60,13 +60,6 @@ For the sake of the workshop we are creating a public database that any host in 
 In a real world scenario you would create a private database and connect to it over a private link service
 ====
 
-. Make sure the PostgreSQL client software is installed on your bastion VM:
-+
-[source,sh,role=execute]
-----
-sudo dnf -y install postgresql
-----
-
 . Check connectivity to the database.
 To do so, run the following command:
 +
@@ -112,7 +105,7 @@ quarkus --version
 .Sample Output
 [source,text,options=nowrap]
 ----
-3.6.3
+3.6.5
 ----
 
 . Now, let's clone the application from GitHub to our local bastion VM.
@@ -393,7 +386,6 @@ oc get route microsweeper-appservice -n microsweeper-ex -o jsonpath='{"http://"}
 ----
 http://microsweeper-appservice-microsweeper-ex.apps.nbybk9f3.eastus.aroapp.io/
 ----
-+
 
 [WARNING]
 ====
