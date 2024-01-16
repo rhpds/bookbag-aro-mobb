@@ -1,12 +1,12 @@
 == Introduction
 
-Red Hat® OpenShift® GitOps is an operator that provides a workflow that integrates git repositories, continuous integration/continuous delivery (CI/CD) tools, and Kubernetes to realize faster, more secure, scalable software development, without compromising quality.
+Red Hat OpenShift GitOps is an operator that provides a workflow that integrates git repositories, continuous integration/continuous delivery (CI/CD) tools, and Kubernetes to realize faster, more secure, scalable software development, without compromising quality.
 
 OpenShift GitOps enables customers to build and integrate declarative git driven CD workflows directly into their application development platform. 
 
 There's no single tool that converts a development pipeline to "DevOps". By implementing a GitOps framework, updates and changes are pushed through declarative code, automating infrastructure and deployment requirements, and CI/CD.
 
-OpenShift GitOps takes advantage of https://argoproj.github.io/cd[Argo CD] and integrates it into Red Hat OpenShift to deliver a consistent, fully supported, declarative Kubernetes platform to configure and use with GitOps principles.
+OpenShift GitOps takes advantage of https://argoproj.github.io/cd[Argo CD,window=_blank] and integrates it into Red Hat OpenShift to deliver a consistent, fully supported, declarative Kubernetes platform to configure and use with GitOps principles.
 
 OpenShift and OpenShift GitOps:
 
@@ -241,7 +241,7 @@ deployment.apps/bgd patched
 +
 [INFO]
 ====
-The self healing may happen so fast you don't even see it happen.
+The self healing may happen so fast you don't even see it happen. If you missed just run the command again and be sure to have the Argo CD view up and ready!
 ====
 
 == Summary 

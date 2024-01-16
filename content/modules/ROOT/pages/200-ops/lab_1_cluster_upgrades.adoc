@@ -19,7 +19,7 @@ image::web-console-upgrade-channel-not-configured.png[Web Console - Upgrade Chan
 ====
 Upgrade channel is not configured by default
 
-By default, the https://docs.openshift.com/container-platform/4.13/updating/understanding-upgrade-channels-release.html[upgrade channel] (which is used to recommend the appropriate release versions for cluster updates), is not set in ARO.
+By default, the https://docs.openshift.com/container-platform/4.13/updating/understanding-upgrade-channels-release.html[upgrade channel,window=_blank] (which is used to recommend the appropriate release versions for cluster updates), is not set in ARO.
 ====
 
 . In the *Channel* field, enter `stable-4.13` to set the upgrade channel to the stable releases of OpenShift 4.13 and click *Save*.
@@ -27,11 +27,11 @@ By default, the https://docs.openshift.com/container-platform/4.13/updating/unde
 image::web-console-input-channel.png[Web Console - Input Channel]
 
 . In a moment, you'll begin to see what upgrades are available for your cluster.
-From here, you could click the *Select a version* button and upgrade the cluster, or you could follow the instructions below to use the Managed Upgrade Operator.
+From here, you could click the *Select a version* button and upgrade the cluster. But don't do that yet! Instead, follow the instructions below to use the Managed Upgrade Operator.
 +
 [WARNING]
 ====
-Do not perform an upgrade at this stage!
+Again, do not perform an upgrade at this stage!
 ====
 
 == Upgrade using the Managed Upgrade Operator
@@ -132,7 +132,7 @@ While the workshop environment will be deleted before then, you now have the exp
 
 === Red Hat OpenShift Upgrade Graph Tool
 
-Occasionally, you may be not be able to go directly from your current version to a desired version. In these cases, you must first upgrade your cluster from your current version, to an intermediary version, and then to your desired version. To help you navigate these decisions, you can take advantage of the https://access.redhat.com/labs/ocpupgradegraph/update_path[Red Hat OpenShift Upgrade Graph Tool].
+Occasionally, you may be not be able to go directly from your current version to a desired version. In these cases, you must first upgrade your cluster from your current version, to an intermediary version, and then to your desired version. To help you navigate these decisions, you can take advantage of the https://access.redhat.com/labs/ocpupgradegraph/update_path[Red Hat OpenShift Upgrade Graph Tool,window=_blank]. Please note: you'll need your Red Hat login to access this tool.
 
 image::aro_upgrade_graph.png[ARO Upgrade Graph Tool Screenshot]
 
@@ -140,9 +140,9 @@ In this scenario to upgrade your cluster from version 4.11.0 to 4.12.15, you mus
 
 === Links to Documentation
 
-* https://learn.microsoft.com/en-us/azure/openshift/howto-upgrade[Upgrade an Azure Red Hat OpenShift cluster]
-* https://learn.microsoft.com/en-us/azure/openshift/howto-upgrade#scheduling-individual-upgrades-using-the-managed-upgrade-operator[Scheduling individual upgrades using the managed-upgrade-operator]
-* https://docs.openshift.com/container-platform/4.13/updating/understanding_updates/intro-to-updates.html#update-service-about_understanding-openshift-updates[About the OpenShift Update Service]
+* https://learn.microsoft.com/en-us/azure/openshift/howto-upgrade[Upgrade an Azure Red Hat OpenShift cluster,window=_blank]
+* https://learn.microsoft.com/en-us/azure/openshift/howto-upgrade#scheduling-individual-upgrades-using-the-managed-upgrade-operator[Scheduling individual upgrades using the managed-upgrade-operator,window=_blank]
+* https://docs.openshift.com/container-platform/4.13/updating/understanding_updates/intro-to-updates.html#update-service-about_understanding-openshift-updates[About the OpenShift Update Service,window=_blank]
 
 === Summary
 

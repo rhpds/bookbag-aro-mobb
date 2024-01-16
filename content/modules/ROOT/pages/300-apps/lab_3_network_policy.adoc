@@ -17,28 +17,28 @@ For this module we will be applying networkpolices to the previously created 'mi
 +
 [source,sh,role=execute]
 ----
- cat << EOF | oc apply -f -
- ---
- apiVersion: v1
- kind: Pod
- metadata:
-   name: networkpolicy-pod
-   namespace: networkpolicy-test
-   labels:
-     app: networkpolicy
- spec:
-   securityContext:
-     allowPrivilegeEscalation: false
-   containers:
-     - name: networkpolicy-pod
-       image: registry.access.redhat.com/ubi9/ubi-minimal
-       command: ["sleep", "infinity"]
+cat << EOF | oc apply -f -
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: networkpolicy-pod
+  namespace: networkpolicy-test
+  labels:
+    app: networkpolicy
+spec:
+  securityContext:
+    allowPrivilegeEscalation: false
+  containers:
+    - name: networkpolicy-pod
+      image: registry.access.redhat.com/ubi9/ubi-minimal
+      command: ["sleep", "infinity"]
 EOF
 ----
 +
 [TIP]
 ====
-You may ignore any warning you  may see.
+You may ignore any warnings you may see about PodSecurity violations.
 ====
 
 . Now we will change to the microsweeper-ex project to start applying the network policies
@@ -135,7 +135,7 @@ Hit Ctrl-C to avoid having to wait until a timeout.
 If you have your browser still open to the microsweeper app, you can refresh and see that you can still access it.
 ====
 
-. In other cases, you may want to allow your application to be accessible to only _certain_ namespaces. In this example, lets allow access to just your `microsweeper` application from only the `networkpolicy-pod` in the `networkpolicy-test` namespace using a label selector. To do so, run the following command:
+. In other cases, you may want to allow your application to be accessible to only _certain_ namespaces. In this example, let's allow access to just your `microsweeper` application from only the `networkpolicy-pod` in the `networkpolicy-test` namespace using a label selector. To do so, run the following command:
 +
 [source,sh,role=execute]
 ----
@@ -214,7 +214,7 @@ EOF
 +
 [TIP]
 ====
-Again you may ignore any warning you may see.
+Again you may ignore any PodSecurity violation warnings you may see.
 ====
 
 . Now, let's try to curl the `microsweeper` application by running the following command:
@@ -229,7 +229,7 @@ Hit Ctrl-C to avoid waiting for a timeout.
 
 [INFO]
 ====
-To learn more about configuring NetworkPolicy objects, visit the https://docs.openshift.com/container-platform/4.13/networking/network_policy/about-network-policy.html[Red Hat documentation on NetworkPolicy]. Interested in creating a set of default NetworkPolicy objects for new projects? Read more at the https://docs.openshift.com/container-platform/4.13/networking/network_policy/default-network-policy.html[Red Hat documentation on modifying the default project template].
+To learn more about configuring NetworkPolicy objects, visit the https://docs.openshift.com/container-platform/4.13/networking/network_policy/about-network-policy.html[Red Hat documentation on NetworkPolicy,window=_blank]. Interested in creating a set of default NetworkPolicy objects for new projects? Read more at the https://docs.openshift.com/container-platform/4.13/networking/network_policy/default-network-policy.html[Red Hat documentation on modifying the default project template,window=_blank].
 ====
 
 == Summary

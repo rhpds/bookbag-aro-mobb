@@ -1,6 +1,6 @@
 == Introduction
 
-Azure Red Hat OpenShift (ARO) clusters store log data inside the cluster by default. Understanding metrics and logs is critical in successfully running your cluster. Included with ARO is the OpenShift Cluster Logging Operator, which is intended to simplify log management and analysis within an ARO cluster, offering centralized log collection, powerful search capabilities, visualization tools, and integration with other other Azure systems like https://azure.microsoft.com/en-us/products/storage/files[Azure Files].
+Azure Red Hat OpenShift (ARO) clusters store log data inside the cluster by default. Understanding metrics and logs is critical in successfully running your cluster. Included with ARO is the OpenShift Cluster Logging Operator, which is intended to simplify log management and analysis within an ARO cluster, offering centralized log collection, powerful search capabilities, visualization tools, and integration with other other Azure systems like https://azure.microsoft.com/en-us/products/storage/files[Azure Files,window=_blank].
 
 In this section of the workshop, we'll configure ARO to forward logs and metrics to Azure Files and view them using Grafana.
 
@@ -296,7 +296,7 @@ oc -n custom-logging get route grafana-route \
 https://grafana-route-custom-logging.apps.nbybk9f3.eastus.aroapp.io
 ----
 
-. Then click on the `AAD` authentication provider - you should already be logged into the cluster because you logged into the web console earlier. Accept all permissions by clicking on *Allow selected permissions*. You should see the Grafana dashboard.
+. You should already be logged into the cluster because you logged into the web console earlier. Accept all permissions by clicking on *Allow selected permissions*. You should see the Grafana dashboard.
 +
 [WARNING]
 ====
@@ -406,7 +406,7 @@ oc -n custom-logging get route grafana-route \
 https://grafana-route-custom-logging.apps.nbybk9f3.eastus.aroapp.io
 ----
 
-. Browse to the provided route address in the same browser window as your OCP console and login using your OpenShift credentials (either AAD or kubeadmin). If you tested this before you are already logged in.
+. Browse to the provided route address in the same browser window as your OCP console and login using your OpenShift credentials. If you tested this before you are already logged in.
 
 . View an existing dashboard such as *custom-logging \-> Node Exporter \-> USE Method \-> Cluster* (click on the *search* icon on the left to see the *custom-logging* dashboard).
 +
