@@ -9,15 +9,15 @@ modules:
   100-setup/2-access-cluster:
     name: Access your ARO Cluster
     exit_sign: Continue
-  200-ops/idp/1-aad:
-    name: Cluster Authentication
-    exit_sign: Continue
-  200-ops/idp/1a-configure-aad:
-    name: Configuring Cluster Authentication
-    exit_sign: Continue
-  200-ops/idp/1b-explore-aad:
-    name: Explore Cluster Authentication
-    exit_sign: Continue
+      #  200-ops/idp/1-aad:
+      #    name: Cluster Authentication
+      #    exit_sign: Continue
+      #  200-ops/idp/1a-configure-aad:
+      #    name: Configuring Cluster Authentication
+      #    exit_sign: Continue
+      #  200-ops/idp/1b-explore-aad:
+      #    name: Explore Cluster Authentication
+      #    exit_sign: Continue
   200-ops/day2/1-upgrades:
     name: Managing Cluster Upgrades
     exit_sign: Continue
