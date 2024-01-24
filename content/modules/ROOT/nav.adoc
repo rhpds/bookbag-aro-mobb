@@ -27,6 +27,18 @@
 * xref:400-service-mesh/lab_5_service_mesh_weighted_routing.adoc[Set up Service Mesh Weighted Routing]
 * xref:400-service-mesh/lab_6_service_mesh_observe.adoc[Configure and observe Service Mesh traffic]
 
+ifeval::[{display_arc_content} == true]
+*ifeval: display_arc_content bool - Integrating Azure ARC with ARO*
+endif::[]
+
+ifeval::["{display_arc_content}" == "true"]
+*ifeval: display_arc_content string - Integrating Azure ARC with ARO*
+endif::[]
+
+ifdef::display_arc_content[]
+*ifdef: display_arc_content - Integrating Azure ARC with ARO*
+endif::[]
+
 *Conclusion and What's Next*
 
 * xref:conclusion.adoc[Conclusion & What's Next]
