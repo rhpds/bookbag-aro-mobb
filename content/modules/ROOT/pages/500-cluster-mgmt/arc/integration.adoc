@@ -107,8 +107,8 @@ az connectedk8s list --resource-group openenv-${GUID} --output table
 Your output will look very similar to:
 +
 [source,bash]
-====
+----
 Name           Location    ResourceGroup
 -------------  ----------  ---------------
 aro-cluster-vv5bc  eastus      openenv-vv5bc
-====
+----
