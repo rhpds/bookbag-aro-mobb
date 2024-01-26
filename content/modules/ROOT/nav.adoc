@@ -23,19 +23,11 @@
 * xref:400-service-mesh/lab_5_service_mesh_weighted_routing.adoc[Set up Service Mesh Weighted Routing]
 * xref:400-service-mesh/lab_6_service_mesh_observe.adoc[Configure and observe Service Mesh traffic]
 
-.*Cluster Management*
-ifeval::[{include_arc_content} == true]
-* eval 1 include_arc_content bool
-endif::[]
 ifeval::["{include_arc_content}" == "true"]
-* eval 2 include_arc_content string
-endif::[]
-ifdef::include_arc_content[]
-* def include_arc_content
-endif::[]
-* def there nothing {include_arc_content}
+.*Cluster Management*
 * xref:500-cluster-mgmt/arc/integration.adoc[Integrating Azure ARC with ARO]
 * xref:500-cluster-mgmt/arc/observability.adoc[Configure Red Hat OpenShift Logging with Azure Files]
+endif::[]
 
 .*Conclusion and What's Next*
 * xref:conclusion.adoc[Conclusion & What's Next]
