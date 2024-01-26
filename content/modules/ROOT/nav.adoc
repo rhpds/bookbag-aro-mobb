@@ -39,6 +39,9 @@ ifdef::display_arc_content[]
 *ifdef: display_arc_content - Integrating Azure ARC with ARO*
 endif::[]
 
+* xref:500-cluster-mgmt/arc/integration.adoc[Integrating Azure ARC with ARO]
+* xref:500-cluster-mgmt/arc/observability.adoc[Configure Red Hat OpenShift Logging with Azure Files]
+
 *Conclusion and What's Next*
 
 * xref:conclusion.adoc[Conclusion & What's Next]
