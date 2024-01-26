@@ -33,7 +33,7 @@ endif::[]
 ifdef::display_arc_content[]
 * def display_arc_content
 endif::[]
-* def there nothing
+* def there nothing {display_arc_content}
 * xref:500-cluster-mgmt/arc/integration.adoc[Integrating Azure ARC with ARO]
 * xref:500-cluster-mgmt/arc/observability.adoc[Configure Red Hat OpenShift Logging with Azure Files]
 
