@@ -25,13 +25,13 @@
 
 .*Cluster Management*
 ifeval::[{display_arc_content} == true]
-* eval 1 display_arc_content bool - Integrating Azure ARC with ARO*
+* eval 1 display_arc_content bool
 endif::[]
 ifeval::["{display_arc_content}" == "true"]
-* eval 2 display_arc_content string - Integrating Azure ARC with ARO*
+* eval 2 display_arc_content string
 endif::[]
 ifdef::display_arc_content[]
-* def display_arc_content - Integrating Azure ARC with ARO*
+* def display_arc_content
 endif::[]
 * xref:500-cluster-mgmt/arc/integration.adoc[Integrating Azure ARC with ARO]
 * xref:500-cluster-mgmt/arc/observability.adoc[Configure Red Hat OpenShift Logging with Azure Files]
