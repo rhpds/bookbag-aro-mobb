@@ -1,25 +1,21 @@
-*Building a Modern Application Platform*
-
+.*Building a Modern Application Platform*
 * xref:100-setup/lab_1_environment.adoc[Explore the environment]
 * xref:100-setup/lab_2_access_cluster.adoc[Access your ARO cluster]
 
-*Basic Operational Tasks*
-
+.*Basic Operational Tasks*
 * xref:200-ops/lab_1_cluster_upgrades.adoc[Upgrade your ARO cluster]
 * xref:200-ops/lab_2_managing_worker_nodes.adoc[Managing Worker Nodes]
 * xref:200-ops/lab_3_autoscaling.adoc[Autoscale your ARO Cluster]
 * xref:200-ops/lab_4_labeling_nodes.adoc[Labeling your Worker Nodes]
 * xref:200-ops/lab_5_observability.adoc[Configure Red Hat OpenShift Logging with Azure Files]
 
-*Deploy an Application to ARO*
-
+.*Deploy an Application to ARO*
 * xref:300-apps/lab_1_deploy_app.adoc[Deploy an application with Azure Database]
 * xref:300-apps/lab_2_openshift_gitops.adoc[Deploy an application with Red Hat OpenShift GitOps]
 * xref:300-apps/lab_3_network_policy.adoc[Secure your applications with Network Policies]
 * xref:300-apps/lab_4_resilient_app.adoc[Make your application resilient]
 
-*Red Hat OpenShift Service Mesh*
-
+.*Red Hat OpenShift Service Mesh*
 * xref:400-service-mesh/lab_1_service_mesh_introduction.adoc[Service Mesh Introduction]
 * xref:400-service-mesh/lab_2_service_mesh_deploy_operator.adoc[Install Service Mesh Operator]
 * xref:400-service-mesh/lab_3_service_mesh_deploy_control_plane.adoc[Deploy Service Mesh Control Plane]
@@ -27,18 +23,16 @@
 * xref:400-service-mesh/lab_5_service_mesh_weighted_routing.adoc[Set up Service Mesh Weighted Routing]
 * xref:400-service-mesh/lab_6_service_mesh_observe.adoc[Configure and observe Service Mesh traffic]
 
+.*Cluster Management*
 ifeval::[{display_arc_content} == true]
-*ifeval: display_arc_content bool - Integrating Azure ARC with ARO*
+* eval 1 display_arc_content bool - Integrating Azure ARC with ARO*
 endif::[]
-
 ifeval::["{display_arc_content}" == "true"]
-*ifeval: display_arc_content string - Integrating Azure ARC with ARO*
+* eval 2 display_arc_content string - Integrating Azure ARC with ARO*
 endif::[]
-
 ifdef::display_arc_content[]
-*ifdef: display_arc_content - Integrating Azure ARC with ARO*
+* def display_arc_content - Integrating Azure ARC with ARO*
 endif::[]
-
 * xref:500-cluster-mgmt/arc/integration.adoc[Integrating Azure ARC with ARO]
 * xref:500-cluster-mgmt/arc/observability.adoc[Configure Red Hat OpenShift Logging with Azure Files]
 
