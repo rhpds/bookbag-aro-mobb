@@ -1,0 +1,67 @@
+. In order to see ARO resources (such as namespaces, pods, services, etc.) inside Azure Arc, you need to create a service account and provide the token to Azure Arc.
+To do so, run the following command:
++
+[source,bash,role=execute]
+----
+oc -n azure-arc create serviceaccount azure-arc-observability
+oc create clusterrolebinding azure-arc-observability-rb --clusterrole cluster-admin --serviceaccount azure-arc:azure-arc-observability
+----
+
+. Next, we need to create a secret to store our token.
+To do so, run the following command:
++
+[source,bash,role=execute]
+----
+cat <<EOF | oc apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+ name: azure-arc-observability-secret
+ namespace: azure-arc
+ annotations:
+   kubernetes.io/service-account.name: azure-arc-observability
+type: kubernetes.io/service-account-token
+EOF
+----
+
+. Then, we can obtain the token for Azure Arc.
+To do so, run the following command:
++
+[source,bash,role=execute]
+----
+token=$(oc -n azure-arc get secret azure-arc-observability-secret -o jsonpath='{$.data.token}' | base64 -d)
+----
+
+. Then, we can obtain the token for Azure Arc.
+To do so, run the following command:
++
+[source,bash,role=execute]
+----
+echo $token
+----
++
+Make sure you copy this value, as you'll need it in a moment.
+
+. Next, In the Azure Portal search for "Kubernetes Azure Arc" and click on the _Kubernetes - Azure Arc_ option.
++
+image::azure-arc-search.png[Azure Portal - Azure Arc Kubernetes Search]
++
+WARNING: Make sure that you DO NOT click on Azure Arc Kubernetes clusters!
+
+. Select your cluster name from the page.
++
+image::azure-arc-cluster-list.png[Azure Portal - Azure Arc Cluster List]
+
+. Then, select _Namespaces_ from the left side menu and paste the token from step three in the _Service account bearer token_ field.
++
+image::azure-arc-unauthenticated-namespaces.png[Azure Portal - Azure Arc Namespaces - Unauthenticated]
++
+You can now see and explore through the following OpenShift resources inside the Azure Arc portal:
++
+* Namespaces
+* Workloads
+* Services and Ingress
+* Storage
+* Configurations
++
+image::azure-arc-namespaces.png[Azure Portal - Azure Arc Namespaces]
