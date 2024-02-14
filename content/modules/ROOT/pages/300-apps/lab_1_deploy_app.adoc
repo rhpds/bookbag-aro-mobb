@@ -89,10 +89,12 @@ Now that we've got an Azure managed PostgreSQL instance up and running, let's bu
 [source,sh,role=execute]
 ----
 curl -Ls https://sh.jbang.dev | bash -s - trust add https://repo1.maven.org/maven2/io/quarkus/quarkus-cli/
-
 curl -Ls https://sh.jbang.dev | bash -s - app install --fresh --force quarkus@quarkusio
 
-source $HOME/.bashrc
+echo "export JAVA_HOME=/usr/lib/jvm/jre-17-openjdk" >>${HOME}/.bashrc
+echo "export PATH=\$JAVA_HOME/bin:\$PATH" >>${HOME}/.bashrc
+
+source ${HOME}/.bashrc
 ----
 
 . Double check the Quarkus CLI version:
