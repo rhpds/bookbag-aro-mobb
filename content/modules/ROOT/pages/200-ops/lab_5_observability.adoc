@@ -4,6 +4,51 @@ Azure Red Hat OpenShift (ARO) clusters store log data inside the cluster by defa
 
 In this section of the workshop, we'll configure ARO to forward logs and metrics to Azure Files and view them using Grafana.
 
+== Configure Autoscaling for All Worker MachineSets
+
+OpenShift Cluster Logging takes place in the cluster itself, so we need to scale up the number of worker nodes.
+We'll use the MachineAutoscaler on each of the existing MachineSets to scale up the number of worker nodes.
+
+. To deploy the MachineAutoscalers, run the following command:
++
+[source,sh,role=execute]
+----
+MACHINESETS=$(oc -n openshift-machine-api get machinesets -o name | cut -d / -f2 )
+
+for MACHINESET in $(echo ${MACHINESETS}); do
+cat <<EOF | oc apply -f -
+---
+apiVersion: "autoscaling.openshift.io/v1beta1"
+kind: "MachineAutoscaler"
+metadata:
+  name: "${MACHINESET}"
+  namespace: "openshift-machine-api"
+spec:
+  minReplicas: 1
+  maxReplicas: 3
+  scaleTargetRef:
+    apiVersion: machine.openshift.io/v1beta1
+    kind: MachineSet
+    name: "${MACHINESET}"
+EOF
+done
+----
+
+CAUTION: Be patient with this lab.
+As you progress through this lab deploying logging be aware that it will take about five minutes to provision each machine and another one minute for the Nodes to become Ready.
+
+. Be prepareed to watch the progress of the MachineAutoscaler as you work through this lab with the following commands.
+.. Get the list of Pods in state "Pending", which triggers the MachineAutoscaler to scale up the number of worker nodes
+.. Get the list of Machines in the cluster, which you will see in various states as they are being provisioned
+.. Get the list of Nodes as they become ready and the Pods in Pending are deployed to them
++
+[source,sh,role=execute]
+----
+oc get pods -A | grep Pending
+oc -n openshift-machine-api get machines -l "machine.openshift.io/cluster-api-machine-role=worker"
+oc get nodes -o wide
+----
+
 == Configure Metrics and Log Forwarding to Azure Files
 
 . First, let's create our Azure Files storage account. To do so, run the following command::
