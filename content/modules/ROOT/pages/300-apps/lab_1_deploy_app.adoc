@@ -34,7 +34,7 @@ To do so, run the following command (this command will take ~ 5mins)
 az postgres server create --resource-group openenv-$GUID \
   --location eastus --sku-name GP_Gen5_2 \
   --name microsweeper-$GUID --storage-size 51200 \
-  --admin-user myAdmin --admin-pass {generated_password} \
+  --admin-user myAdmin --admin-pass 'M1cr0Sw33p3r!' \
   --public 0.0.0.0
 ----
 +
@@ -68,7 +68,7 @@ To do so, run the following command:
 psql \
   "host=microsweeper-$GUID.postgres.database.azure.com port=5432
   dbname=postgres
-  user=myAdmin@microsweeper-$GUID.postgres.database.azure.com password={generated_password} sslmode=require" \
+  user=myAdmin@microsweeper-$GUID.postgres.database.azure.com password=M1cr0Sw33p3r! sslmode=require" \
   -c "select now();"
 ----
 +
@@ -184,7 +184,7 @@ type: Opaque
 stringData:
   PG_URL: jdbc:postgresql://microsweeper-$GUID.postgres.database.azure.com:5432/postgres
   PG_USER: myAdmin@microsweeper-$GUID.postgres.database.azure.com
-  PG_PASS: {generated_password}
+  PG_PASS: "M1cr0Sw33p3r!"
 EOF
 ----
 +
