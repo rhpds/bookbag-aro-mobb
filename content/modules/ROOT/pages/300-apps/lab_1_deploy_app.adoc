@@ -68,7 +68,7 @@ To do so, run the following command:
 psql \
   "host=microsweeper-$GUID.postgres.database.azure.com port=5432
   dbname=postgres
-  user=myAdmin@microsweeper-$GUID.postgres.database.azure.com password='M1cr0Sw33p3r!' sslmode=require" \
+  user=myAdmin@microsweeper-$GUID.postgres.database.azure.com password=M1cr0Sw33p3r! sslmode=require" \
   -c "select now();"
 ----
 +
@@ -184,7 +184,7 @@ type: Opaque
 stringData:
   PG_URL: jdbc:postgresql://microsweeper-$GUID.postgres.database.azure.com:5432/postgres
   PG_USER: myAdmin@microsweeper-$GUID.postgres.database.azure.com
-  PG_PASS: 'M1cr0Sw33p3r!'
+  PG_PASS: "M1cr0Sw33p3r!"
 EOF
 ----
 +
