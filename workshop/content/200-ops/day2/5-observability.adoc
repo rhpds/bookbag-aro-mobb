@@ -111,7 +111,7 @@ helm version
 .Sample Output
 [source,text,options=nowrap]
 ----
-version.BuildInfo{Version:"v3.11.1+6.el8", GitCommit:"66bfc44f827aea6eb8e001150914170ac0d49e2d", GitTreeState:"clean", GoVersion:"go1.18.9"}
+version.BuildInfo{Version:"v3.15.4+60.el9", GitCommit:"fa384522f2878321c8b6b1a06f8ff5f86f47a937", GitTreeState:"clean", GoVersion:"go1.22.7 (Red Hat 1.22.7-2.el9_5)"}
 ----
 
 . Next, let's add the MOBB Helm Chart repository. To do so, run the following command:
