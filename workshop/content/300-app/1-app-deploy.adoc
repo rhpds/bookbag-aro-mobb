@@ -114,7 +114,7 @@ quarkus --version
 .Sample Output
 [source,text,options=nowrap]
 ----
-3.7.2
+3.19.1
 ----
 
 . Now, let's clone the application from GitHub to our local bastion VM.

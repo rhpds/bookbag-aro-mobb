@@ -40,7 +40,7 @@ metadata:
   name: basic
   namespace: istio-system
 spec:
-  version: v2.2
+  version: v2.6
   security:
     identity:
       type: ThirdParty
