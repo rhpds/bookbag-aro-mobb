@@ -2,6 +2,13 @@
 
 === Login to the OpenShift Web Console
 
+. Set your account to the subscription
++
+[source,sh,role=execute]
+----
+az account set --subscription %azure_subscription%
+----
+
 . Make sure your cluster is ready
 +
 [source,sh,role=execute]
