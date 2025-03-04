@@ -2,6 +2,13 @@
 
 === Login to the OpenShift Web Console
 
+. Set your account to the proper subscription.
++
+[source,sh,role=execute]
+----
+az account --subscription {azure_subscription}
+----
+
 . Make sure your cluster is ready  by using the `aro show` extension to the `az` command. Use this command to check on the state of your ARO clusters.
 +
 [source,sh,role=execute]
