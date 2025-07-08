@@ -31,11 +31,11 @@ To do so, run the following command (this command will take ~ 5mins)
 +
 [source,sh,role=execute]
 ----
-az postgres server create --resource-group openenv-${GUID} \
-  --location eastus --sku-name GP_Gen5_2 \
-  --name microsweeper-${GUID} --storage-size 51200 \
-  --admin-user myAdmin --admin-pass %generated_password% \
-  --public 0.0.0.0
+az postgres flexible-server create --resource-group openenv-${GUID} \
+  --location eastus --sku-name Standard_D2s_v3 \
+  --name microsweeper-${GUID} --storage-size 64 \
+  --admin-user myAdmin --admin-password 'M1cr0Sw33p3r!' \
+  --public-access all
 ----
 +
 .Sample Output
@@ -75,7 +75,7 @@ To do so, run the following command:
 psql \
   "host=microsweeper-${GUID}.postgres.database.azure.com port=5432
   dbname=postgres
-  user=myAdmin@microsweeper-${GUID}.postgres.database.azure.com password=%generated_password% sslmode=require" \
+  user=myAdmin password='M1cr0Sw33p3r!' sslmode=require" \
   -c "select now();"
 ----
 +
@@ -190,8 +190,8 @@ metadata:
 type: Opaque
 stringData:
   PG_URL: jdbc:postgresql://microsweeper-${GUID}.postgres.database.azure.com:5432/postgres
-  PG_USER: myAdmin@microsweeper-${GUID}.postgres.database.azure.com
-  PG_PASS: %generated_password%
+  PG_USER: myAdmin
+  PG_PASS: "M1cr0Sw33p3r!"
 EOF
 ----
 +
