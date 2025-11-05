@@ -86,7 +86,7 @@ To do so, run the following command to create the necessary resources:
 [source,sh,role=execute]
 ----
 oc -n bookinfo apply -f \
-  https://raw.githubusercontent.com/rh-mobb/rosa-workshop-content/main/rosa-content/assets/scripts/bookinfo.yaml
+  https://raw.githubusercontent.com/rh-mobb/aro-workshop-service-mesh-files/refs/heads/main/bookinfo.yaml
 ----
 +
 .Sample Output
@@ -115,7 +115,7 @@ deployment.apps/productpage-v1 created
 You may ignore the Warnings.
 +
 Interested in seeing the configuration you're deploying?
-Check it out on GitHub https://github.com/rh-mobb/rosa-workshop-content/blob/main/rosa-content/assets/scripts/bookinfo.yaml[here,window=_blank].
+https://github.com/rh-mobb/aro-workshop-service-mesh-files/blob/main/bookinfo.yaml[Check it out on GitHub],window=_blank].
 
 . Now, let's create the service mesh ingress gateway.
 To do so, run the following command:
@@ -123,7 +123,7 @@ To do so, run the following command:
 [source,sh,role=execute]
 ----
 oc -n bookinfo apply -f \
-  https://raw.githubusercontent.com/rh-mobb/rosa-workshop-content/main/rosa-content/assets/scripts/bookinfo-gateway.yaml
+  https://raw.githubusercontent.com/rh-mobb/aro-workshop-service-mesh-files/refs/heads/main/bookinfo-gateway.yaml
 ----
 +
 .Sample Output
@@ -142,7 +142,7 @@ To create the rules, run the following command:
 [source,sh,role=execute]
 ----
 oc -n bookinfo apply -f \
-  https://raw.githubusercontent.com/rh-mobb/rosa-workshop-content/main/rosa-content/assets/scripts/destination-rule-all.yaml
+  https://raw.githubusercontent.com/rh-mobb/aro-workshop-service-mesh-files/refs/heads/main/destination-rule-all.yaml
 ----
 +
 .Sample Output
@@ -192,8 +192,10 @@ http://istio-ingressgateway-istio-system.apps.rosa-6n4s8.1c1c.p1.openshiftapps.c
 . Copy and paste the URL provided in the previous step into your web browser and verify the Bookinfo product page is successfully deployed.
 +
 You should see a book review of "The Comedy of Errors".
++
+If you get "Application Unavailable", make sure your browser did not redirect you to HTTPS.
 
-== Summary 
+== Summary
 
 Here you learned how to:
 
